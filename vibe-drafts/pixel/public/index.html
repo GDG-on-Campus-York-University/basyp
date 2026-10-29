@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sam Rivera | Computer Science student</title>
+  <meta name="description" content="Sam Rivera, first-year Computer Science student at York University. Small tools that solve everyday student problems.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="menu-bar">
+    <nav class="menu" aria-label="Sections">
+      <span class="menu-cursor" aria-hidden="true">▶&#xFE0E;</span>
+      <ul>
+        <li><a class="select" href="#home">Home</a></li>
+        <li><a class="select" href="#about">About</a></li>
+        <li><a class="select" href="#projects">Projects</a></li>
+        <li><a class="select" href="#skills">Skills</a></li>
+        <li><a class="select" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <span class="wipe" aria-hidden="true"></span>
+
+  <main>
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <span class="cloud" aria-hidden="true"></span>
+      <div class="title-panel px-box">
+        <h1 id="home-title" class="title-name">Sam Rivera</h1>
+        <p class="title-intro">First-year Computer Science student at York University.</p>
+        <a class="select start px-box" href="#projects"><span aria-hidden="true">▶&#xFE0E;</span> Projects</a>
+      </div>
+      <span class="ground" aria-hidden="true"></span>
+    </section>
+
+    <section id="about" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <div class="panel px-box">
+        <p>I enjoy making small tools that solve everyday student problems.</p>
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title">Projects</h2>
+      <div class="projects-grid">
+        <article class="project-card px-box">
+          <span class="sprite sprite-bus" aria-hidden="true"></span>
+          <h3>Bus Buddy</h3>
+          <p>A Python script showing upcoming campus bus departures.</p>
+        </article>
+        <article class="project-card px-box">
+          <span class="sprite sprite-clock" aria-hidden="true"></span>
+          <h3>Study Timer</h3>
+          <p>A simple Pomodoro timer website built with HTML, CSS and JavaScript.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title">Skills</h2>
+      <ul class="tags">
+        <li class="px-box">Python</li>
+        <li class="px-box">HTML</li>
+        <li class="px-box">CSS</li>
+        <li class="px-box">JavaScript</li>
+        <li class="px-box">Git</li>
+      </ul>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact</h2>
+      <div class="panel px-box">
+        <ul class="contact-list">
+          <li><a class="select" href="mailto:sam.rivera@example.com">sam.rivera@example.com</a></li>
+          <li><a class="select" href="https://example.com/sam">GitHub</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

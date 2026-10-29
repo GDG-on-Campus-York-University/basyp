@@ -51,7 +51,7 @@ Fonts, with a job each:
 - Pixelify Sans for short UI labels: menu links, tags, the contact list. Always 16px or larger, never for paragraphs.
 - Atkinson Hyperlegible for every paragraph, 18px (1.125rem) on a 1.6 line height. Pixel fonts tire the eye over a paragraph, and a clean, very legible sans keeps the page grown-up. Alternative: DM Sans.
 
-`<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet">`
+`<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet">`
 
 Other console-like palettes: a four-green handheld look (dark green text on pale green) or night-sky navy with a coral accent. Check contrast if you change colours. Avoid near-black with acid green.
 
@@ -76,7 +76,7 @@ p { max-width: 60ch; margin: 0 0 16px; }
 
 ## Layout ideas
 - **Header / menu:** a fixed bar at the top with the real section names as menu items and the ▶ cursor (see Navigation). On phones the items sit in a 3-column grid of two rows (44px tall each), on wide screens in one row. Never scroll sideways. No footer, or at most one plain "Back to top" link.
-- **Hero (title screen):** the real name large inside one pixel panel, the one-line intro under it (the one-line intro from SPEC.md; if SPEC.md has no separate tagline, the "Who I am" line without the name), and one framed link to the first real section after the hero (usually Projects), labelled with that section's real name. Pixel scenery around it: a cloud and a ground strip.
+- **Hero (title screen):** the real name large inside one pixel panel, the one-line intro under it (the one-line intro from SPEC.md; if SPEC.md has no separate tagline, the "Who I am" line without the name), and one framed link to the Projects section (or, if SPEC.md has no projects, the first section after the hero), labelled with that section's real name. Pixel scenery around it: a cloud and a ground strip.
 - **About:** the real bio in a pixel panel, like a dialog box.
 - **Projects:** each real project is a menu entry: a pixel panel with the title and the real description. The title is a link only if SPEC.md gives that project a link; panels without a link do not react to hover.
 - **Skills:** the real skills as small pixel-bordered tags.
@@ -111,7 +111,7 @@ Cards, tags and contact. Give each project card, each tag `<li>` and the contact
 
 ## Make it theirs
 - The one loud thing is the ▶ cursor and the room-change wipe. Everything else stays calm: no glow, no scanlines, no second accent, no decoration that carries no meaning.
-- Ground the art in the student's SPEC.md. If a project or interest has a clear, simple subject (a bus, a clock, a plant), offer to draw one small 8 by 8 sprite of it from CSS squares, `aria-hidden`. Never invent a subject.
+- Ground the art in the student's SPEC.md. If a project or interest has a clear, simple subject (a bus, a clock, a plant), offer to draw one small 8 by 8 sprite of it from CSS squares, `aria-hidden`. Never invent a subject. The sprite element itself is exactly one pixel square (`width` and `height` = one unit) and every other pixel is a `box-shadow` copy of it with zero blur; give the element a `margin-bottom` of seven units to reserve the rows below. A taller element makes every shadow a tall bar.
 - Clear type scale: name 24px (then 32px, 48px on wider screens), section titles 16px (24px on wide screens), paragraphs 18px. Press Start 2P is one em wide per letter, so check the longest word of the name at 320px: a 24px name fits about 10 letters per line in the hero panel.
 - Pixel art is CSS only and `aria-hidden`. A real image the student supplies gets `image-rendering: pixelated` and real alt text.
 
@@ -155,14 +155,14 @@ The name drops from above in 4 frames, then the intro and the link follow, and a
 @media (min-width: 60em) { .title-name { font-size: 3rem; } }
 
 /* Cloud: three stacked rows of 8px pixels, built from the element and its two pseudo-elements. */
-.cloud { --u: 8px; position: absolute; top: 12px; right: 20px; width: calc(var(--u) * 9); height: var(--u); background: var(--color-sky); --run: 96px; animation: slide-in 600ms steps(6) both; }
+.cloud { --u: 8px; position: absolute; top: 28px; /* the two upper rows sit above the box, so leave 2 units plus a gap */ right: 20px; width: calc(var(--u) * 9); height: var(--u); background: var(--color-sky); --run: 96px; animation: slide-in 600ms steps(6) both; }
 .cloud::before, .cloud::after { content: ""; position: absolute; background: var(--color-sky); height: var(--u); }
 .cloud::before { left: var(--u); bottom: var(--u); width: calc(var(--u) * 7); }
 .cloud::after { left: calc(var(--u) * 3); bottom: calc(var(--u) * 2); width: calc(var(--u) * 3); }
 .ground { position: absolute; inset: auto 20px 0 20px; height: calc(var(--px) * 2);
   background: repeating-linear-gradient(90deg, var(--color-border) 0 calc(var(--px) * 4), transparent 0 calc(var(--px) * 5)); }
 ```
-The link goes to the first real section after the hero and says that section's real name, never "Press Start" or any made-up call to action.
+The link goes to Projects (or the first section after the hero if there are no projects) and says that section's real name, never "Press Start" or any made-up call to action.
 
 ### 2. Scroll: rooms drop in
 A section drops 16px into place in 4 frames, once, when it comes on screen. JavaScript adds the hiding class, so without JavaScript everything is visible. Hidden sections use `opacity`, not `visibility`, so screen readers still read them and Tab still reaches their links.
@@ -226,7 +226,7 @@ The cursor sits in the left gutter of the menu item for the section on screen. W
 .menu { position: relative; max-width: 56rem; margin-inline: auto; padding: 4px 8px; }
 .menu ul { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; padding: 0; list-style: none; } /* 3 per row: five links wrap to two rows at 320px */
 /* .menu a (0,1,1) beats .select (0,1,0) on purpose; keep these selectors this specific. */
-.menu a { display: flex; width: 100%; padding-left: 1.5rem; font: 700 1rem/1.2 var(--font-ui); color: var(--color-text); text-decoration: none; }
+.menu a { display: flex; width: 100%; padding-left: 1.5rem; font: 500 1rem/1.2 var(--font-ui); /* 500, not 700: bold Pixelify closes up the C at 16px */ color: var(--color-text); text-decoration: none; }
 .menu a[aria-current] { color: var(--color-accent); }
 .menu .select::after { inset: 0; } /* inside the item, so nothing is clipped */
 @media (min-width: 40em) {
@@ -264,8 +264,14 @@ function select(id) {
   links.forEach((a) => (a === link ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current')));
   place(link, first);
 }
+// At the very top and bottom the edge section wins, even if the observer fires after the scroll check.
+function edgeId() {
+  if (window.scrollY < 8 && sections[0]) return sections[0].id;
+  if (atBottom() && sections.length) return sections[sections.length - 1].id;
+  return '';
+}
 const spy = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => { if (entry.isIntersecting && !locked) select(entry.target.id); });
+  entries.forEach((entry) => { if (entry.isIntersecting && !locked) select(edgeId() || entry.target.id); });
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach((section) => spy.observe(section));
 
