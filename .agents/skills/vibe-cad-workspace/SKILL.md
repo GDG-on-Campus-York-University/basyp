@@ -207,7 +207,11 @@ sections.forEach((section) => spy.observe(section));
 window.addEventListener('scroll', () => {
   const last = sections[sections.length - 1];
   if (!last || window.innerHeight + window.scrollY < document.documentElement.scrollHeight - 2) return;
-  treeLinks.forEach((link) => link.toggleAttribute('aria-current', link.hash === '#' + last.id));
+  treeLinks.forEach((link) => {
+    // setAttribute, not toggleAttribute: aria-current="" counts as false for screen readers.
+    if (link.hash === '#' + last.id) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
   if (cube) cube.dataset.view = last.id;
 }, { passive: true });
 ```
