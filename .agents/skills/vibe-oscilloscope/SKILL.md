@@ -54,6 +54,7 @@ Spacing, sizes and corner radius are your call. Corners stay square or nearly sq
 - **Projects:** one panel per real project on the surface colour, a link only if SPEC.md has one.
 - **Skills:** the real skills as outlined chips, in the student's own words.
 - **Contact:** the real links as a plain list in cyan, one per line.
+- **Structure:** `<header>` holds the fixed softkey `<nav>` and comes first, with a "Skip to content" link before it (the keys are first in Tab order); every section, the hero included, sits inside `<main>` (the snippets select `main section[id]`). A footer, if any, holds only SPEC.md content.
 
 ## Make it theirs
 - The one loud thing is the hero waveform. The other four moments stay small: a rule, a short jitter, a thin yellow line, a softkey bar.
@@ -95,7 +96,7 @@ When a section arrives, its top rule sweeps left to right (linear), then glows a
 </section>
 ```
 ```css
-.lock { position: relative; padding-top: 2rem; } /* room under the rule; use your spacing scale */
+.lock { position: relative; margin-top: 3rem; padding-top: 2rem; } /* room above and under the rule; use your spacing scale */
 .lock::before, .lock::after { content: ""; position: absolute; top: 0; left: 0; right: 0; }
 .lock::before { height: 1px; background: var(--color-border); } /* the dim rule, always there */
 .lock::after { height: 2px; background: var(--ch1); transform: scaleX(0); transform-origin: left; opacity: 0; } /* the bright trace */
@@ -103,7 +104,7 @@ When a section arrives, its top rule sweeps left to right (linear), then glows a
 @keyframes decay { from { opacity: 1; } to { opacity: 0; } }
 /* Two classes plus a pseudo-element beat the base rules above, so nothing cancels these animations. */
 .lock.is-locking::after { animation: sweep 700ms linear both, decay 2600ms var(--ease-decay) 700ms both; }
-.lock.is-locking > .section-title { animation: lock-on 1400ms steps(1, end) both; } /* keyframes from moment 1 */
+.lock.is-locking > .section-title { animation: lock-on 1400ms steps(1, end) both; } /* @keyframes lock-on is in moment 1: keep it even if you change the page load */
 main { overflow-x: clip; } /* the jitter can never cause sideways scrolling */
 ```
 ```js
@@ -172,24 +173,30 @@ const select = (id) => keys.forEach((key) => {
   if (key.hash === '#' + id) key.setAttribute('aria-current', 'location');
   else key.removeAttribute('aria-current');
 });
+const lastSection = sections[sections.length - 1];
+// After a softkey jump, that key stays selected until the visitor scrolls on their own. Without this, jumping to a
+// short section near the end selects the section after it (the middle band or the page bottom lands there).
+let jumpedTo = '';
+['wheel', 'touchmove', 'keydown'].forEach((type) => window.addEventListener(type, () => { jumpedTo = ''; }, { passive: true }));
 const spy = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => { if (entry.isIntersecting) select(entry.target.id); });
+  entries.forEach((entry) => { if (entry.isIntersecting) select(jumpedTo || entry.target.id); });
   checkEnds(); // the top and bottom of the page win over the middle band
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach((section) => spy.observe(section));
-const lastSection = sections[sections.length - 1];
-const checkEnds = () => {
+function checkEnds() { // a function declaration, so the spy can call it from anywhere in the file
   if (window.scrollY < 8) select(sections[0].id); // a short hero can leave the middle band in the next section
   else if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
-    select(lastSection.id); // a short last section may never reach the middle band
+    select(jumpedTo || lastSection.id); // a short last section may never reach the middle band
     lastSection.classList.add('is-locking');
   }
-};
+}
 window.addEventListener('scroll', checkEnds, { passive: true });
 checkEnds();
-// Jumping to a section locks it on again. Removing and re-adding the class restarts the animation.
+// Jumping to a section selects its key and locks it on again. Removing and re-adding the class restarts the animation.
 window.addEventListener('hashchange', () => {
   const target = document.getElementById(location.hash.slice(1));
+  jumpedTo = target && target.matches('main section[id]') ? target.id : '';
+  if (jumpedTo) select(jumpedTo);
   if (!target || !target.classList.contains('lock') || motion.matches) return;
   target.classList.remove('is-locking');
   void target.offsetWidth; // the only layout read, once per jump, so the animation restarts
