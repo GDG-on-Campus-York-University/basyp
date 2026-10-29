@@ -1,0 +1,163 @@
+/* ---------- Variables ---------- */
+:root {
+  /* Contrast, computed (WCAG): ink on bg 15.3, on every pastel 11.5 to 13.8; muted on bg 8.3, on every pastel 6.3 to 7.5;
+     accent on bg 6.7, on pastels 5.1 to 6.0; white on accent 7.0. */
+  --color-bg: #FFF8FB;
+  --color-surface: #FFFFFF;
+  --color-text: #2A1B36;
+  --color-muted: #554560;
+  --color-accent: #0B645B;
+  --color-on-accent: #FFFFFF;
+  --pastel-pink: #FAD5E5;
+  --pastel-lilac: #DFD6FA;
+  --pastel-mint: #C8EFDF;
+  --pastel-butter: #FBEEB8;
+  --pastel-sky: #CCE5F9;
+
+  --font-display: "Fredoka", "Nunito", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+
+  /* Spacing scale (roomy) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  --radius-card: 1.75rem;
+  --radius-band: 2.25rem;
+  --radius-pill: 999px;
+
+  /* Spring, about 8% overshoot. The cubic-bezier is the fallback; browsers that know linear() replace it. */
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+@supports (transition-timing-function: linear(0, 1)) {
+  :root { --spring: linear(0, .068, .227, .421, .612, .777, .905, .994, 1.05, 1.077, 1.083, 1.077, 1.063, 1.047, 1.031, 1.018, 1.007, 1, .996, .994, .993, .994, .995, .996, 1); }
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font: 1.0625rem/1.6 var(--font-body); }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: 600; line-height: 1.1; }
+h1 { font-size: clamp(2.5rem, 11vw, 5.5rem); text-wrap: balance; overflow-wrap: anywhere; }
+h2 { font-size: clamp(1.75rem, 6vw, 2.75rem); }
+h3 { font-size: 1.375rem; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+main { overflow-x: clip; } /* settling and the blobs can never cause sideways scroll */
+main section:not(.hero) { padding: var(--space-7) var(--space-4) 0; max-width: 72rem; margin-inline: auto; }
+main section:last-child { padding-bottom: var(--space-8); }
+main section h2 { margin-bottom: var(--space-5); }
+
+a { color: var(--color-accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+
+/* ---------- Header and nav ---------- */
+.site-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-4);
+  margin: var(--space-3); padding: var(--space-2) var(--space-4); border-radius: var(--radius-card); background: var(--color-surface);
+  box-shadow: 0 8px 20px -14px rgb(42 27 54 / 0.35); }
+.brand { color: var(--color-text); font: 600 1.25rem var(--font-display); text-decoration: none; border-radius: var(--radius-pill); }
+.site-nav { position: relative; }  /* the links' offsetParent: do not position the ul or li */
+.site-nav ul { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.site-nav a { position: relative; z-index: 1; display: flex; align-items: center; min-height: 44px; padding: 0 var(--space-3); border-radius: var(--radius-pill);
+  color: var(--color-text); font-weight: 500; text-decoration: none; transition: transform 500ms var(--spring); }
+.site-nav a:active { transform: scale(0.94); transition-duration: 120ms; transition-timing-function: ease-out; }
+.nav-pill { position: absolute; inset: 0; background: var(--pastel-lilac);
+  clip-path: inset(var(--pill-t, 0px) var(--pill-r, 100%) var(--pill-b, 0px) var(--pill-l, 0px) round 999px); }
+.nav-pill.is-ready { transition: clip-path 550ms var(--spring); } /* added after the first placement, so it doesn't fly in */
+section[id] { scroll-margin-top: var(--space-4); }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; isolation: isolate; overflow: clip; padding: var(--space-9) var(--space-4) var(--space-7); min-height: 62vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.hero-intro { max-width: 36rem; margin-top: var(--space-4); font-size: 1.25rem; color: var(--color-muted); }
+@keyframes pop { from { opacity: 0; transform: translateY(1.25rem) scale(0.94); } }
+.hero h1, .hero-intro { animation: pop 800ms var(--spring) backwards; }
+.hero-intro { animation-delay: 120ms; }
+
+.blobs { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.blob { position: absolute; width: var(--size); aspect-ratio: 1; animation: blob-in 1100ms var(--spring) backwards; }
+.blob-shape { display: block; width: 100%; height: 100%; background: var(--fill); border-radius: 62% 38% 54% 46% / 48% 58% 42% 52%;
+  animation: morph 11s ease-in-out 6 alternate; } /* 6 runs, an even count, so it ends where it began */
+.blob-a { --size: min(78vw, 26rem); --fill: var(--pastel-lilac); top: -12%; right: -14%; }
+.blob-b { --size: min(60vw, 19rem); --fill: var(--pastel-mint); bottom: -18%; left: -12%; animation-delay: 120ms; }
+.blob-c { --size: min(34vw, 9rem); --fill: var(--pastel-butter); bottom: 2%; right: 6%; animation-delay: 240ms; }
+.blob-b .blob-shape { animation-duration: 14s; animation-direction: alternate-reverse; }
+.blob-c .blob-shape { animation-duration: 9s; }
+@keyframes blob-in { from { opacity: 0; transform: scale(0.6); } }
+@keyframes morph { 0% { transform: rotate(0deg) scale(1, 1); } 50% { transform: rotate(35deg) scale(1.18, 0.86); } 100% { transform: rotate(-20deg) scale(0.9, 1.12); } }
+.is-paused .blob-shape { animation-play-state: paused; }
+.pause { min-height: 44px; margin-top: var(--space-5); padding: 0 var(--space-4); border: 2px solid var(--color-text); border-radius: var(--radius-pill);
+  background: var(--color-surface); color: var(--color-text); font: inherit; font-weight: 500; cursor: pointer; }
+
+/* ---------- About: open text, no card ---------- */
+.about p { max-width: 40rem; font-size: 1.25rem; }
+
+/* ---------- Scroll settle ---------- */
+@keyframes settle { from { opacity: 0; transform: translateY(1.5rem) scale(0.96); } }
+.will-settle > * { opacity: 0; }
+/* These selectors are more specific than the hiding rule, so they win. */
+.will-settle.is-settled > * { opacity: 1; animation: settle 800ms var(--spring) backwards; }
+.will-settle.is-settled > :nth-child(2) { animation-delay: 90ms; }
+.will-settle.is-settled > :nth-child(n + 3) { animation-delay: 180ms; }
+
+/* ---------- Projects ---------- */
+.projects-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
+.card { position: relative; padding: var(--space-5); border-radius: var(--radius-card); background: var(--card-bg, var(--color-surface));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 10px 24px -12px rgb(42 27 54 / 0.35); }
+.card:nth-child(4n + 1) { --card-bg: var(--pastel-pink); }
+.card:nth-child(4n + 2) { --card-bg: var(--pastel-mint); }
+.card:nth-child(4n + 3) { --card-bg: var(--pastel-butter); }
+.card:nth-child(4n + 4) { --card-bg: var(--pastel-sky); }
+.card h3 { margin-bottom: var(--space-2); }
+.card p { max-width: 36ch; color: var(--color-muted); }
+
+/* ---------- Skills ---------- */
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.tags li { padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); background: var(--tag-bg, var(--pastel-pink)); color: var(--color-text); font-weight: 500; }
+.tags li:nth-child(5n + 1) { --tag-bg: var(--pastel-pink); }
+.tags li:nth-child(5n + 2) { --tag-bg: var(--pastel-lilac); }
+.tags li:nth-child(5n + 3) { --tag-bg: var(--pastel-mint); }
+.tags li:nth-child(5n + 4) { --tag-bg: var(--pastel-butter); }
+.tags li:nth-child(5n + 5) { --tag-bg: var(--pastel-sky); }
+
+/* ---------- Contact ---------- */
+.contact-band { padding: var(--space-6) var(--space-4); border-radius: var(--radius-band); background: var(--pastel-lilac); }
+.contact-band h2 { margin-bottom: var(--space-4); }
+.contact-links { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.contact-links li { max-width: 100%; }
+
+/* ---------- Hover, focus, press ---------- */
+.card, .pill-link { transition: transform 500ms var(--spring); } /* never "transition: all" */
+@media (hover: hover) { .card:hover, .pill-link:hover { transform: translateY(-6px) scale(1.015); } }
+.card:has(:focus-visible), .pill-link:focus-visible { transform: translateY(-6px) scale(1.015); }
+/* :active comes last, so it wins over hover and focus. */
+.card:active, .pill-link:active { transform: scale(0.97); transition-duration: 120ms; transition-timing-function: ease-out; }
+.pill-link { display: inline-flex; align-items: center; min-height: 44px; padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
+  background: var(--color-accent); color: var(--color-on-accent); font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+.pill-link:focus-visible { outline-color: var(--color-text); }
+
+/* ---------- Wider screens ---------- */
+@media (min-width: 40em) {
+  .site-header { position: sticky; top: var(--space-3); z-index: 10; margin-inline: auto; max-width: 72rem; width: calc(100% - 2 * var(--space-3)); padding-inline: var(--space-5); }
+  section[id] { scroll-margin-top: var(--space-9); } /* header height, so it never covers a heading */
+  .hero { padding: var(--space-9) var(--space-6) var(--space-8); min-height: 70vh; }
+  .hero { padding-inline: max(var(--space-6), calc((100% - 72rem) / 2 + var(--space-6))); }
+  main section:not(.hero) { padding: var(--space-8) var(--space-6) 0; }
+  main section:last-child { padding-bottom: var(--space-9); }
+  .contact-band { padding: var(--space-7); }
+  .blob-c { bottom: 12%; right: 14%; }
+  .pill-link { padding-inline: var(--space-5); }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .will-settle > * { opacity: 1; }
+  .pause { display: none; } /* nothing moves, so there is nothing to pause */
+}

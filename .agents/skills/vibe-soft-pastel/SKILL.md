@@ -18,7 +18,7 @@ A well-made indie app or a designer's sticker sheet: soft colour fields, rounded
 2. Rounded everything, but with a hierarchy: pills for small things, big soft corners for cards and bands. About stays open text, not another card.
 3. One motion character: a soft spring that overshoots by a few percent and settles. Nothing is stepped, linear or sharp.
 4. Morphing blobs behind the hero are the one loud thing. They are decoration, never over text or links.
-5. Cards feel physical: they lift on hover and squash a little on press.
+5. Cards feel physical: a card with a real link lifts on hover and squashes a little on press.
 
 ## Starting defaults (change freely)
 The student can say "more mint" or "make the accent berry". Their request wins.
@@ -54,7 +54,8 @@ Type scale: name `clamp(2.5rem, 11vw, 5.5rem)`, section titles `clamp(1.75rem, 6
 - **About:** the real bio as open text on the page colour, narrow measure, no card.
 - **Projects:** a grid of cards, each in a different pastel (cycle with `:nth-child`): real title, real description, and the title as a link only if SPEC.md has one.
 - **Skills:** the real skills as pill tags, cycling through the pastels.
-- **Contact:** one big, softly rounded pastel band holding the real links as accent-filled pills (class `pill-link`). Long emails must wrap, not overflow.
+- **Contact:** one big, softly rounded pastel band holding the real links as accent-filled pills (class `pill-link`). Long emails must wrap, not overflow; on phones keep the band and pill padding small so a real email fits on one line at 320px.
+- **Width:** the hero and every section share one content width, so the name lines up with the sections on wide screens: `.hero, main > section { padding-inline: max(1rem, (100% - 72rem) / 2); }`.
 - Cards, tags and bands differ in radius and colour by role, never one identical card everywhere.
 
 ## Make it theirs
@@ -123,7 +124,7 @@ document.addEventListener('focusin', (event) => {
 ```
 
 ### 3. Hover, focus and press: lift, then squash
-Cards and pill links lift with the spring on hover or keyboard focus, squash a little when pressed, and spring back on release (the state you move into sets the transition, so the press is quick and the release is springy).
+Cards that hold a real link, and pill links, lift with the spring on hover or keyboard focus, squash a little when pressed, and spring back on release. A card with no link stays still, so it never pretends to be clickable (the state you move into sets the transition, so the press is quick and the release is springy).
 
 ```html
 <ul class="projects-grid">
@@ -144,14 +145,15 @@ Cards and pill links lift with the spring on hover or keyboard focus, squash a l
 .card a:focus-visible { outline: none; }
 .card a:focus-visible::after { outline: 3px solid var(--color-accent); outline-offset: 3px; }
 
-.card, .pill-link { transition: transform 500ms var(--spring); } /* never "transition: all" */
-@media (hover: hover) { .card:hover, .pill-link:hover { transform: translateY(-6px) scale(1.015); } }
+.card:has(a), .pill-link { transition: transform 500ms var(--spring); } /* never "transition: all" */
+@media (hover: hover) { .card:has(a):hover, .pill-link:hover { transform: translateY(-6px) scale(1.015); } }
 .card:has(:focus-visible), .pill-link:focus-visible { transform: translateY(-6px) scale(1.015); }
 /* :active comes last, so it wins over hover and focus. */
-.card:active, .pill-link:active { transform: scale(0.97); transition-duration: 120ms; transition-timing-function: ease-out; }
+.card:has(a):active, .pill-link:active { transform: scale(0.97); transition-duration: 120ms; transition-timing-function: ease-out; }
 
 a { color: var(--color-accent); }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+.pill-link:focus-visible { outline-color: var(--color-text); } /* a teal ring would vanish next to the teal pill */
 .pill-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0.5rem 1.25rem; border-radius: 999px;
   background: var(--color-accent); color: var(--color-on-accent); font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
 ```
@@ -183,10 +185,10 @@ One lilac pill sits behind the links: a full-size layer revealed through a round
 .nav-pill { position: absolute; inset: 0; background: var(--pastel-lilac);
   clip-path: inset(var(--pill-t, 0px) var(--pill-r, 100%) var(--pill-b, 0px) var(--pill-l, 0px) round 999px); }
 .nav-pill.is-ready { transition: clip-path 550ms var(--spring); } /* added after the first placement, so it doesn't fly in */
-section[id] { scroll-margin-top: 1rem; }
+html { scroll-padding-top: 1rem; }
 @media (min-width: 40em) {
   .site-header { position: sticky; top: 0.75rem; z-index: 10; }
-  section[id] { scroll-margin-top: 6rem; } /* use your header's height so it never covers a heading */
+  html { scroll-padding-top: 5.5rem; } /* your header's height plus a gap; also keeps Tab focus out from under the header */
 }
 ```
 ```js
@@ -236,19 +238,21 @@ if (pill) requestAnimationFrame(() => requestAnimationFrame(() => pill.classList
 Three flat pastel blobs sit behind the hero (markup in moment 1). Each is a lopsided rounded shape that slowly rotates while squashing and stretching along its own axes, which reads as morphing and uses `transform` only. The outer layer pops in, the inner one morphs. The hero clips them, so nothing scrolls sideways; they are `aria-hidden` and behind the text. The motion ends on its own after about a minute and the Pause button stops it sooner.
 
 ```css
-.hero { position: relative; isolation: isolate; overflow: clip; padding: 4rem 1rem 3.5rem; }
+.hero { position: relative; isolation: isolate; overflow: clip; padding-block: 6rem 3.5rem; } /* the top padding keeps blob A clear of the name on phones */
 .blobs { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 .blob { position: absolute; width: var(--size); aspect-ratio: 1; animation: blob-in 1100ms var(--spring) backwards; }
 .blob-shape { display: block; width: 100%; height: 100%; background: var(--fill); border-radius: 62% 38% 54% 46% / 48% 58% 42% 52%;
   animation: morph 11s ease-in-out 6 alternate; } /* 6 runs, an even count, so it ends where it began */
 .blob-a { --size: min(78vw, 26rem); --fill: var(--pastel-lilac); top: -12%; right: -14%; }
 .blob-b { --size: min(60vw, 19rem); --fill: var(--pastel-mint); bottom: -18%; left: -12%; animation-delay: 120ms; }
-.blob-c { --size: min(34vw, 9rem); --fill: var(--pastel-butter); bottom: 12%; right: 14%; animation-delay: 240ms; }
+.blob-c { --size: min(34vw, 9rem); --fill: var(--pastel-butter); bottom: 2%; right: 6%; animation-delay: 240ms; }
+@media (min-width: 40em) { .blob-c { bottom: 12%; right: 14%; } } /* on phones it would sit behind the Pause button */
 .blob-b .blob-shape { animation-duration: 14s; animation-direction: alternate-reverse; } .blob-c .blob-shape { animation-duration: 9s; }
 @keyframes blob-in { from { opacity: 0; transform: scale(0.6); } }
 @keyframes morph { 0% { transform: rotate(0deg) scale(1, 1); } 50% { transform: rotate(35deg) scale(1.18, 0.86); } 100% { transform: rotate(-20deg) scale(0.9, 1.12); } }
 .is-paused .blob-shape { animation-play-state: paused; }
 .pause { min-height: 44px; margin-top: 1.5rem; padding: 0 1.25rem; border: 2px solid var(--color-text); border-radius: 999px; background: var(--color-surface); color: var(--color-text); font: inherit; font-weight: 500; }
+.pause[hidden] { display: none; } /* keeps it hidden even if you give .pause a display value */
 ```
 ```js
 // The button is hidden in the HTML and shown here, so it never sits there doing nothing without JavaScript.
