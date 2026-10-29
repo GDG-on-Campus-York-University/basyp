@@ -215,10 +215,30 @@ The link for the section on screen becomes a solid inverted block, and it jumps 
 ```js
 const navLinks = document.querySelectorAll('.nav a[href^="#"]');
 const watched = document.querySelectorAll('main section[id]');
-const mark = (id) => navLinks.forEach((a) => {
-  if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'location');
-  else a.removeAttribute('aria-current');
+// After a nav jump, keep the jumped-to link current until the visitor scrolls on their own. Without this,
+// jumping to a short section selects the one after it (the middle band or the page bottom lands there).
+let jumpedTo = '', jumpSeen = false;
+document.querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener('click', () => {
+  const target = document.getElementById(a.hash.slice(1));
+  if (target && target.matches('main section[id]')) { jumpedTo = target.id; jumpSeen = false; }
+}));
+['wheel', 'touchmove'].forEach((name) => window.addEventListener(name, () => { jumpedTo = ''; }, { passive: true }));
+window.addEventListener('keydown', (event) => {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) jumpedTo = '';
 });
+window.addEventListener('scroll', () => { // a scrollbar drag: release once the target was on screen and has left it
+  if (!jumpedTo) return;
+  const box = document.getElementById(jumpedTo).getBoundingClientRect();
+  if (box.bottom > 0 && box.top < window.innerHeight) jumpSeen = true;
+  else if (jumpSeen) jumpedTo = '';
+}, { passive: true });
+function mark(id) {
+  id = jumpedTo || id;
+  navLinks.forEach((a) => {
+    if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'location');
+    else a.removeAttribute('aria-current');
+  });
+}
 if ('IntersectionObserver' in window && watched.length) {
   const spy = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {

@@ -192,27 +192,41 @@ The `data-view` values must match the section ids; rename them to match the stud
 const sections = document.querySelectorAll('main section[id]');
 const treeLinks = document.querySelectorAll('.feature-tree a');
 const cube = document.querySelector('.cube');
-const spy = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (!entry.isIntersecting) return;
-    treeLinks.forEach((link) => {
-      if (link.hash === '#' + entry.target.id) link.setAttribute('aria-current', 'location');
-      else link.removeAttribute('aria-current');
-    });
-    if (cube) cube.dataset.view = entry.target.id;
+// After a nav jump, keep the jumped-to link current until the visitor scrolls on their own. Without this,
+// jumping to a short section selects the one after it (the middle band or the page bottom lands there).
+let jumpedTo = '', jumpSeen = false;
+document.querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener('click', () => {
+  const target = document.getElementById(a.hash.slice(1));
+  if (target && target.matches('main section[id]')) { jumpedTo = target.id; jumpSeen = false; }
+}));
+['wheel', 'touchmove'].forEach((name) => window.addEventListener(name, () => { jumpedTo = ''; }, { passive: true }));
+window.addEventListener('keydown', (event) => {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) jumpedTo = '';
+});
+window.addEventListener('scroll', () => { // a scrollbar drag: release once the target was on screen and has left it
+  if (!jumpedTo) return;
+  const box = document.getElementById(jumpedTo).getBoundingClientRect();
+  if (box.bottom > 0 && box.top < window.innerHeight) jumpSeen = true;
+  else if (jumpSeen) jumpedTo = '';
+}, { passive: true });
+function select(id) {
+  id = jumpedTo || id;
+  treeLinks.forEach((link) => {
+    // setAttribute, not toggleAttribute: aria-current="" counts as false for screen readers.
+    if (link.hash === '#' + id) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
   });
+  if (cube) cube.dataset.view = id;
+}
+const spy = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => { if (entry.isIntersecting) select(entry.target.id); });
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach((section) => spy.observe(section));
 // A short last section may never reach the middle band: at the very bottom, select it anyway.
 window.addEventListener('scroll', () => {
   const last = sections[sections.length - 1];
   if (!last || window.innerHeight + window.scrollY < document.documentElement.scrollHeight - 2) return;
-  treeLinks.forEach((link) => {
-    // setAttribute, not toggleAttribute: aria-current="" counts as false for screen readers.
-    if (link.hash === '#' + last.id) link.setAttribute('aria-current', 'location');
-    else link.removeAttribute('aria-current');
-  });
-  if (cube) cube.dataset.view = last.id;
+  select(last.id);
 }, { passive: true });
 ```
 On phones, the fixed cube can cover text as the page scrolls: put it inside a slim fixed top bar with the student's name, or leave a gutter on the right for it.
