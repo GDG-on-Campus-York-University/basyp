@@ -65,6 +65,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.
 p { max-width: 62ch; }
 html { scroll-behavior: auto; } /* jumps are instant, like a probe touching a pad */
 section[id] { scroll-margin-top: var(--header-h); } /* the sticky header never covers a landing */
+html { scroll-padding-block: var(--header-h) 2rem; } /* and Tab focus never lands under it or on the bottom edge */
 ```
 
 ## Layout ideas
@@ -100,7 +101,7 @@ section[id] { scroll-margin-top: var(--header-h); } /* the sticky header never c
 @media (min-width: 60em) { .chips { grid-template-columns: repeat(3, 1fr); } }
 .chip { position: relative; margin-inline: 0.5rem; padding: 1.25rem 1rem; background: var(--color-deep); border: 1px solid var(--color-line); border-radius: 0.25rem; }
 .chip::before, .chip::after { content: ""; position: absolute; top: 0.75rem; bottom: 0.75rem; width: 0.5rem; /* the pins */
-  background: repeating-linear-gradient(to bottom, var(--color-copper) 0 0.5rem, transparent 0.5rem 1rem); }
+  background: linear-gradient(to bottom, var(--color-copper) 0 0.5rem, transparent 0.5rem) 0 0 / 100% 1rem round; } /* round: whole pins only, no sliver at the end */
 .chip::before { right: 100%; } .chip::after { left: 100%; }
 .skill-pins { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
 .skill-pins li { display: flex; align-items: center; gap: 0.5rem; }
@@ -119,7 +120,7 @@ Tempo: a trace takes 700ms, pads light 90ms apart, then everything holds. Easing
 
 Shared keyframes (used by several moments):
 ```css
-@keyframes pulse-run { from { stroke-dashoffset: 12; } to { stroke-dashoffset: -100; } }   /* a 12-unit dash enters at 0 and leaves past 100 */
+@keyframes pulse-run { from { stroke-dashoffset: 18; } to { stroke-dashoffset: -100; } }   /* an 18-unit dash enters at 0 and leaves past 100 */
 @keyframes pad-on { 0% { opacity: 0; transform: scale(0.5); } 45% { opacity: 1; transform: scale(1.4); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes header-sweep { to { transform: translateX(100vw); } }
 @keyframes pins-in { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
@@ -155,8 +156,8 @@ As each chip scrolls in, its pins extend from the top down, tied to scroll posit
 Content links wear a dim copper underline (a short trace). On hover or focus a bright pulse fills it left to right. Contact vias swell and glow. Only real links react; chips and plain text do nothing. Scoped to `.board` so the header pins are not affected.
 
 ```css
-.board a { position: relative; display: inline-block; color: var(--color-gold); text-decoration: none; overflow-wrap: anywhere; }
-.board a::before, .board a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; }
+.board a { position: relative; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; color: var(--color-gold); text-decoration: none; overflow-wrap: anywhere; } /* 44px tap targets */
+.board a::before, .board a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.5rem; height: 2px; } /* under the text inside the 44px box */
 .board a::before { background: var(--color-copper); }
 .board a::after { background: var(--color-pulse); transform: scaleX(0); transform-origin: left; transition: transform 180ms var(--ease-surge); }
 .board a:hover::after, .board a:focus-visible::after { transform: scaleX(1); }
@@ -230,7 +231,7 @@ The last stage can leave out the bottom pads. Every stage class is `stage`; the 
 .trace { display: block; width: 3rem; height: 3.5rem; margin-left: 1.5rem; overflow: visible; }
 .trace path { fill: none; stroke-width: 3; stroke-linecap: round; }
 .trace .copper { stroke: var(--color-copper); }
-.trace .pulse { stroke: var(--color-pulse); stroke-dasharray: 12 100; stroke-dashoffset: 12; filter: drop-shadow(0 0 3px var(--color-gold)); } /* hidden until it runs */
+.trace .pulse { stroke: var(--color-pulse); stroke-width: 4; stroke-dasharray: 18 100; stroke-dashoffset: 18; filter: drop-shadow(0 0 5px var(--color-gold)); } /* hidden until it runs */
 .lane-b { display: none; }
 @media (min-width: 48em) { .lane-b { display: inline; } }
 

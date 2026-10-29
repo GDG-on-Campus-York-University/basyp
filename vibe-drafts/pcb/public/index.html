@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daniel Osei | Computer Engineering Portfolio</title>
+<meta name="description" content="Daniel Osei, second-year Computer Engineering student at York University. Embedded hardware projects: Plant Monitor, Logic Probe and Reaction Timer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Saira+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+</head>
+<body>
+<header class="pin-header">
+  <nav aria-label="Sections">
+    <ul>
+      <li><a href="#home" aria-current="location"><span class="pin" aria-hidden="true"></span>Home</a></li>
+      <li><a href="#about"><span class="pin" aria-hidden="true"></span>About</a></li>
+      <li><a href="#projects"><span class="pin" aria-hidden="true"></span>Projects</a></li>
+      <li><a href="#skills"><span class="pin" aria-hidden="true"></span>Skills</a></li>
+      <li><a href="#contact"><span class="pin" aria-hidden="true"></span>Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="board">
+  <section class="stage stage--first" id="home" aria-labelledby="home-title">
+    <div class="footprint footprint--hero">
+      <h1 id="home-title">Daniel Osei</h1>
+      <p>Second-year Computer Engineering student at York University.</p>
+      <span class="pads pads--bottom" aria-hidden="true"><i></i><i></i></span>
+    </div>
+  </section>
+
+  <section class="stage" id="about" aria-labelledby="about-title">
+  <svg class="trace" viewBox="0 0 48 56" aria-hidden="true" focusable="false">
+    <path class="copper" d="M8 0V10L20 22V34L8 46V56"/>
+    <path class="pulse" pathLength="100" d="M8 0V10L20 22V34L8 46V56"/>
+    <g class="lane-b">
+      <path class="copper" d="M24 0V10L36 22V34L24 46V56"/>
+      <path class="pulse" pathLength="100" d="M24 0V10L36 22V34L24 46V56"/>
+    </g>
+  </svg>
+    <div class="footprint">
+      <span class="pads pads--top" aria-hidden="true"><i></i><i></i></span>
+      <h2 id="about-title">About</h2>
+      <p>I like projects where code and hardware meet: choosing the parts, laying out the board, soldering it, and then working out why it does not behave. I am happiest with a multimeter in one hand and a datasheet open.</p>
+      <span class="pads pads--bottom" aria-hidden="true"><i></i><i></i></span>
+    </div>
+  </section>
+
+  <section class="stage" id="projects" aria-labelledby="projects-title">
+  <svg class="trace" viewBox="0 0 48 56" aria-hidden="true" focusable="false">
+    <path class="copper" d="M8 0V10L20 22V34L8 46V56"/>
+    <path class="pulse" pathLength="100" d="M8 0V10L20 22V34L8 46V56"/>
+    <g class="lane-b">
+      <path class="copper" d="M24 0V10L36 22V34L24 46V56"/>
+      <path class="pulse" pathLength="100" d="M24 0V10L36 22V34L24 46V56"/>
+    </g>
+  </svg>
+    <div class="footprint">
+      <span class="pads pads--top" aria-hidden="true"><i></i><i></i></span>
+      <h2 id="projects-title">Projects</h2>
+      <ul class="chips">
+        <li class="chip">
+          <h3>Plant Monitor</h3>
+          <p>A battery-powered soil moisture sensor on a small custom board that wakes up, reads the soil and sends the result to my phone over Bluetooth.</p>
+        </li>
+        <li class="chip">
+          <h3>Logic Probe</h3>
+          <p>A pocket tool I built for my digital logic course. It shows whether a pin is high, low or floating using three LEDs, and it lets me check circuits without an oscilloscope.</p>
+          <p><a href="https://example.com/daniel-osei/logic-probe">Link<span class="sr-only"> to Logic Probe</span></a></p>
+        </li>
+        <li class="chip">
+          <h3>Reaction Timer</h3>
+          <p>A two-player reaction game on a microcontroller, with a button for each player, a display for the score and a buzzer, written in C.</p>
+        </li>
+      </ul>
+      <span class="pads pads--bottom" aria-hidden="true"><i></i><i></i></span>
+    </div>
+  </section>
+
+  <section class="stage" id="skills" aria-labelledby="skills-title">
+  <svg class="trace" viewBox="0 0 48 56" aria-hidden="true" focusable="false">
+    <path class="copper" d="M8 0V10L20 22V34L8 46V56"/>
+    <path class="pulse" pathLength="100" d="M8 0V10L20 22V34L8 46V56"/>
+    <g class="lane-b">
+      <path class="copper" d="M24 0V10L36 22V34L24 46V56"/>
+      <path class="pulse" pathLength="100" d="M24 0V10L36 22V34L24 46V56"/>
+    </g>
+  </svg>
+    <div class="footprint">
+      <span class="pads pads--top" aria-hidden="true"><i></i><i></i></span>
+      <h2 id="skills-title">Skills</h2>
+      <ul class="skill-pins">
+        <li>C</li>
+        <li>Python</li>
+        <li>Arduino</li>
+        <li>KiCad</li>
+        <li>Soldering</li>
+        <li>Breadboard prototyping</li>
+        <li>Multimeter debugging</li>
+      </ul>
+      <span class="pads pads--bottom" aria-hidden="true"><i></i><i></i></span>
+    </div>
+  </section>
+
+  <section class="stage" id="contact" aria-labelledby="contact-title">
+  <svg class="trace" viewBox="0 0 48 56" aria-hidden="true" focusable="false">
+    <path class="copper" d="M8 0V10L20 22V34L8 46V56"/>
+    <path class="pulse" pathLength="100" d="M8 0V10L20 22V34L8 46V56"/>
+    <g class="lane-b">
+      <path class="copper" d="M24 0V10L36 22V34L24 46V56"/>
+      <path class="pulse" pathLength="100" d="M24 0V10L36 22V34L24 46V56"/>
+    </g>
+  </svg>
+    <div class="footprint">
+      <span class="pads pads--top" aria-hidden="true"><i></i><i></i></span>
+      <h2 id="contact-title">Contact</h2>
+      <ul class="contact-list">
+        <li><span class="via" aria-hidden="true"></span><a href="mailto:daniel.osei@example.com">daniel.osei@example.com</a></li>
+        <li><span class="via" aria-hidden="true"></span><a href="https://example.com/daniel-osei">GitHub</a></li>
+        <li><span class="via" aria-hidden="true"></span><a href="https://example.com/daniel-osei-profile">LinkedIn</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <span class="silk-mark" aria-hidden="true">DO</span>
+</main>
+</body>
+</html>
