@@ -8,7 +8,7 @@ const sections = [...document.querySelectorAll('.commit')];
 const pieces = [...document.querySelectorAll('.piece')];
 const dots = [...document.querySelectorAll('.dot')];
 sections.forEach((s) => s.querySelector('.commit-title').setAttribute('tabindex', '-1')); // so j/k can focus headings
-let headIndex = -1, queued = false, jumped = -1;
+let headIndex = -1, queued = false, jumped = -1, jumpSeen = false;
 function update() {
   queued = false;
   const vh = window.innerHeight, tipY = vh * TIP;
@@ -22,7 +22,9 @@ function update() {
   let index = 0;
   tops.forEach((top, i) => { if (top <= readY) index = i; }); // also true for sections already scrolled past
   if (atBottom) index = sections.length - 1;                  // a short last section still becomes HEAD
-  if (jumpBox && (jumpBox.bottom < 0 || jumpBox.top > vh)) jumped = -1; // scrolled away another way (scrollbar drag)
+  // Release the jump once its section has been on screen and then left it (scrollbar drag). Not before it was seen:
+  // right after a click the target is still off screen, and releasing then would undo the jump.
+  if (jumpBox) { if (jumpBox.bottom > 0 && jumpBox.top < vh) jumpSeen = true; else if (jumpSeen) jumped = -1; }
   if (jumped >= 0) index = jumped;                            // ...unless the visitor just jumped somewhere
   if (index !== headIndex) setHead(index);
   if (fallback) {
@@ -50,7 +52,7 @@ function setHead(index) {
 // Without this, jumping to a short section near the end makes the bottom-of-page rule select the one after it.
 const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
 ['wheel', 'touchmove', 'pointerdown'].forEach((name) => window.addEventListener(name, () => { jumped = -1; }, { passive: true }));
-navLinks.forEach((link) => link.addEventListener('click', () => { jumped = sections.findIndex((s) => '#' + s.id === link.hash); }));
+navLinks.forEach((link) => link.addEventListener('click', () => { jumped = sections.findIndex((s) => '#' + s.id === link.hash); jumpSeen = false; }));
 document.addEventListener('keydown', (event) => {
   if (scrollKeys.includes(event.key)) jumped = -1;
   if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || (event.key !== 'j' && event.key !== 'k')) return;
@@ -58,7 +60,7 @@ document.addEventListener('keydown', (event) => {
   const from = jumped >= 0 ? jumped : headIndex;
   const next = clamp(from + (event.key === 'j' ? 1 : -1), 0, sections.length - 1);
   if (next === from) return;
-  jumped = next;
+  jumped = next; jumpSeen = false;
   setHead(next);
   sections[next].scrollIntoView(); // CSS smooth scroll and scroll-margin-top apply
   sections[next].querySelector('.commit-title').focus({ preventScroll: true });
