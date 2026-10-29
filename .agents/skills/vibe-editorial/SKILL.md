@@ -77,7 +77,7 @@ h1, h2, h3, .pull-quote, .folio-now { font-family: var(--font-display); font-wei
 - **Projects:** "stories" in a staggered list: a hairline above, the project name large in display type, the real description under it. Even stories sit further right. The name is a link only if SPEC.md gives that project a link; otherwise it is plain text and nothing about it reacts.
 - **Skills:** the real skills as a plain index list in italic display type, one per row separated by hairlines, two columns from 40em up. No pills, no "A · B · C" strings.
 - **Contact:** a quiet colophon: the real email large and wrapping (`overflow-wrap: anywhere`, `font-size: clamp(1.25rem, 5vw, 2.5rem)` so it fits one line at 320px), then each real link with the label SPEC.md gives it. A link only if SPEC.md has one.
-- **Footer:** omit it, or a plain "Back to top" link. No year, no slogan, no "made with".
+- **Footer:** omit it, or a plain "Back to top" link. No year, no slogan, no "made with". Either way give the last section generous bottom padding (`main > section:last-child { padding-bottom: clamp(4rem, 10vw, 8rem); }`) so the page does not end flush against the edge.
 - **Images:** none unless SPEC.md lists some (then see the zoom-settle note in Scroll). Without images the type, drop cap and rules carry the layout. Never add stock photos.
 
 ## Make it theirs
@@ -230,7 +230,7 @@ Use only the sections SPEC.md has, with the names SPEC.md gives them. The folio 
   background-position: 0 calc(50% + 0.85em), 0 calc(50% + 0.85em); background-size: 0% 2px, 0% 1px; } /* 5 links fit one row at 320px; if more, they wrap to a second row */
 .folio-nav a[aria-current], .folio-nav a:focus-visible { background-size: 100% 2px, 0% 1px; }
 @media (hover: hover) { .folio-nav a:hover { background-size: 100% 2px, 0% 1px; } }
-.folio-nav a:focus-visible { outline-offset: -2px; } /* inside the link, so the screen edge never clips it */
+.folio-nav a:focus-visible { outline-offset: -2px; background-size: 0% 2px, 0% 1px; } /* ring inside the link, so the screen edge never clips it; no underline under the ring, or the two read as a double line */
 @media (min-width: 56em) {
   .folio { grid-template-columns: auto 1fr auto; }
   .folio-name { min-height: 3.5rem; }
@@ -332,13 +332,15 @@ function fitName() {
   heroName.style.setProperty('--fit', 1);
   const room = heroName.clientWidth;
   const widest = Math.max(...[...heroName.querySelectorAll('.line-in')].map((el) => el.offsetWidth));
-  heroName.style.setProperty('--fit', Math.min(1, room / widest).toFixed(3));
+  // On phones the name may also grow (up to 1.6x) so the longest word fills the column, like a masthead.
+  const most = window.innerWidth < 640 ? 1.6 : 1;
+  heroName.style.setProperty('--fit', Math.min(most, room / widest).toFixed(3));
 }
 fitName();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitName); // the real font is wider than the fallback
 window.addEventListener('resize', () => requestAnimationFrame(fitName));
 ```
-The drop cap is not animated. It is the quiet typographic anchor of About:
+The drop cap is not animated. It is the quiet typographic anchor of About. If the About text starts with a one-letter word ("I", "A"), leave the drop cap off: a lone giant letter reads as a stray slab, not a cap.
 ```html
 <div class="section-body">
   <p class="about-text dropcap">The real About text from SPEC.md.</p>
