@@ -39,12 +39,13 @@ Palette, in words: cool pale grey paper; near-black ink with a blue tint; a mid 
   --font-body: "Figtree", system-ui, sans-serif;
   --snap: cubic-bezier(0.8, 0, 1, 0.5);   /* slow start, abrupt arrival: the snap back */
   --fringe: drop-shadow(-2px 0 0 var(--ch-b)) drop-shadow(2px 0 0 var(--ch-a));
+  --fringe-small: drop-shadow(-1px 0 0 var(--ch-b)) drop-shadow(1px 0 0 var(--ch-a)); /* for text under about 18px, where 2px smudges */
 }
 *, *::before, *::after { box-sizing: border-box; }
 body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; }
 h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: 800; line-height: 1.1; } /* Syne is variable, so say the weight */
 .page { width: min(100% - 2rem, 62rem); margin-inline: auto; } /* 16px gutters; section padding comes from your spacing scale */
-p, li { max-width: 40rem; } /* lines stay under 80 characters */
+main p { max-width: 40rem; } /* lines stay under 80 characters; scoped so it never squeezes nav, grid or list items */
 ::selection { background: var(--color-accent-text); color: var(--color-bg); }
 ```
 Fonts: Syne 800 for the name and headings, Figtree for everything else. Alternatives: Bricolage Grotesque or Space Grotesk for display. Do not use Archivo Black (Brutalist) or JetBrains Mono (Terminal).
@@ -57,7 +58,7 @@ Corners stay square. No gradients, no shadows other than the thin channel lines 
 - **About:** a giant-ish section title, then the real bio at a comfortable width.
 - **Projects:** one row per real project, separated by a misregistered rule (a 1px ink line with a magenta line 2px above and a cyan line 2px below). The title is a link only if SPEC.md has a link for it. Description under it.
 - **Skills:** the real skills as a plain grid of words with hairline underlines.
-- **Contact:** the real email and links as big plain text, one per line, with `overflow-wrap: anywhere`. Link text is the label SPEC.md gives next to the URL (for example "GitHub"), never new wording.
+- **Contact:** the real email and links as big plain text, one per line, with `overflow-wrap: anywhere`. Link text is the label SPEC.md gives next to the URL (for example "GitHub"), never new wording. Put them in a `<ul class="contact-list">`.
 ```html
 <li class="project-row">
   <h3 class="row-title"><a href="https://example.com/project">Project name from SPEC.md</a></h3> <!-- no href, and no <a>, if SPEC.md has no link -->
@@ -144,7 +145,7 @@ The hero's intro line is revealed left to right in four hard steps right after t
 </section>
 ```
 ```css
-.hero-name { font-size: clamp(2rem, 10vw, 7rem); }
+.hero-name { width: fit-content; font-size: clamp(2rem, 10vw, 7rem); } /* fit-content: the hover burst starts on the name itself, not anywhere across the row */
 @keyframes scan-in { from { clip-path: inset(-0.3em 100% -0.3em 0); } to { clip-path: inset(-0.3em 0 -0.3em 0); } }
 .hero-intro { margin: 1rem 0 0; font-size: 1.25rem; animation: scan-in 320ms steps(4, end) 380ms both; }
 ```
@@ -192,6 +193,7 @@ a { color: var(--color-accent-text); text-underline-offset: 0.2em; text-decorati
 @media (hover: hover) { a:hover { filter: var(--fringe); } }
 a:focus-visible { filter: var(--fringe); outline: 3px solid var(--color-text); outline-offset: 3px; }
 .brand { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-text); font-family: var(--font-display); font-weight: 800; text-decoration: none; }
+.row-title a, .contact-list a { display: inline-flex; align-items: center; min-height: 44px; } /* 44px tap targets */
 .row-title a { color: var(--color-text); }
 ```
 The name in the hero also re-glitches when a mouse enters it (see moment 5). The hero heading is not focusable (headings should not be), so keyboard users get the fringe on the header name link instead.
@@ -219,13 +221,16 @@ The link for the section on screen is underlined and keeps the channel fringe on
 .site-nav { display: flex; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
 .site-nav a { display: inline-flex; align-items: center; min-height: 44px; padding-inline: 0.625rem; font-size: 0.9375rem; color: var(--color-text); text-decoration: none; }
 /* Steady, not animated: the current link keeps the fringe even when the mouse leaves it. */
-.site-nav a[aria-current="location"] { text-decoration: underline 2px; text-underline-offset: 0.3em; filter: var(--fringe); }
+.site-nav a[aria-current="location"] { text-decoration: underline 2px; text-underline-offset: 0.3em; filter: var(--fringe-small); }
+.site-nav a:focus-visible { filter: var(--fringe-small); }
 html { scroll-behavior: auto; }
 main { overflow-x: clip; }                       /* the sliced copies move sideways */
 section[id] { scroll-margin-top: 1rem; }
+html { scroll-padding-top: 1rem; }
 @media (min-width: 48rem) {
   .site-header { position: sticky; top: 0; z-index: 2; }
   section[id] { scroll-margin-top: 4.5rem; }     /* use your header's height */
+  html { scroll-padding-top: 4.5rem; }           /* keeps Tab focus out from under the sticky header too */
 }
 ```
 ```js
