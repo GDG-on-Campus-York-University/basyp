@@ -152,7 +152,7 @@ Sections, in order:
 Length: about 170–250 lines; frontier can be longer.
 
 ### 3.8 Design inspiration taken from Anthropic's `frontend-design` skill
-Apply it in our own words; don't copy its text.
+A copy is in this branch at `vibe-drafts/reference-skills/frontend-design/SKILL.md` (Apache-2.0). Read it, and apply its ideas in our own words; don't copy its text into the vibe skills.
 - **Spend boldness in one place.** The signature is the one loud moment; the other four moments stay small.
 - **Ground details in the student's SPEC:** their materials, tools and project names.
 - **Every device carries meaning.** Numbers only for real sequences or item numbers. All-caps labels only where the field really uses them.
@@ -201,6 +201,7 @@ Apply it in our own words; don't copy its text.
 - `.agents/skills/vibe-kinetic-type/SKILL.md`
 - `vibe-drafts/<vibe>/SPEC.md`: fictional sample students. Each SPEC says it is a gallery sample and may be used as content for that sample only.
 - `vibe-drafts/<vibe>/public/`: the sample sites (index.html, styles.css, script.js).
+- `vibe-drafts/reference-skills/frontend-design/`: Anthropic's design skill, for reference while writing the vibes (section 3.8).
 - `vibe-drafts/serve.mjs`: a tiny static server. Run `node vibe-drafts/serve.mjs`, then open `http://localhost:5181/terminal/public/` and so on.
 - `AGENTS.md` and `.agents/skills/portfolio-structure/SKILL.md`: current starter rules (still v1).
 - Other skills (keep as they are): `explain-as-you-go`, `firebase-ship`, `git-coach`.
