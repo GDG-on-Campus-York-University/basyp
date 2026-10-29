@@ -108,5 +108,9 @@ if (heroName) {
     const start = () => burst(heroName, 'load');
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
   }
-  heroName.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') burst(heroName, 'hover'); });
 }
+// Every heading (the name and each section title) glitches again when a mouse enters it. They share the
+// one safety gate, so sweeping the mouse down the page cannot stack bursts faster than one per GAP.
+document.querySelectorAll('.glitch').forEach((heading) => {
+  heading.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') burst(heading, 'hover'); });
+});

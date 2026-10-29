@@ -84,7 +84,7 @@ Tempo: long calm, then a burst of 240-360ms, then calm again. Easing: `steps(1, 
 
 Shared CSS (the glitch layers, used by moments 2 and 5):
 ```css
-.glitch { position: relative; max-width: 100%; overflow-wrap: anywhere; }
+.glitch { position: relative; width: fit-content; max-width: 100%; overflow-wrap: anywhere; } /* fit-content: hover glitches start on the words, not anywhere across the row */
 /* Two copies sit exactly on top of the real text, clipped to nothing until a burst. Use line-height 1.05 or more so descenders stay inside the box. */
 .g-copy { position: absolute; inset: 0; pointer-events: none; user-select: none; clip-path: inset(0 0 100% 0); }
 .g-a { --band-1: inset(12% 0 60% 0); --band-2: inset(52% 0 30% 0); --dx-1: -0.06em; --dx-2: 0.07em; color: var(--ch-a); }
@@ -145,7 +145,7 @@ The hero's intro line is revealed left to right in four hard steps right after t
 </section>
 ```
 ```css
-.hero-name { width: fit-content; font-size: clamp(2rem, 10vw, 7rem); } /* fit-content: the hover burst starts on the name itself, not anywhere across the row */
+.hero-name { font-size: clamp(2rem, 10vw, 7rem); }
 @keyframes scan-in { from { clip-path: inset(-0.3em 100% -0.3em 0); } to { clip-path: inset(-0.3em 0 -0.3em 0); } }
 .hero-intro { margin: 1rem 0 0; font-size: 1.25rem; animation: scan-in 320ms steps(4, end) 380ms both; }
 ```
@@ -279,8 +279,8 @@ if (location.hash.length > 1) jump(location.hash.slice(1));
 updateNav();
 ```
 
-### 5. Signature: the name glitches into place
-On load the name splits (magenta and cyan copies on two different slices), hops once, and snaps back to clean text in 360ms. When a mouse enters the name it glitches again for 240ms. Both go through the safety gate, so a flicking mouse cannot stack bursts. Touch and keyboard skip the hover glitch.
+### 5. Signature: the headings glitch into place
+On load the name splits (magenta and cyan copies on two different slices), hops once, and snaps back to clean text in 360ms. After that, the name and every section title glitch again for 240ms when a mouse enters them. All of them go through the one safety gate, so sweeping the mouse across several headings cannot stack bursts. Touch and keyboard skip the hover glitch.
 
 ```js
 if (heroName) {
@@ -288,8 +288,12 @@ if (heroName) {
     const start = () => burst(heroName, 'load');
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
   }
-  heroName.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') burst(heroName, 'hover'); });
 }
+// Every heading (the name and each section title) glitches again when a mouse enters it. They share the
+// one safety gate, so sweeping the mouse down the page cannot stack bursts faster than one per GAP.
+document.querySelectorAll('.glitch').forEach((heading) => {
+  heading.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') burst(heading, 'hover'); });
+});
 ```
 
 ## Safety numbers (photosensitivity)

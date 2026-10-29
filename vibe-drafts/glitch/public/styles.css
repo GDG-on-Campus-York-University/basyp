@@ -53,7 +53,7 @@ section[id] { scroll-margin-top: var(--space-3); }
 }
 
 /* ---------- Glitch layers ---------- */
-.glitch { position: relative; max-width: 100%; overflow-wrap: anywhere; }
+.glitch { position: relative; width: fit-content; max-width: 100%; overflow-wrap: anywhere; } /* fit-content: hover glitches start on the words, not anywhere across the row */
 .g-copy { position: absolute; inset: 0; pointer-events: none; user-select: none; clip-path: inset(0 0 100% 0); }
 .g-a { --band-1: inset(12% 0 60% 0); --band-2: inset(52% 0 30% 0); --dx-1: -0.06em; --dx-2: 0.07em; color: var(--ch-a); }
 .g-b { --band-1: inset(58% 0 22% 0); --band-2: inset(10% 0 70% 0); --dx-1: 0.06em; --dx-2: -0.07em; color: var(--ch-b); }
