@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jordan Mehta | Computer Science student</title>
+  <meta name="description" content="Jordan Mehta, second-year Computer Science student at York University. Small tools, kept in Git.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <p class="head" aria-hidden="true"><span class="head-tag">HEAD</span><span class="head-name"></span></p>
+    <nav class="nav" aria-label="Sections">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <p class="keys"><kbd>j</kbd> <kbd>k</kbd> move between sections</p>
+  </header>
+
+  <main class="graph">
+    <section class="commit lane-main is-first" id="home" aria-labelledby="home-title">
+      <div class="rail" aria-hidden="true">
+        <svg class="piece from-dot" viewBox="0 0 60 100" preserveAspectRatio="none"><path class="track" d="M10 -1V101"/><path class="draw" d="M10 -1V101" pathLength="1"/></svg>
+        <span class="dot"></span>
+      </div>
+      <h1 class="commit-title" id="home-title">Jordan Mehta</h1>
+      <p class="intro">Second-year Computer Science student at York University.</p>
+    </section>
+
+    <section class="commit lane-main" id="about" aria-labelledby="about-title">
+      <div class="rail" aria-hidden="true">
+        <svg class="piece" viewBox="0 0 60 100" preserveAspectRatio="none"><path class="track" d="M10 -1V101"/><path class="draw" d="M10 -1V101" pathLength="1"/></svg>
+        <span class="dot"></span>
+      </div>
+      <h2 class="commit-title" id="about-title">About</h2>
+      <p>I like turning a tiny annoyance into a working program, then improving it in small steps. I keep every project in its own Git repository so I can see how it grew.</p>
+    </section>
+
+    <section class="commit lane-main" id="projects" aria-labelledby="projects-title">
+      <div class="rail" aria-hidden="true">
+        <svg class="piece" viewBox="0 0 60 100" preserveAspectRatio="none"><path class="track" d="M10 -1V101"/><path class="draw" d="M10 -1V101" pathLength="1"/></svg>
+        <span class="dot"></span>
+      </div>
+      <h2 class="commit-title" id="projects-title">Projects</h2>
+
+      <article class="branch lane-1" aria-labelledby="p1-title">
+        <div class="rail" aria-hidden="true">
+          <svg class="piece fork" viewBox="0 0 60 40" preserveAspectRatio="none"><path class="track" d="M10 0C10 20 30 20 30 40"/><path class="draw" d="M10 0C10 20 30 20 30 40" pathLength="1"/></svg>
+          <svg class="piece run" viewBox="0 0 60 100" preserveAspectRatio="none"><path class="track" d="M30 -1V101"/><path class="draw" d="M30 -1V101" pathLength="1"/></svg>
+          <svg class="piece merge" viewBox="0 0 60 40" preserveAspectRatio="none"><path class="track" d="M30 0C30 20 10 20 10 40"/><path class="draw" d="M30 0C30 20 10 20 10 40" pathLength="1"/></svg>
+          <span class="dot dot-branch"></span><span class="dot dot-merge"></span>
+        </div>
+        <div class="project">
+          <h3 id="p1-title">Note Finder <span class="branch-name" aria-hidden="true">note-finder</span></h3>
+          <p>A Python command-line tool that searches a folder of plain-text lecture notes and prints every matching line with its file name.</p>
+        </div>
+      </article>
+
+      <article class="branch lane-2" aria-labelledby="p2-title">
+        <div class="rail" aria-hidden="true">
+          <svg class="piece fork" viewBox="0 0 60 40" preserveAspectRatio="none"><path class="track" d="M10 0C10 20 50 20 50 40"/><path class="draw" d="M10 0C10 20 50 20 50 40" pathLength="1"/></svg>
+          <svg class="piece run" viewBox="0 0 60 100" preserveAspectRatio="none"><path class="track" d="M50 -1V101"/><path class="draw" d="M50 -1V101" pathLength="1"/></svg>
+          <svg class="piece merge" viewBox="0 0 60 40" preserveAspectRatio="none"><path class="track" d="M50 0C50 20 10 20 10 40"/><path class="draw" d="M50 0C50 20 10 20 10 40" pathLength="1"/></svg>
+          <span class="dot dot-branch"></span><span class="dot dot-merge"></span>
+        </div>
+        <div class="project">
+          <h3 id="p2-title"><a href="https://example.com/jordan-mehta/course-planner">Course Planner</a> <span class="branch-name" aria-hidden="true">course-planner</span></h3>
+          <p>A small website built with HTML, CSS and JavaScript that lays out a four-year course plan in a grid and warns me when a prerequisite comes too late.</p>
+        </div>
+      </article>
+
+      <article class="branch lane-1" aria-labelledby="p3-title">
+        <div class="rail" aria-hidden="true">
+          <svg class="piece fork" viewBox="0 0 60 40" preserveAspectRatio="none"><path class="track" d="M10 0C10 20 30 20 30 40"/><path class="draw" d="M10 0C10 20 30 20 30 40" pathLength="1"/></svg>
+          <svg class="piece run" viewBox="0 0 60 100" preserveAspectRatio="none"><path class="track" d="M30 -1V101"/><path class="draw" d="M30 -1V101" pathLength="1"/></svg>
+          <svg class="piece merge" viewBox="0 0 60 40" preserveAspectRatio="none"><path class="track" d="M30 0C30 20 10 20 10 40"/><path class="draw" d="M30 0C30 20 10 20 10 40" pathLength="1"/></svg>
+          <span class="dot dot-branch"></span><span class="dot dot-merge"></span>
+        </div>
+        <div class="project">
+          <h3 id="p3-title">Sort Visualizer <span class="branch-name" aria-hidden="true">sort-visualizer</span></h3>
+          <p>A JavaScript page that animates merge sort one step at a time, written for a data structures assignment.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="commit lane-main" id="skills" aria-labelledby="skills-title">
+      <div class="rail" aria-hidden="true">
+        <svg class="piece" viewBox="0 0 60 100" preserveAspectRatio="none"><path class="track" d="M10 -1V101"/><path class="draw" d="M10 -1V101" pathLength="1"/></svg>
+        <span class="dot"></span>
+      </div>
+      <h2 class="commit-title" id="skills-title">Skills</h2>
+      <ul class="tags">
+        <li>Python</li>
+        <li>Java</li>
+        <li>JavaScript</li>
+        <li>HTML and CSS</li>
+        <li>Git and GitHub</li>
+        <li>Command line</li>
+      </ul>
+    </section>
+
+    <section class="commit lane-main" id="contact" aria-labelledby="contact-title">
+      <div class="rail" aria-hidden="true">
+        <svg class="piece to-dot" viewBox="0 0 60 100" preserveAspectRatio="none"><path class="track" d="M10 -1V101"/><path class="draw" d="M10 -1V101" pathLength="1"/></svg>
+        <span class="dot"></span>
+      </div>
+      <h2 class="commit-title" id="contact-title">Contact</h2>
+      <ul class="links">
+        <li><a href="mailto:jordan.mehta@example.com">jordan.mehta@example.com</a></li>
+        <li><span class="link-label">GitHub</span> <a href="https://example.com/jordan-mehta">https://example.com/jordan-mehta</a></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

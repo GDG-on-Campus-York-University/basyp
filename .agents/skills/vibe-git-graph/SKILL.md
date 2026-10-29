@@ -74,10 +74,12 @@ Wrap all sections in `<main class="graph">`.
 ```css
 .lane-main { --c: var(--lane-main); --x: var(--x0); } .lane-1 { --c: var(--lane-1); --x: var(--x1); } .lane-2 { --c: var(--lane-2); --x: var(--x2); }
 *, *::before, *::after { box-sizing: border-box; } h1, h2, h3, p { margin: 0; } /* both keep the dots aligned with the headings */
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font: 1rem/1.6 "Hanken Grotesk", system-ui, sans-serif; }
+.commit-title + *, .project p { margin-top: 0.75rem; } p { max-width: 65ch; }
 main { overflow-x: clip; } /* nothing in the graph can ever cause sideways scrolling */
 .graph { max-width: 56rem; margin-inline: auto; padding-inline: 0.5rem 1rem; }
 .commit { position: relative; padding: var(--sec-pad) 0 var(--sec-pad) var(--gutter); scroll-margin-top: var(--bar-h); }
-.commit:last-child { min-height: calc(85vh - var(--bar-h)); min-height: calc(85svh - var(--bar-h)); } /* tall enough to scroll up to the HEAD line, or its node never lights */
+.commit:last-child { min-height: calc(60vh - var(--bar-h)); min-height: calc(60svh - var(--bar-h)); } /* room for its line to finish drawing; keep it modest or the page ends in blank space */
 .is-first { --title-size: clamp(2.25rem, 9vw, 3.5rem); }
 .commit-title { position: relative; width: fit-content; max-width: 100%; font-size: var(--title-size); line-height: 1.2; overflow-wrap: anywhere; } /* line-height 1.2 keeps --dot-y right */
 .rail { position: absolute; inset: 0 auto 0 0; width: var(--gutter); pointer-events: none; } .piece { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
@@ -85,7 +87,7 @@ main { overflow-x: clip; } /* nothing in the graph can ever cause sideways scrol
 .track, .draw { fill: none; stroke-width: 2.5; } .track { stroke: var(--color-track); } .draw { stroke: var(--c); }
 .dot { position: absolute; top: var(--dot-y); left: var(--x); width: var(--dot); height: var(--dot); margin: calc(var(--dot) / -2) 0 0 calc(var(--dot) / -2); border: 2px solid var(--color-surface); border-radius: 50%; background: var(--c); }
 ```
-Without JavaScript or animation support the full line simply shows; the page is complete.
+Without JavaScript, modern browsers still draw the lines by scroll (it is pure CSS); older browsers show the full line. Either way the page is complete.
 
 ### 1. Page load: first commit lands
 The text is in the HTML from the start. A ring pings once from the first node and a short bar sweeps under the name (both under half a second, once). Pure CSS.
@@ -126,7 +128,7 @@ const sections = [...document.querySelectorAll('.commit')];
 const pieces = [...document.querySelectorAll('.piece')];
 const dots = [...document.querySelectorAll('.dot')];
 sections.forEach((s) => s.querySelector('.commit-title').setAttribute('tabindex', '-1')); // so j/k can focus headings
-let headIndex = -1, queued = false;
+let headIndex = -1, queued = false, jumped = -1;
 function update() {
   queued = false;
   const vh = window.innerHeight, tipY = vh * TIP;
@@ -134,11 +136,14 @@ function update() {
   // Read every layout value first, then write (no layout thrash).
   const readY = document.querySelector('.topbar').getBoundingClientRect().bottom + vh * 0.15;
   const tops = sections.map((s) => s.getBoundingClientRect().top);
+  const jumpBox = jumped >= 0 ? sections[jumped].getBoundingClientRect() : null;
   const pieceBoxes = fallback ? pieces.map((p) => p.getBoundingClientRect()) : [];
   const dotBoxes = fallback ? dots.map((d) => d.getBoundingClientRect()) : [];
   let index = 0;
   tops.forEach((top, i) => { if (top <= readY) index = i; }); // also true for sections already scrolled past
   if (atBottom) index = sections.length - 1;                  // a short last section still becomes HEAD
+  if (jumpBox && (jumpBox.bottom < 0 || jumpBox.top > vh)) jumped = -1; // scrolled away another way (scrollbar drag)
+  if (jumped >= 0) index = jumped;                            // ...unless the visitor just jumped somewhere
   if (index !== headIndex) setHead(index);
   if (fallback) {
     pieces.forEach((p, i) => p.style.setProperty('--draw', (atBottom ? 1 : clamp((tipY - pieceBoxes[i].top) / pieceBoxes[i].height, 0, 1)).toFixed(3)));
@@ -202,16 +207,22 @@ function setHead(index) {
   });
   sections.forEach((s, i) => s.querySelector(':scope > .rail > .dot').classList.toggle('is-head', i === index));
 }
-let wanted = 0, wantedUntil = 0; // a quick run of j or k keeps going while the smooth scroll catches up
+// After a jump (j/k or a nav link), HEAD stays on the section jumped to until the visitor scrolls by themselves.
+// Without this, jumping to a short section near the end makes the bottom-of-page rule select the one after it.
+const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+['wheel', 'touchmove', 'pointerdown'].forEach((name) => window.addEventListener(name, () => { jumped = -1; }, { passive: true }));
+navLinks.forEach((link) => link.addEventListener('click', () => { jumped = sections.findIndex((s) => '#' + s.id === link.hash); }));
 document.addEventListener('keydown', (event) => {
+  if (scrollKeys.includes(event.key)) jumped = -1;
   if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || (event.key !== 'j' && event.key !== 'k')) return;
   if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]')) return;
-  const from = Date.now() < wantedUntil ? wanted : headIndex;
-  wanted = clamp(from + (event.key === 'j' ? 1 : -1), 0, sections.length - 1);
-  wantedUntil = Date.now() + 700;
-  if (wanted === from) return;
-  sections[wanted].scrollIntoView(); // CSS smooth scroll and scroll-margin-top apply
-  sections[wanted].querySelector('.commit-title').focus({ preventScroll: true });
+  const from = jumped >= 0 ? jumped : headIndex;
+  const next = clamp(from + (event.key === 'j' ? 1 : -1), 0, sections.length - 1);
+  if (next === from) return;
+  jumped = next;
+  setHead(next);
+  sections[next].scrollIntoView(); // CSS smooth scroll and scroll-margin-top apply
+  sections[next].querySelector('.commit-title').focus({ preventScroll: true });
 });
 ```
 
@@ -244,11 +255,12 @@ For `lane-2` use x 50 instead of 30 in all three pieces (fork `M10 0C10 20 50 20
 ```
 
 ## Reduced motion
-The graph is already fully drawn, so nothing is hidden; the HEAD ring still moves, instantly. The JavaScript adds `.js-graph` only when motion is allowed.
+The graph shows fully drawn and the HEAD ring still moves, instantly. Turning animations off is not enough on its own: the scroll-drawn lines start at `stroke-dashoffset: 1` (hidden), so this block sets them back to 0. The JavaScript adds `.js-graph` only when motion is allowed.
 ```css
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  .draw { stroke-dashoffset: 0 !important; } /* otherwise every line stays invisible */
 }
 ```
 
