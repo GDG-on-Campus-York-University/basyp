@@ -61,12 +61,12 @@ Fonts: Archivo for the name, slide titles and numbers, Instrument Sans for body 
 Spacing and sizes are your call. Corners stay square.
 
 ## Layout ideas
-- **Slide shell:** `<section class="slide" id="about">` holding one `<div class="slide-inner">` (up to about 72rem wide). Slides alternate paper and `slide--white`, Results is `slide--deep`, the last slide is `slide--ink`. Use your spacing scale for block padding.
+- **Slide shell:** `<section class="slide" id="about">` holding one `<div class="slide-inner">` (up to about 72rem wide). Slides alternate paper and `slide--white`, Results is `slide--deep`, the last slide is `slide--ink`. Give every slide generous block padding (about 6rem on desktop, from your spacing scale): the empty space is the look. The snippets assume a margin reset (`h1, h2, h3, p, ul { margin: 0; }`); add one.
 - **Header:** a plain (not fixed) top row: the student's name, then `<nav class="site-nav">` with the section links, each 44px tall. Let it wrap, so at 320px the links drop to a second row instead of scrolling sideways.
 - **Hero:** the real name very large (`clamp(2.75rem, 12vw, 9rem)`, weight 800) and the one-line intro under it. Check the longest word fits at 320px.
 - **About:** the real bio set large as a statement (`clamp(1.5rem, 3.6vw, 2.5rem)`, max-width about 36ch). If it is long, only the first sentence is large.
 - **Projects:** a ruled table, one row per real project: name large on the left, real description on the right (stacked on phones). A link only if SPEC.md has one. Rows are not numbered.
-- **Results:** up to four big figures (Signature below). **Skills:** a ruled list. **Contact:** large links on the ink slide, with `overflow-wrap: anywhere`.
+- **Results:** up to four big figures (Signature below). It goes right after Projects, gets its own nav link, and counts toward the slide total. When you add it, tell the student in one line that you added it and which SPEC.md figures it shows. **Skills:** a ruled list. **Contact:** large links on the ink slide, with `overflow-wrap: anywhere` and a minimum size small enough (about 1.25rem) that a real email fits on one line at 320px.
 - **Deck bar:** fixed at the bottom with the progress line on its top edge. Write the true slide count in `slide-m`. It is decoration (the nav already does the job), so it is `aria-hidden`.
 ```html
 <div class="deck-bar" aria-hidden="true">
@@ -81,7 +81,7 @@ Spacing and sizes are your call. Corners stay square.
 
 ## Make it theirs
 - The one loud thing is the count-up on the Results slide. The slide arrivals and the progress bar stay quiet.
-- Slide titles are the SPEC.md section names. Project names, figures and labels are copied exactly as SPEC.md writes them. "Results" is the one structural heading this vibe adds; every figure and label under it comes from SPEC.md.
+- Slide titles are the SPEC.md section names. Project names and figures are copied exactly as SPEC.md writes them. A figure's label is the words around it in SPEC.md, trimmed (for example "members, grown from 12 in one term"); the project it comes from goes on its own small line under the label, never in brackets. Count only outcomes: a projection or estimate counts only if its label keeps the word SPEC.md uses ("projected"); durations, team sizes, dates and ranks never count. "Results" is the one structural heading this vibe adds; every figure and label under it comes from SPEC.md.
 - Which numbers count as results? Counts, money and percentages the student states about their own outcomes (members, dollars raised, a percent change). Leave out durations, team sizes, dates and ranks. Show at most four.
 - Every device carries meaning: the counter is a real sequence, the figures are real results, and nothing else is numbered or in capitals.
 
@@ -232,19 +232,21 @@ When the Results slide arrives, each figure counts up once to the value SPEC.md 
 <ul class="metrics">
   <li class="metric">
     <p class="metric-value" data-count data-from="12">40</p>
-    <p class="metric-label">The label for this figure, copied from SPEC.md.</p>
+    <p class="metric-label">The words around this figure in SPEC.md, trimmed.</p>
+    <p class="metric-source">The project name from SPEC.md.</p>
   </li>
 </ul>
 ```
 Use `data-from` only when SPEC.md states the starting number (for example "from 12 to 40"). Write each value exactly as SPEC.md does: `$1,200`, `18%`, `3.5`.
 ```css
-.slide-title { margin: 0; font: 700 clamp(1.75rem, 4.5vw, 2.75rem)/1.1 var(--font-display); }
+.slide-title { margin: 0; font: 700 clamp(1.75rem, 4.5vw, 2.75rem)/1.1 var(--font-display); } /* every slide's h2, not only Results */
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 2.5rem; margin: 2.5rem 0 0; padding: 0; list-style: none; }
 .metric { container-type: inline-size; padding-top: 1rem; border-top: 2px solid var(--slide-rule); }
 .metric-value { display: inline-grid; margin: 0; font: 800 clamp(3rem, 26cqi, 8rem)/1 var(--font-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .metric-value > * { grid-area: 1 / 1; }
 .metric-value.is-counting .count-final { opacity: 0; } /* opacity, not hidden: it stays readable and holds the width */
 .metric-label { margin: 0.75rem 0 0; color: var(--slide-muted); font-size: 1.125rem; }
+.metric-source { margin: 0.25rem 0 0; color: var(--slide-muted); font-size: 0.9375rem; }
 ```
 ```js
 const metrics = [...document.querySelectorAll('[data-count]')];
