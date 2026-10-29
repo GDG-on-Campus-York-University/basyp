@@ -64,7 +64,17 @@ Spacing and sizes are your call. Corners stay exactly square.
 - **Projects:** hard-edged tiles with thick borders and a hard offset shadow. At wide sizes the grid is asymmetric (the first tile spans more columns). Each tile holds the real project name, its description, and a link only if SPEC.md has one.
 - **Skills:** the marquee band, full width, in hazard yellow between heavy black rules. It carries the real skills. `main` has no side padding of its own: each section pads itself, so the band can run edge to edge.
 - **Contact:** an inverted black block with the real links set huge. Show a link only if SPEC.md has it. Long emails wrap with `overflow-wrap: anywhere`.
+- **Footer:** SPEC.md usually has nothing for it. Leave it out, or put only a plain "Back to top" link there. No year, no slogan.
 - Headings never overlap links or paragraphs. Keep a gutter at least as wide as the card shadow so it does not cause sideways scroll.
+
+Sections pad themselves, so their rules run edge to edge. The band is the exception: its head is padded, its marquee is not. Archivo Black has a single weight, so every heading that uses it sets `font-weight: 400`; otherwise the browser fakes a bold.
+
+```css
+main > section { padding: 2rem 1rem; border-bottom: calc(var(--rule) * 2) solid var(--color-border); }
+main > section.band { padding-inline: 0; }
+.band-head { padding-inline: 1rem; }
+main h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.75rem, 16vw, 9rem); line-height: 0.95; margin: 0 0 1rem; overflow-wrap: anywhere; }
+```
 
 ## Make it theirs
 - The one loud thing is the marquee band. Everything else stays blunt but quiet: black, white, rules. No stickers, no extra colours, no decoration that carries no information.
@@ -104,7 +114,7 @@ The name jumps in from the left, then the intro box from the right as a black bl
 ```
 ```css
 .hero { border-bottom: calc(var(--rule) * 2) solid var(--color-border); }
-.hero-name { --slam-x: calc(var(--slam) * -1); font-family: var(--font-display); font-size: clamp(2.75rem, 15vw, 11rem); line-height: 0.9; overflow-wrap: anywhere; animation: slam 200ms steps(1) backwards; }
+.hero-name { --slam-x: calc(var(--slam) * -1); font-family: var(--font-display); font-weight: 400; font-size: clamp(2.75rem, 20vw, 14rem); line-height: 0.9; overflow-wrap: anywhere; animation: slam 200ms steps(1) backwards; }
 .hero-intro { --slam-x: var(--slam); position: relative; display: inline-block; max-width: 40rem; border: var(--rule) solid var(--color-border); padding: 0.75rem 1rem; animation: slam 200ms steps(1) 120ms backwards; }
 /* A black block covers the intro, then cuts away. Only opacity animates. */
 .hero-intro::before { content: ""; position: absolute; inset: 0; background: var(--color-text); opacity: 0; animation: cover 300ms steps(1) 120ms backwards; pointer-events: none; }
@@ -112,7 +122,7 @@ The name jumps in from the left, then the intro box from the right as a black bl
 ```
 
 ### 2. Scroll: sections slam in
-Each section after the hero jumps in as one block, from the left on odd sections and from the right on even ones, once. JavaScript adds the hiding class, so without JavaScript everything is visible. Hidden sections use `opacity`, not `visibility`, so screen readers still read them and Tab still reaches their links; a section slams in the moment anything inside it gets focus.
+Each section after the hero jumps in as one block, once, alternating sides: the hero counts as the first `section`, so About comes from the right, Projects from the left, and so on. Keep the hero a `<section>` or the sides flip. JavaScript adds the hiding class, so without JavaScript everything is visible. Hidden sections use `opacity`, not `visibility`, so screen readers still read them and Tab still reaches their links; a section slams in the moment anything inside it gets focus.
 
 ```css
 .will-slam { opacity: 0; }
@@ -165,7 +175,7 @@ button:focus-visible { background: var(--color-text); color: var(--color-bg); te
 }
 
 .project-card { border: var(--rule) solid var(--color-border); background: var(--color-surface); padding: 1rem; filter: drop-shadow(8px 8px 0 var(--color-border)); }
-.project-card h3 { font-family: var(--font-display); font-size: clamp(1.75rem, 6vw, 3rem); line-height: 1; overflow-wrap: anywhere; }
+.project-card h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 6vw, 3rem); line-height: 1; overflow-wrap: anywhere; }
 /* The tile inverts (same token swap as .inverted) and loses its shadow. It must not move: a tile sliding away from the pointer would flicker. */
 .project-card.has-link:hover,
 .project-card.has-link:focus-within {
@@ -193,6 +203,8 @@ The link for the section on screen becomes a solid inverted block, and it jumps 
 .nav li { flex: 1 1 auto; }
 .nav a { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 1rem; border-right: calc(var(--rule) / 2) solid var(--color-border); border-bottom: calc(var(--rule) / 2) solid var(--color-border); font-family: var(--font-display); text-decoration: none; }
 .nav a[aria-current="location"] { background: var(--color-text); color: var(--color-bg); }
+/* Cells touch the screen edge and each other, so an outside ring gets clipped: draw it inside, in the paper colour. */
+.nav a:focus-visible { outline-offset: -8px; outline-color: var(--color-bg); }
 .site-header { border-bottom: var(--rule) solid var(--color-border); background: var(--color-bg); }
 @media (min-width: 48rem) {
   .site-header { position: sticky; top: 0; z-index: 10; }
@@ -251,6 +263,7 @@ The Skills section is a full-width yellow band, framed by heavy black rules, whe
 .marquee-group li { display: flex; align-items: center; }
 .marquee-group li::after { content: ""; width: 0.35em; height: 0.35em; margin-inline: 0.5em; background: currentColor; } /* a plain square between skills, no text for screen readers */
 .marquee-group[aria-hidden="true"] { display: none; }
+.band:not(.js-marquee) .marquee-group li:last-child::after { display: none; } /* the still list ends cleanly; the loop needs every square */
 .band-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
 .band-toggle { min-height: 44px; min-width: 44px; padding: 0 1rem; border: var(--rule) solid var(--color-border); background: var(--color-bg); color: var(--color-text); font: inherit; font-family: var(--font-display); cursor: pointer; }
 .band-toggle[hidden] { display: none; } /* otherwise the display rule above overrides the hidden attribute */
