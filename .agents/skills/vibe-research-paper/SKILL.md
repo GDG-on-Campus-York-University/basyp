@@ -48,7 +48,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-text); font: 4
 Fonts: Source Serif 4 for reading (it has an optical size axis, so headings and body each get the right shapes) and Source Sans 3 for small labels. Alternatives: Newsreader, Literata or Crimson Pro for the serif. Not Playfair Display (that is magazine territory) and not Inter.
 `<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">`
 
-Type scale: title `clamp(2.25rem, 7vw, 3.5rem)` at weight 600, section headings 1.5rem, project names 1.1875rem, body 1.125rem, abstract and notes 1rem, labels 1rem in the sans with `font-variant-caps: all-small-caps`. Corners are square or nearly square. Swap the rem gaps below for your spacing scale.
+Type scale: title `clamp(2.25rem, 7vw, 3.5rem)` at weight 600, section headings 1.5rem, project names 1.1875rem, body 1.125rem, abstract and notes 1rem, labels 1.125rem in the sans with `font-variant-caps: all-small-caps` (small caps render about a third smaller, so this keeps them readable). Corners are square or nearly square. Swap the rem gaps below for your spacing scale.
 
 ## Layout ideas
 - **Page:** one `.page` wrapper holding the contents nav and `<main>`. `main` is one column about 34rem wide. At 64em and up the nav is a sticky left margin column; on phones it is a plain wrapping list at the top. There is no `<header>` wrapper, because a sticky nav must be a direct child of `.page`. Omit the footer.
@@ -99,7 +99,7 @@ h2 { position: relative; margin: 0 0 0.75rem; font-size: 1.5rem; line-height: 1.
 .author-line { margin: 0.5rem 0 1.25rem; font-style: italic; }
 .title-rule { height: 5px; border-block: 1px solid var(--color-text); transform-origin: left; } /* two hairlines, a classic double rule */
 .abstract { padding: 1rem 1.25rem; background: var(--color-tint); border-block: 1px solid var(--color-border); font-size: 1rem; line-height: 1.6; }
-.abstract h2, .toc-title, .note-num { font: 600 1rem/1.2 var(--font-label); font-variant-caps: all-small-caps; letter-spacing: 0.06em; }
+.abstract h2, .toc-title, .note-num { font: 600 1.125rem/1.2 var(--font-label); font-variant-caps: all-small-caps; letter-spacing: 0.06em; }
 .abstract p { margin: 0; }
 .entries, .toc-list, .skill-list, .contact-list { margin: 0; padding: 0; list-style: none; }
 .entry { padding-block: 1rem; border-top: 1px solid var(--color-border); }
@@ -107,7 +107,7 @@ h2 { position: relative; margin: 0 0 0.75rem; font-size: 1.5rem; line-height: 1.
 .entry p { margin: 0; }
 .skill-list li { display: inline; }
 .skill-list li:not(:last-child)::after { content: "; "; }
-.contact-list dt { margin-top: 0.75rem; color: var(--color-muted); font: 600 1rem/1.2 var(--font-label); font-variant-caps: all-small-caps; letter-spacing: 0.06em; }
+.contact-list dt { margin-top: 0.75rem; color: var(--color-muted); font: 600 1.125rem/1.2 var(--font-label); font-variant-caps: all-small-caps; letter-spacing: 0.06em; }
 .contact-list dd { margin: 0; }
 .contact-list a { display: inline-block; min-height: 44px; padding-block: 0.6rem; overflow-wrap: anywhere; } /* the email wraps instead of overflowing at 320px */
 .figure { margin: 1rem 0 0; }
@@ -201,7 +201,7 @@ html { scroll-behavior: auto; }
 .toc-list li:not(.unnumbered) { counter-increment: toc; }
 .toc-list li:not(.unnumbered) a::before { content: counter(toc); }
 .toc a { position: relative; display: flex; align-items: center; gap: 0.35rem; min-height: 44px; padding: 0 0.6rem; color: var(--color-muted); text-decoration: none; }
-.toc a::before { min-width: 0.6rem; }
+.toc li:not(.unnumbered) a::before { min-width: 0.6rem; }
 .toc a:hover { color: var(--color-text); }
 .toc a::after { content: ""; position: absolute; inset: auto 0.6rem 6px; height: 2px; background: var(--color-accent); opacity: 0; transform: scaleX(0.4); transition: opacity var(--t-short) var(--ease-quiet), transform var(--t-short) var(--ease-quiet); }
 .toc a[aria-current="location"] { color: var(--color-accent); }
@@ -266,7 +266,7 @@ update();
 ### 5. Signature: citation markers open popover notes
 In the Projects entries, a small superscript number sits after the lead of the description. It is a real `<button>` that opens a note with the rest of the story: the full description sentence from SPEC.md and, only if SPEC.md has one, the link. The browser's native Popover API does the work, so it needs no JavaScript, closes on Esc or a click outside, and returns focus to the marker. Where the Popover API is not supported, the notes simply show inline under each entry and the markers and close buttons are hidden.
 
-Content rule: show the description up to its first comma (cut at an existing comma, never reworded; capitalising the first letter is fine). The note holds the whole sentence and the link. If the description has no comma and there is no link, show it whole and add no marker. Number the markers in page order (1, 2, 3).
+Content rule: the lead is the description up to its first comma, cut at an existing comma and never reworded (capitalise the first letter, no added punctuation). Use a lead only when it reads as a complete phrase on its own, such as "A field study of three campus ponds"; if the first comma comes early ("In my first year, ...") show the whole description and add no marker. The note holds the whole sentence. If SPEC.md gives the project a link, it sits on the page under the entry as well as in the note: a link is never only inside a note. Number the markers in page order (1, 2, 3).
 
 ```html
 <li class="entry">
@@ -275,7 +275,7 @@ Content rule: show the description up to its first comma (cut at an existing com
   <div class="cite-note" id="note-1" popover role="note" aria-labelledby="note-1-title">
     <p class="note-title" id="note-1-title"><span class="note-num">Note 1.</span> Project name from SPEC.md</p>
     <p>The full description sentence from SPEC.md.</p>
-    <p><a href="https://example.com/the-link-in-SPEC">Link label from SPEC.md</a></p> <!-- only if SPEC.md has a link -->
+    <p><a href="https://example.com/the-link-in-SPEC">Link label from SPEC.md</a></p> <!-- only if SPEC.md has a link; repeat it on the page under the entry -->
     <button class="note-close" type="button" popovertarget="note-1" popovertargetaction="hide">Close note 1</button>
   </div>
 </li>
@@ -307,7 +307,12 @@ The marker's `aria-label` starts with its visible number, so voice-control users
   }
 }
 ```
-Browsers without anchor positioning keep the popover centred on screen, which still works.
+Browsers without anchor positioning keep the popover centred on screen, which still works. On phones the card sits at the bottom, so bring its entry to the top first, or the card covers the marker and the lead:
+```js
+document.querySelectorAll('.cite-note').forEach((note) => note.addEventListener('beforetoggle', (event) => {
+  if (event.newState === 'open' && window.matchMedia('(max-width: 47.99em)').matches) note.closest('.entry').scrollIntoView({ block: 'start' });
+}));
+```
 
 ## Reduced motion
 ```css
@@ -331,7 +336,7 @@ None. Plain HTML, CSS and JavaScript. The Popover API is built into the browser.
 - Fake PDF chrome: a "Download PDF" button, page counters, a fake toolbar.
 - Hover or lift effects on entries that have no link; a rising fade on every section; sideways motion; anything travelling more than 4px.
 - Generic page habits: a "→" after every link, "A · B · C" strings, an ALL-CAPS eyebrow above every heading, numbering things that are not a real sequence, one word of a heading picked out in the accent, the same rounded soft-shadow card everywhere.
-- Hiding content until JavaScript runs, or content that exists only inside a popover when it could also be on the page.
+- Hiding content until JavaScript runs, or a link that exists only inside a note.
 
 ## Who wins
 The student's requests override this skill. The content rules in AGENTS.md always apply.
