@@ -12,6 +12,7 @@ These rules work with any AI coding tool. The full instructions for each rule ar
 ## 2. Files and stack (skill: portfolio-structure)
 - The site lives in `public/`: `index.html`, `styles.css`, `script.js`, `assets/`. Firebase serves that folder.
 - Plain HTML, CSS and JavaScript only. No frameworks, no libraries, no build tools, no npm packages for the site. A Google Fonts link is allowed.
+- One exception: if the student picked a take-home vibe (`vibe-scroll-film`, `vibe-shader-world` or `vibe-3d-room`), load only the pinned CDN libraries listed in that skill's Libraries section. Still no npm and no build step.
 - Semantic HTML, mobile-first CSS, alt text on every image, readable contrast.
 
 ## 3. How to work
