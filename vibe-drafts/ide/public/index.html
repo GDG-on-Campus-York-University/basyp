@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rhea Castellanos | Computer Science student</title>
+  <meta name="description" content="Rhea Castellanos, third-year Computer Science student at York University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400;500&family=Red+Hat+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="tabbar">
+    <nav aria-label="Main">
+      <ul class="tabs">
+        <li><a class="tab" href="#home" aria-current="location">Home</a></li>
+        <li><a class="tab" href="#about">About</a></li>
+        <li><a class="tab" href="#projects">Projects</a></li>
+        <li><a class="tab" href="#skills">Skills</a></li>
+        <li><a class="tab" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <div class="lines">
+        <h1 id="home-title" class="open">Rhea Castellanos</h1>
+        <p class="open">Third-year Computer Science student at York University.</p>
+      </div>
+    </section>
+
+    <section id="about" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <div class="lines">
+        <p>I like reading a problem twice before I write any code, then building the solution in small pieces and running it after every change. I enjoy tidying a program once it works, so that the next person can read it, and that next person is usually me a month later.</p>
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title">Projects</h2>
+      <article class="file" id="project-study-timer">
+        <h3>Study Timer</h3>
+        <p>A small website built with HTML, CSS and JavaScript that counts down focused study sessions and keeps a list of the finished ones in the browser.</p>
+        <p><a href="https://example.com/rhea-castellanos/study-timer">Open the Study Timer project</a></p>
+      </article>
+      <article class="file" id="project-maze-solver">
+        <h3>Maze Solver</h3>
+        <p>A Python program that reads a maze from a text file and prints the shortest path through it using breadth-first search, written for a data structures course.</p>
+      </article>
+      <article class="file" id="project-library-catalogue">
+        <h3>Library Catalogue</h3>
+        <p>A Java command-line program for a databases course that stores books in a SQLite database and lets me search them by title or author.</p>
+      </article>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title">Skills</h2>
+      <ul class="chips">
+        <li>Python</li>
+        <li>Java</li>
+        <li>JavaScript</li>
+        <li>SQL</li>
+        <li>HTML and CSS</li>
+        <li>Git and GitHub</li>
+        <li>Command line</li>
+      </ul>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact</h2>
+      <ul class="contact-list lines">
+        <li><a href="mailto:rhea.castellanos@example.com" data-palette-link>rhea.castellanos@example.com</a></li>
+        <li><a href="https://example.com/rhea-castellanos" data-palette-link>GitHub</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <div class="statusbar" hidden>
+    <p class="status-section"><span class="status-name" aria-hidden="true">Home</span></p>
+    <button class="palette-btn" type="button" data-palette-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+      Commands <kbd aria-hidden="true"><span data-mod>Ctrl</span> K</kbd>
+    </button>
+  </div>
+
+  <dialog id="palette" class="palette" aria-label="Command palette">
+    <input id="palette-input" class="palette-input" type="text" role="combobox" aria-expanded="true"
+      aria-controls="palette-list" aria-autocomplete="list" autocomplete="off" placeholder="Go to a section or project" aria-label="Search the page">
+    <ul id="palette-list" class="palette-list" role="listbox" aria-label="Results"></ul>
+    <p id="palette-status" class="visually-hidden" role="status"></p>
+  </dialog>
+
+  <div class="minimap" aria-hidden="true" hidden><div class="minimap-thumb"></div></div>
+</body>
+</html>
