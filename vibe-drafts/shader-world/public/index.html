@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zainab Rahimi | Computer Science student, graphics and games</title>
+  <meta name="description" content="Zainab Rahimi, third-year Computer Science student at York University. Small shaders and renderers that turn maths into pictures in real time.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Familjen+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home">Zainab Rahimi</a>
+    <button class="world-toggle" type="button" hidden>Pause background</button>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <div class="panel hero-panel">
+        <h1 id="home-title">Zainab Rahimi</h1>
+        <p class="hero-intro">Third-year Computer Science student at York University.</p>
+      </div>
+    </section>
+
+    <section id="about" aria-labelledby="about-title">
+      <div class="panel">
+        <h2 id="about-title">About</h2>
+        <p>I like the moment a few lines of maths turn into light on a screen. I spend most weekends writing small shaders and renderers, then taking them apart to see why they look the way they do.</p>
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-title">
+      <div class="panel panel-title"><h2 id="projects-title">Projects</h2></div>
+      <div class="project-list">
+        <article class="panel project">
+          <h3>Weekend Ray Tracer</h3>
+          <p>A small C++ ray tracer that draws spheres with shadows and reflections to an image file, built while following a free online tutorial and then extended with a checkerboard floor.</p>
+        </article>
+        <article class="panel project">
+          <h3><a href="https://example.com/zainab-rahimi/shader-sketchbook">Shader Sketchbook</a></h3>
+          <p>A page of short GLSL fragment shaders in the browser (flowing noise, gradients and water-like ripples), each small enough to read in one sitting.</p>
+        </article>
+        <article class="panel project">
+          <h3>Terrain Flyover</h3>
+          <p>A C++ and OpenGL program that builds hilly terrain from noise and lets you fly a camera over it with the keyboard, made for a computer graphics course.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-title">
+      <div class="panel">
+        <h2 id="skills-title">Skills</h2>
+        <ul class="chips">
+          <li>C++</li>
+          <li>GLSL</li>
+          <li>WebGL</li>
+          <li>Three.js</li>
+          <li>Python</li>
+          <li>Git</li>
+          <li>Linear algebra</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="panel">
+        <h2 id="contact-title">Contact</h2>
+        <ul class="contact-list">
+          <li><a href="mailto:zainab.rahimi@example.com">zainab.rahimi@example.com</a></li>
+          <li><a href="https://example.com/zainab-rahimi">GitHub</a></li>
+          <li><a href="https://example.com/zainab-rahimi-linkedin">LinkedIn</a></li>
+          <li><a href="#home">Back to top</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

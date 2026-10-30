@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0A0F0C">
+  <title>Sam Rivera</title>
+  <meta name="description" content="First-year Computer Science student at York University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-bar">
+      <p class="prompt-path" aria-hidden="true">~/portfolio<span class="path-dir"></span> $</p>
+      <nav aria-label="Main">
+        <ul class="nav-list">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="boot" id="home" aria-labelledby="home-title">
+      <p class="boot-cmd" aria-hidden="true"><span class="ps">$</span> <span class="typed">whoami</span></p>
+      <h1 id="home-title" class="boot-line boot-line-name">Sam Rivera</h1>
+      <p class="boot-line boot-line-intro">First-year Computer Science student at York University.<span class="cursor" aria-hidden="true"></span></p>
+    </section>
+
+    <section id="about" aria-labelledby="about-title">
+      <p class="cmd" aria-hidden="true"><span class="ps">$</span> cat about.txt</p>
+      <h2 id="about-title">About</h2>
+      <p class="lead">I enjoy making small tools that solve everyday student problems.</p>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-title">
+      <p class="cmd" aria-hidden="true"><span class="ps">$</span> ls projects/</p>
+      <h2 id="projects-title">Projects</h2>
+      <ul class="project-list">
+        <li class="project-row">
+          <h3 class="project-name">Bus Buddy</h3>
+          <p class="project-desc">A Python script showing upcoming campus bus departures.</p>
+        </li>
+        <li class="project-row">
+          <h3 class="project-name">Study Timer</h3>
+          <p class="project-desc">A simple Pomodoro timer website built with HTML, CSS and JavaScript.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-title">
+      <p class="cmd" aria-hidden="true"><span class="ps">$</span> skills --list</p>
+      <h2 id="skills-title">Skills</h2>
+      <ul class="flag-list">
+        <li>Python</li>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>Git</li>
+      </ul>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <p class="cmd" aria-hidden="true"><span class="ps">$</span> contact --list</p>
+      <h2 id="contact-title">Contact</h2>
+      <ul class="contact-list">
+        <li>
+          <span class="contact-label">Contact</span>
+          <a href="mailto:sam.rivera@example.com">sam.rivera@example.com</a>
+        </li>
+        <li>
+          <span class="contact-label">GitHub</span>
+          <a href="https://example.com/sam">https://example.com/sam</a>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+</body>
+</html>

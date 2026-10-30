@@ -1,0 +1,131 @@
+/* Research Paper vibe. Colors, fonts, spacing and motion live in the variables below. */
+:root {
+  --color-bg: #F9FAF7;
+  --color-tint: #EEF1EA;      /* abstract band */
+  --color-surface: #FFFFFF;   /* popover notes */
+  --color-text: #1C211D;
+  --color-muted: #505850;
+  --color-accent: #17604F;
+  --color-border: #B9C0B3;    /* hairlines only, never text */
+  --font-body: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-label: "Source Sans 3", system-ui, sans-serif;
+  --ease-quiet: cubic-bezier(0.4, 0.1, 0.25, 1);
+  --t-short: 200ms;
+  --t-base: 400ms;
+  --settle: 4px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font: 400 1.125rem/1.65 var(--font-body); font-optical-sizing: auto; text-wrap: pretty; }
+
+/* Page and sections */
+.page { max-width: 64rem; margin-inline: auto; padding: var(--space-2) var(--space-4) var(--space-8); }
+main { max-width: 34rem; counter-reset: sec; }
+main > section { margin-top: var(--space-7); }
+main > .title-block { margin-top: var(--space-6); }
+section[id] { scroll-margin-top: var(--space-6); }
+h1, h2, h3 { font-weight: 600; text-wrap: balance; }
+main > section:not(.unnumbered) > h2::before { counter-increment: sec; content: counter(sec) "\00a0\00a0"; color: var(--color-muted); font-weight: 400; }
+h2 { position: relative; margin: 0 0 var(--space-3); font-size: 1.5rem; line-height: 1.25; }
+.paper-title { margin: 0; font-size: clamp(2.25rem, 7vw, 3.5rem); line-height: 1.1; letter-spacing: -0.01em; }
+.author-line { margin: var(--space-2) 0 var(--space-5); font-style: italic; }
+.title-rule { height: 5px; border-block: 1px solid var(--color-text); transform-origin: left; }
+.abstract { padding: var(--space-4) var(--space-5); background: var(--color-tint); border-block: 1px solid var(--color-border); font-size: 1rem; line-height: 1.6; }
+.abstract h2, .toc-title, .note-num { font: 600 1.125rem/1.2 var(--font-label); font-variant-caps: all-small-caps; letter-spacing: 0.06em; }
+.abstract p { margin: 0; }
+.entries, .toc-list, .skill-list, .contact-list { margin: 0; padding: 0; list-style: none; }
+.entry { padding-block: var(--space-4); border-top: 1px solid var(--color-border); }
+.entry h3 { margin: 0 0 var(--space-1); font-size: 1.1875rem; line-height: 1.3; }
+.entry p { margin: 0; }
+.skill-list li { display: inline; }
+.skill-list li:not(:last-child)::after { content: "; "; }
+.contact-list dt { margin-top: var(--space-3); color: var(--color-muted); font: 600 1.125rem/1.2 var(--font-label); font-variant-caps: all-small-caps; letter-spacing: 0.06em; }
+.contact-list dd { margin: 0; }
+.contact-list a { display: inline-block; min-height: 44px; padding-block: 0.6em; overflow-wrap: anywhere; }
+.figure { margin: var(--space-4) 0 0; }
+.figure img { display: block; width: 100%; height: auto; border: 1px solid var(--color-border); }
+.figure figcaption { margin-top: var(--space-2); color: var(--color-muted); font-size: 1rem; line-height: 1.5; }
+
+/* Motion keyframes */
+@keyframes settle-in { from { opacity: 0; transform: translateY(var(--settle)); } }
+@keyframes rule-in { from { transform: scaleX(0); } }
+@keyframes mark-flash { from { opacity: 1; } to { opacity: 0; } }
+
+/* 1. Page load */
+.paper-title, .author-line { animation: settle-in var(--t-base) var(--ease-quiet) both; }
+.author-line { animation-delay: 100ms; }
+.title-rule { animation: rule-in 600ms var(--ease-quiet) 200ms both; }
+
+/* 2. Scroll settle */
+.will-settle { opacity: 0; transition: opacity var(--t-base) var(--ease-quiet), transform var(--t-base) var(--ease-quiet); }
+figure.will-settle { transform: translateY(var(--settle)); }
+.will-settle.is-settled, figure.will-settle.is-settled { opacity: 1; transform: none; }
+
+/* 3. Hover and focus */
+a { color: var(--color-accent); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.cite::before { opacity: 0; transition: opacity var(--t-short) var(--ease-quiet); }
+.cite:hover::before, .cite:focus-visible::before { opacity: 1; }
+
+/* 4. Navigation */
+html { scroll-behavior: auto; }
+.toc-list { display: flex; flex-wrap: wrap; counter-reset: toc; }
+.toc-list li:not(.unnumbered) { counter-increment: toc; }
+.toc-list li:not(.unnumbered) a::before { content: counter(toc); }
+.toc a { position: relative; display: flex; align-items: center; gap: var(--space-1); min-height: 44px; padding: 0 var(--space-2); color: var(--color-muted); text-decoration: none; }
+.toc li:not(.unnumbered) a::before { min-width: 0.6rem; }
+.toc a:hover { color: var(--color-text); }
+.toc a::after { content: ""; position: absolute; inset: auto var(--space-2) 6px; height: 2px; background: var(--color-accent); opacity: 0; transform: scaleX(0.4); transition: opacity var(--t-short) var(--ease-quiet), transform var(--t-short) var(--ease-quiet); }
+.toc a[aria-current="location"] { color: var(--color-accent); }
+.toc a[aria-current="location"]::after { opacity: 1; transform: none; }
+section:target > h2::after { content: ""; position: absolute; inset: auto 0 -3px; height: 2px; background: var(--color-accent); animation: mark-flash 1400ms var(--ease-quiet) 1 both; }
+@media (min-width: 64em) {
+  .page { display: grid; grid-template-columns: 11rem minmax(0, 34rem); justify-content: center; column-gap: var(--space-7); padding-top: var(--space-7); }
+  .toc { position: sticky; top: var(--space-6); align-self: start; }
+  .toc-list { display: block; }
+  .toc a { min-height: 0; padding-block: var(--space-1); }
+  .toc .unnumbered a { padding-inline-start: calc(var(--space-2) + 0.95rem); }
+  .toc a::after { inset: 0.3rem auto 0.3rem 0; width: 2px; height: auto; transform: scaleY(0.4); }
+}
+
+/* 5. Signature: citation markers and notes */
+.cite-wrap { line-height: 0; font-size: 1em; vertical-align: baseline; }
+.cite { position: relative; isolation: isolate; top: -0.55em; margin-inline: 0.1em; padding: 0 0.15em; border: 0; background: none; color: var(--color-accent); font: 600 0.875rem/1 var(--font-label); cursor: pointer; }
+.cite::before { content: ""; position: absolute; inset: -0.2em -0.1em; z-index: -1; border-radius: 2px; background: var(--color-tint); }
+.cite::after { content: ""; position: absolute; inset: -1rem -0.9rem; }
+.cite-note { max-width: 24rem; margin-top: var(--space-2); padding: var(--space-4) 1.125rem; background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); border-radius: 2px; font-size: 1rem; line-height: 1.55; }
+.cite-note p { margin: 0 0 var(--space-2); }
+.note-title { font-weight: 600; }
+.note-close { min-height: 44px; padding: 0 var(--space-3); border: 1px solid var(--color-border); border-radius: 2px; background: var(--color-bg); color: var(--color-text); font: 600 1rem var(--font-label); cursor: pointer; }
+
+@supports not selector(:popover-open) { .cite, .note-close { display: none; } }
+@supports selector(:popover-open) {
+  .cite-note { margin: 0; opacity: 0; transform: translateY(var(--settle));
+    transition: opacity var(--t-short) var(--ease-quiet), transform var(--t-short) var(--ease-quiet), overlay var(--t-short) allow-discrete, display var(--t-short) allow-discrete; }
+  .cite-note:popover-open { opacity: 1; transform: none; }
+  @starting-style { .cite-note:popover-open { opacity: 0; transform: translateY(var(--settle)); } }
+  @media (max-width: 47.99em) { .cite-note { inset: auto 0 var(--space-4); margin-inline: auto; width: min(26rem, calc(100% - 2rem)); max-height: 70vh; overflow: auto; } }
+  @media (min-width: 48em) {
+    @supports (position-area: bottom) {
+      .cite-note { inset: auto; width: 22rem; margin-block: var(--space-3); position-area: bottom span-right; position-try-fallbacks: flip-block, flip-inline; }
+    }
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .will-settle { opacity: 1 !important; transform: none !important; }
+}
+
+.entry-link { margin-top: var(--space-2); }

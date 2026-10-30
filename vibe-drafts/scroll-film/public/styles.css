@@ -1,0 +1,117 @@
+/* Contrast, computed (WCAG 2.x):
+   text #ECEFF2 on bg #0E1013 16.5:1, on letterbox black 18.2:1, on the four grades 14.3 to 15.5:1.
+   muted #A9B1BA on bg 8.8:1, on the grades 7.6 to 8.3:1.
+   accent #FF6B63 as text on bg 6.8:1, on the grades 5.9 to 6.4:1, on black 7.5:1.
+   --color-on-accent #0E1013 on an accent fill 6.8:1. --color-border is decoration only (1.4:1), never the only cue. */
+:root {
+  --color-bg: #0E1013;
+  --color-letterbox: #000000;
+  --color-text: #ECEFF2;
+  --color-muted: #A9B1BA;
+  --color-accent: #FF6B63;
+  --color-on-accent: #0E1013;
+  --color-border: #2A2F37;
+  --grade-about: #111C2B;
+  --grade-projects: #1C1426;
+  --grade-skills: #0F2220;
+  --grade-contact: #241214;
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-body: "Schibsted Grotesk", system-ui, sans-serif;
+  --ease-dissolve: cubic-bezier(0.37, 0, 0.63, 1);
+  --bar-top: 3.5rem;
+  --bar-bottom: 2.75rem;
+  --gutter: 1rem;
+  --mask-pad: 0.18em;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: var(--color-accent); text-underline-offset: 0.2em; }
+a:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+[tabindex="-1"]:focus { outline: none; }  /* sections get focus only when a nav link jumps to them */
+.skip-link { position: absolute; top: -4rem; left: 0.5rem; z-index: 60; padding: 0.5rem 1rem; background: var(--color-accent); color: var(--color-on-accent); }
+.skip-link:focus { top: 0.5rem; }
+
+/* Lenis needs these three rules (from its own lenis.css). */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+
+/* A shot = one section. At least a full screen tall, padded so the bars never cover its content. */
+.shot {
+  position: relative; isolation: isolate; overflow: clip;
+  min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+  padding: calc(var(--bar-top) + 3rem) var(--gutter) calc(var(--bar-bottom) + 3rem);
+}
+.shot__grade { position: absolute; inset: 0; z-index: -1; background: var(--grade, transparent); }
+.shot--about { --grade: var(--grade-about); }
+.shot--projects { --grade: var(--grade-projects); }
+.shot--skills { --grade: var(--grade-skills); }
+.shot--contact { --grade: var(--grade-contact); }
+.shot__inner, .hero-inner { width: 100%; max-width: 64rem; margin-inline: auto; }
+
+/* Type */
+.title-card { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.5rem, 18vw, 11rem); line-height: 0.95; letter-spacing: -0.01em; }
+.hero-rule { display: block; width: min(12rem, 40%); height: 2px; margin-block: 1.5rem; background: var(--color-accent); transform-origin: left center; }
+.hero-intro { max-width: 32rem; font-size: clamp(1.125rem, 2.6vw, 1.5rem); color: var(--color-muted); }
+.shot__title { margin-bottom: 2.5rem; font-family: var(--font-display); font-weight: 400; font-size: clamp(2.75rem, 11vw, 6rem); line-height: 1.1; }
+.shot__text { max-width: 38rem; font-size: clamp(1.125rem, 2.4vw, 1.5rem); line-height: 1.5; }
+.word, .char, .word-mask { display: inline-block; }
+.line, .line-mask { display: block; }
+.word-mask, .line-mask { padding-block: var(--mask-pad); margin-block: calc(var(--mask-pad) * -1); }
+
+.project-list { display: grid; gap: clamp(2rem, 6vw, 4rem); }
+.project { padding-top: 1.25rem; border-top: 1px solid var(--color-border); }
+.project__title { margin-bottom: 0.5rem; font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 7vw, 4rem); line-height: 1.05; }
+.project__desc { max-width: 40rem; color: var(--color-muted); }
+.skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+.skill-list li { padding-bottom: 0.25rem; border-bottom: 1px solid var(--color-border); font-family: var(--font-display); font-size: clamp(1.5rem, 5vw, 2.5rem); line-height: 1.2; }
+.contact-list { display: grid; gap: 0.75rem; margin-bottom: 2rem; }
+.contact-list a { display: inline-block; text-decoration-thickness: 2px; min-height: 44px; font-family: var(--font-display); font-size: clamp(1.25rem, 5.4vw, 2.5rem); line-height: 1.3; overflow-wrap: anywhere; }
+.to-top { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* The header is the nav, always fixed at the top. Without JavaScript it has a solid background; in film mode it sits on the letterbox. */
+.frame { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--bar-top); display: flex; align-items: center; padding-inline: var(--gutter);
+  background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
+.frame nav { width: 100%; }
+.frame ul { display: flex; justify-content: space-between; max-width: 64rem; margin-inline: auto; }
+.frame a { position: relative; display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-inline: 0.4rem;
+  color: var(--color-text); font-size: 0.8125rem; text-decoration: none; transition: color 240ms var(--ease-dissolve); }
+.frame a::after { content: ""; position: absolute; left: 0.4rem; right: 0.4rem; bottom: 0.5rem; height: 2px; background: var(--color-accent);
+  transform: scaleX(0); transform-origin: left center; transition: transform 300ms var(--ease-dissolve); }
+.frame a[aria-current] { color: var(--color-accent); }
+.frame a[aria-current]::after, .frame a:focus-visible::after { transform: scaleX(1); }
+@media (hover: hover) { .frame a:hover::after { transform: scaleX(1); } }
+.frame a:focus-visible { outline-offset: -4px; }
+@media (min-width: 48rem) { .frame ul { justify-content: center; gap: 2rem; } .frame a { font-size: 0.9375rem; } }
+
+/* Film mode only (JavaScript adds html.has-film). */
+.letterbox, .progress, .caption { display: none; }
+.has-film .letterbox { display: block; position: fixed; left: 0; right: 0; z-index: 40; height: var(--bar-top); background: var(--color-letterbox); pointer-events: none; will-change: transform; }
+.has-film .letterbox--top { top: 0; transform-origin: center top; }
+.has-film .letterbox--bottom { bottom: 0; height: var(--bar-bottom); transform-origin: center bottom; }
+.has-film .progress { display: block; position: fixed; left: 0; right: 0; bottom: var(--bar-bottom); z-index: 41; height: 2px; background: var(--color-accent); transform: scaleX(0); transform-origin: left center; pointer-events: none; }
+.has-film .caption { display: flex; align-items: center; justify-content: center; position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; height: var(--bar-bottom); font-size: 0.9375rem; color: var(--color-text); pointer-events: none; }
+.has-film .frame { background: transparent; border-bottom-color: transparent; }
+
+/* Hover and focus: only titles that are real links react. */
+.project__title a { position: relative; display: inline-block; min-height: 44px; color: inherit; text-decoration: underline 1px var(--color-accent); text-underline-offset: 0.12em; transition: color 240ms var(--ease-dissolve); }
+.project__title a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--color-accent);
+  transform: scaleX(0); transform-origin: left center; transition: transform 300ms var(--ease-dissolve); }
+.project__title a:focus-visible { color: var(--color-accent); }
+.project__title a:focus-visible::after { transform: scaleX(1); }
+@media (hover: hover) {
+  .project__title a:hover { color: var(--color-accent); }
+  .project__title a:hover::after { transform: scaleX(1); }
+}
+
+/* Reduced motion safety net. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .letterbox, .progress, .caption { display: none !important; }
+  .shot__grade { opacity: 1 !important; clip-path: none !important; transform: none !important; }
+  .frame { background: var(--color-bg) !important; border-bottom-color: var(--color-border) !important; }
+}

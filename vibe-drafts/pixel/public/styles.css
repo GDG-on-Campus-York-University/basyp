@@ -1,0 +1,191 @@
+/* Sam Rivera portfolio, Pixel vibe.
+   Contrast (WCAG): text on bg 14.7, on surface 12.1. Muted on bg 9.2, on surface 7.6.
+   Accent on bg 11.4, on surface 9.4. Bg-coloured text on an accent fill 11.4.
+   Border on bg 4.0 (fine for graphics, never use it for text). Wipe vs bg 1.6 (gentle, no harsh flash). */
+:root {
+  --color-bg: #1F1A3D;
+  --color-surface: #2C2560;
+  --color-text: #F7F2DE;
+  --color-muted: #C4BCE8;
+  --color-accent: #FFD23F;
+  --color-border: #7C6FD6;
+  --color-wipe: #3A3188;
+  --color-sky: #4FD6E8;          /* pixel art only (the cloud and sprites), never text */
+  --font-display: "Press Start 2P", monospace;
+  --font-ui: "Pixelify Sans", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --px: 4px;                     /* one "pixel" for borders and art; not a spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 48px;
+  --space-9: 72px;
+  --bar-h: 6.25rem;              /* menu bar height on phones: 2 rows of 44px + padding + border; JS keeps it exact */
+  --wipe-ms: 300ms;              /* 3 frames at 10 fps; keep equal to WIPE in script.js */
+}
+
+/* Base rules */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; padding-top: var(--bar-h); background: var(--color-bg); color: var(--color-text); font: 1.125rem/1.6 var(--font-body); }
+main { overflow-x: clip; }
+main > section { max-width: 56rem; margin-inline: auto; padding: var(--space-8) var(--space-5); }
+section[id] { scroll-margin-top: calc(var(--bar-h) + var(--space-2)); }
+h1, h2, h3 { margin: 0 0 var(--space-4); font-family: var(--font-display); font-weight: 400; line-height: 1.5; overflow-wrap: anywhere; }
+h2, h3 { font-size: 1rem; }
+p { max-width: 60ch; margin: 0 0 var(--space-4); }
+@media (min-width: 40em) { :root { --bar-h: 3.5rem; } h2 { font-size: 1.5rem; } main > section { padding-block: var(--space-9); } }
+
+/* The pixel border: four 4px shadows with no blur. The corners stay empty, which gives the notched look.
+   Change only --bd to recolour it. Leave 8px or more of room around any box so the shadows are never clipped. */
+.px-box { --bd: var(--color-border); background: var(--color-surface);
+  box-shadow: 0 calc(var(--px) * -1) 0 0 var(--bd), 0 var(--px) 0 0 var(--bd),
+              calc(var(--px) * -1) 0 0 0 var(--bd), var(--px) 0 0 0 var(--bd); }
+
+/* Shared keyframes (--fall and --run set the distance) */
+@keyframes drop { from { transform: translateY(var(--fall, -16px)); opacity: 0; } }
+@keyframes slide-in { from { transform: translateX(var(--run, 64px)); } }
+@keyframes doors-close { from { clip-path: inset(0 50% 0 50%); } to { clip-path: inset(0 0 0 0); } }
+@keyframes doors-open { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 50% 0 50%); } }
+
+/* 1. Title screen */
+.hero { position: relative; display: flex; flex-direction: column; justify-content: center; min-height: calc(100vh - var(--bar-h)); overflow: clip; }
+.title-panel { position: relative; padding: var(--space-6) var(--space-5); }
+.title-name { font-size: 1.5rem; --fall: -32px; animation: drop 400ms steps(4) both; }
+.title-intro { color: var(--color-muted); animation: drop 300ms steps(3) 300ms both; }
+.start { --bd: var(--color-accent); gap: var(--space-2); padding: var(--space-1) var(--space-4); font: 700 1.125rem/1.4 var(--font-ui); background: var(--color-bg); animation: drop 300ms steps(3) 600ms both; }
+@media (min-width: 40em) { .title-name { font-size: 2rem; } }
+@media (min-width: 60em) { .title-name { font-size: 3rem; } }
+
+/* Cloud: three stacked rows of 8px pixels, built from the element and its two pseudo-elements. */
+.cloud { --u: 8px; position: absolute; top: var(--space-6); right: var(--space-5); width: calc(var(--u) * 9); height: var(--u); background: var(--color-sky); --run: 96px; animation: slide-in 600ms steps(6) both; }
+.cloud::before, .cloud::after { content: ""; position: absolute; background: var(--color-sky); height: var(--u); }
+.cloud::before { left: var(--u); bottom: var(--u); width: calc(var(--u) * 7); }
+.cloud::after { left: calc(var(--u) * 3); bottom: calc(var(--u) * 2); width: calc(var(--u) * 3); }
+.ground { position: absolute; inset: auto var(--space-5) 0 var(--space-5); height: calc(var(--px) * 2);
+  background: repeating-linear-gradient(90deg, var(--color-border) 0 calc(var(--px) * 4), transparent 0 calc(var(--px) * 5)); }
+
+/* 2. Scroll: rooms drop in */
+.will-drop { opacity: 0; }
+.will-drop.is-dropped { opacity: 1; animation: drop 400ms steps(4) both; }
+
+/* Cards, tags and contact */
+.projects-grid { display: grid; gap: var(--space-7); }
+@media (min-width: 40em) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
+.project-card, .panel { position: relative; padding: var(--space-5); }
+.project-card p { margin: 0; }
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+.tags li { padding: var(--space-1) var(--space-3); font: 500 1.125rem/1.6 var(--font-ui); }
+.contact-list { margin: 0; padding: 0; list-style: none; font: 500 1.125rem/1.6 var(--font-ui); overflow-wrap: anywhere; }
+.panel p:last-child { margin-bottom: 0; }
+
+/* 3. Hover and focus: a selection box in 2 frames */
+a { color: var(--color-accent); text-underline-offset: 4px; }
+.select { position: relative; display: inline-flex; align-items: center; min-height: 44px; outline: 2px solid transparent; } /* the transparent outline stays visible in forced-colours mode */
+.select::after { content: ""; position: absolute; inset: calc(var(--px) * -2); border: var(--px) solid var(--color-accent);
+  opacity: 0; transform: scale(1.06); pointer-events: none; transition: opacity 200ms steps(2), transform 200ms steps(2); }
+.select:hover::after, .select:focus-visible::after { opacity: 1; transform: none; }
+.card-link { position: static; }
+.card-link::before { content: ""; position: absolute; inset: 0; }
+
+/* 4. Navigation: the cursor follows you */
+.menu-bar { position: fixed; inset: 0 0 auto 0; z-index: 10; background: var(--color-bg); border-bottom: var(--px) solid var(--color-border); }
+.menu { position: relative; max-width: 56rem; margin-inline: auto; padding: var(--space-1) var(--space-2); }
+.menu ul { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; padding: 0; list-style: none; } /* 3 per row: five links wrap to two rows at 320px */
+/* .menu a (0,1,1) beats .select (0,1,0) on purpose; keep these selectors this specific. */
+.menu a { display: flex; width: 100%; padding-left: 1.5rem; font: 500 1rem/1.2 var(--font-ui); color: var(--color-text); text-decoration: none; }
+.menu a[aria-current] { color: var(--color-accent); }
+.menu .select::after { inset: 0; } /* inside the item, so nothing is clipped */
+@media (min-width: 40em) {
+  .menu ul { display: flex; gap: var(--space-2); }
+  .menu a { width: auto; padding-right: var(--space-3); }
+}
+.menu-cursor { position: absolute; top: 0; left: 0; display: flex; align-items: center; justify-content: center; width: 1.5rem; height: 44px;
+  color: var(--color-accent); font: 1rem/1 system-ui, "Segoe UI Symbol", sans-serif; pointer-events: none; opacity: 0;
+  transform: translate(var(--cx, 0px), var(--cy, 0px)); }
+.menu.has-cursor .menu-cursor { opacity: 1; }
+.menu.is-ready .menu-cursor { transition: transform 300ms steps(3); } /* 3 frames, 10 fps */
+
+/* 5. Signature: the room-change wipe */
+.wipe { position: fixed; inset: 0; z-index: 20; background: var(--color-wipe); pointer-events: none; clip-path: inset(0 50% 0 50%); } /* resting state: zero width, invisible */
+.wipe.is-closing { animation: doors-close var(--wipe-ms) steps(3) both; }
+.wipe.is-opening { animation: doors-open var(--wipe-ms) steps(3) both; }
+html { scroll-behavior: auto; } /* the jump is instant; the wipe is the transition */
+
+/* Pixel sprites: one 4px square plus a list of zero-blur shadows, one per pixel. Decorative, aria-hidden. */
+.sprite { --u: 8px; display: block; width: var(--u); height: var(--u); margin-bottom: calc(var(--u) * 6 + var(--space-4)); } /* the element is one pixel; its shadows draw the other pixels, so the margin reserves the rows below */
+.sprite-bus {
+  box-shadow: calc(var(--u) * 1) calc(var(--u) * 0) 0 0 var(--color-accent),
+    calc(var(--u) * 2) calc(var(--u) * 0) 0 0 var(--color-accent),
+    calc(var(--u) * 3) calc(var(--u) * 0) 0 0 var(--color-accent),
+    calc(var(--u) * 4) calc(var(--u) * 0) 0 0 var(--color-accent),
+    calc(var(--u) * 5) calc(var(--u) * 0) 0 0 var(--color-accent),
+    calc(var(--u) * 6) calc(var(--u) * 0) 0 0 var(--color-accent),
+    calc(var(--u) * 0) calc(var(--u) * 1) 0 0 var(--color-accent),
+    calc(var(--u) * 1) calc(var(--u) * 1) 0 0 var(--color-sky),
+    calc(var(--u) * 2) calc(var(--u) * 1) 0 0 var(--color-sky),
+    calc(var(--u) * 3) calc(var(--u) * 1) 0 0 var(--color-accent),
+    calc(var(--u) * 4) calc(var(--u) * 1) 0 0 var(--color-sky),
+    calc(var(--u) * 5) calc(var(--u) * 1) 0 0 var(--color-sky),
+    calc(var(--u) * 6) calc(var(--u) * 1) 0 0 var(--color-sky),
+    calc(var(--u) * 7) calc(var(--u) * 1) 0 0 var(--color-accent),
+    calc(var(--u) * 0) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 1) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 2) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 3) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 4) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 5) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 6) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 7) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 0) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 1) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 2) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 3) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 4) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 5) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 6) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 7) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 0) calc(var(--u) * 4) 0 0 var(--color-accent),
+    calc(var(--u) * 1) calc(var(--u) * 4) 0 0 var(--color-accent),
+    calc(var(--u) * 2) calc(var(--u) * 4) 0 0 var(--color-accent),
+    calc(var(--u) * 3) calc(var(--u) * 4) 0 0 var(--color-accent),
+    calc(var(--u) * 4) calc(var(--u) * 4) 0 0 var(--color-accent),
+    calc(var(--u) * 5) calc(var(--u) * 4) 0 0 var(--color-accent),
+    calc(var(--u) * 6) calc(var(--u) * 4) 0 0 var(--color-accent),
+    calc(var(--u) * 7) calc(var(--u) * 4) 0 0 var(--color-accent),
+    calc(var(--u) * 2) calc(var(--u) * 5) 0 0 var(--color-text),
+    calc(var(--u) * 5) calc(var(--u) * 5) 0 0 var(--color-text);
+}
+.sprite-clock {
+  box-shadow: calc(var(--u) * 2) calc(var(--u) * 0) 0 0 var(--color-text),
+    calc(var(--u) * 3) calc(var(--u) * 0) 0 0 var(--color-text),
+    calc(var(--u) * 4) calc(var(--u) * 0) 0 0 var(--color-text),
+    calc(var(--u) * 1) calc(var(--u) * 1) 0 0 var(--color-text),
+    calc(var(--u) * 3) calc(var(--u) * 1) 0 0 var(--color-accent),
+    calc(var(--u) * 5) calc(var(--u) * 1) 0 0 var(--color-text),
+    calc(var(--u) * 0) calc(var(--u) * 2) 0 0 var(--color-text),
+    calc(var(--u) * 3) calc(var(--u) * 2) 0 0 var(--color-accent),
+    calc(var(--u) * 6) calc(var(--u) * 2) 0 0 var(--color-text),
+    calc(var(--u) * 0) calc(var(--u) * 3) 0 0 var(--color-text),
+    calc(var(--u) * 3) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 4) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 5) calc(var(--u) * 3) 0 0 var(--color-accent),
+    calc(var(--u) * 6) calc(var(--u) * 3) 0 0 var(--color-text),
+    calc(var(--u) * 0) calc(var(--u) * 4) 0 0 var(--color-text),
+    calc(var(--u) * 6) calc(var(--u) * 4) 0 0 var(--color-text),
+    calc(var(--u) * 1) calc(var(--u) * 5) 0 0 var(--color-text),
+    calc(var(--u) * 5) calc(var(--u) * 5) 0 0 var(--color-text),
+    calc(var(--u) * 2) calc(var(--u) * 6) 0 0 var(--color-text),
+    calc(var(--u) * 3) calc(var(--u) * 6) 0 0 var(--color-text),
+    calc(var(--u) * 4) calc(var(--u) * 6) 0 0 var(--color-text);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .will-drop { opacity: 1; }
+  .wipe { display: none; }
+}

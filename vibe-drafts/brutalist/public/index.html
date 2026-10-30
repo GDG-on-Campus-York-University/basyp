@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sam Rivera | Portfolio</title>
+  <meta name="description" content="Sam Rivera, first-year Computer Science student at York University. Projects, skills and contact links.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Sections">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <h1 id="home-title" class="hero-name">Sam Rivera</h1>
+      <p class="hero-intro">First-year Computer Science student at York University.</p>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="about-title">
+      <h2 id="about-title" class="section-title">About</h2>
+      <div class="about-body">
+        <p>I enjoy making small tools that solve everyday student problems.</p>
+      </div>
+    </section>
+
+    <section class="projects" id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="section-title">Projects</h2>
+      <div class="project-grid">
+        <article class="project-card">
+          <h3>Bus Buddy</h3>
+          <p>A Python script showing upcoming campus bus departures.</p>
+        </article>
+        <article class="project-card">
+          <h3>Study Timer</h3>
+          <p>A simple Pomodoro timer website built with HTML, CSS and JavaScript.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="band" id="skills" aria-labelledby="skills-title">
+      <div class="band-head">
+        <h2 id="skills-title" class="section-title">Skills</h2>
+        <button class="band-toggle" type="button" hidden>Pause scrolling text</button>
+      </div>
+      <div class="marquee">
+        <div class="marquee-run">
+          <ul class="marquee-group">
+            <li>Python</li>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+            <li>Git</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact inverted" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="section-title">Contact</h2>
+      <ul class="contact-list">
+        <li><a href="mailto:sam.rivera@example.com">sam.rivera@example.com</a></li>
+        <li><a href="https://example.com/sam">GitHub</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="#home">Back to top</a>
+  </footer>
+</body>
+</html>

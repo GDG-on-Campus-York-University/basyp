@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Noor Haddad | Electrical Engineering Portfolio</title>
+  <meta name="description" content="Noor Haddad, second-year Electrical Engineering student at York University. Circuits built, measured and debugged until they behave.">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#about">Skip to content</a>
+
+  <header>
+    <nav class="softkeys" aria-label="Sections">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <h1 id="home-title" class="hero-name">Noor Haddad</h1>
+      <p class="hero-intro">Second-year Electrical Engineering student at York University. I build circuits, measure them and debug them until they behave.</p>
+      <div class="scope" aria-hidden="true"><canvas class="scope-canvas"></canvas></div>
+    </section>
+
+    <section class="lock" id="about" aria-labelledby="about-title">
+      <h2 id="about-title" class="section-title">About</h2>
+      <p>I like starting with a schematic and a simulation, then building the circuit and checking on the bench whether it does what I predicted.</p>
+      <p>When it does not, I get to find out why.</p>
+    </section>
+
+    <section class="lock" id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="section-title">Projects</h2>
+      <div class="project-list">
+        <article class="project">
+          <h3>Bench Power Supply</h3>
+          <p>An adjustable linear power supply with a current limit, built from a transformer, rectifier and voltage regulator, and checked with a multimeter and an oscilloscope.</p>
+        </article>
+        <article class="project">
+          <h3>Light-Seeking Rover</h3>
+          <p>A small two-wheeled robot with two light sensors and an Arduino that steers toward the brightest light, debugged one wire at a time.</p>
+        </article>
+        <article class="project">
+          <h3>Active Filter Study</h3>
+          <p>An op-amp low-pass filter for a circuits course, simulated in LTspice, built on a breadboard and compared against the simulation.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="lock" id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title" class="section-title">Skills</h2>
+      <ul class="chips">
+        <li>LTspice</li>
+        <li>KiCad</li>
+        <li>Arduino</li>
+        <li>C</li>
+        <li>Python</li>
+        <li>MATLAB</li>
+        <li>Soldering</li>
+        <li>Oscilloscope and multimeter use</li>
+      </ul>
+    </section>
+
+    <section class="lock" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="section-title">Contact</h2>
+      <ul class="contact-list">
+        <li><a href="mailto:noor.haddad@example.com">noor.haddad@example.com</a></li>
+        <li><a href="https://example.com/noor-haddad">Noor Haddad on LinkedIn</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Noor Haddad, Electrical Engineering, York University.</p>
+  </footer>
+</body>
+</html>

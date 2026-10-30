@@ -1,0 +1,188 @@
+/* ---------- Variables ---------- */
+:root {
+  /* Contrast, computed (on bg / surface / surface-2). text 16.3 / 14.9 / 13.6. muted 8.8 / 8.0 / 7.3.
+     ch1 cyan 11.3 / 10.4 / 9.4. ch2 yellow 12.7 / 11.6 / 10.5. */
+  --color-bg: #0A0F13; --color-surface: #111A21; --color-surface-2: #17232C;
+  --color-text: #E8EDF0; --color-muted: #A3B1BB; --color-border: #2B3C48;
+  --ch1: #4FD8EB; /* CH1 cyan: where you are (links, current section) */
+  --ch2: #F2CF4A; /* CH2 yellow: what you point at (cursor line, focus ring) */
+  --color-grid: #131D24; --color-grid-scope: #1E2C36; --color-grid-major: #33464F;
+  --ease-decay: cubic-bezier(0.2, 0.6, 0.1, 1);
+  --keys-h: 3.25rem;
+  --keys-w: 8.5rem;
+
+  --font-head: "Chakra Petch", system-ui, sans-serif;
+  --font-body: "Instrument Sans", system-ui, sans-serif;
+
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4.5rem;
+
+  --radius: 2px;
+  --measure: 62ch;
+}
+
+/* ---------- Base (phone first) ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: auto; color-scheme: dark; }
+section[id] { scroll-margin-top: var(--space-3); }
+
+body {
+  margin: 0;
+  padding-bottom: var(--keys-h); /* keeps the last section clear of the bar */
+  background:
+    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px) 0 0 / 3rem 3rem,
+    linear-gradient(var(--color-grid) 1px, transparent 1px) 0 0 / 3rem 3rem,
+    var(--color-bg);
+  color: var(--color-text);
+  font: 400 1rem/1.6 var(--font-body);
+  -webkit-text-size-adjust: 100%;
+}
+
+main {
+  overflow-x: clip; /* the jitter can never cause sideways scrolling */
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-3) var(--space-6);
+}
+
+h1, h2, h3 { font-family: var(--font-head); line-height: 1.15; margin: 0; }
+p { margin: 0 0 var(--space-3); max-width: var(--measure); }
+p:last-child { margin-bottom: 0; }
+
+a { color: var(--ch1); text-underline-offset: 0.25em; }
+a:hover { text-decoration-thickness: 2px; text-decoration-color: var(--ch2); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--ch2); outline-offset: 3px; }
+
+.skip-link {
+  position: absolute; left: var(--space-3); top: var(--space-3); z-index: 20;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-2); color: var(--color-text);
+  border: 1px solid var(--color-border);
+  transform: translateY(-300%);
+}
+.skip-link:focus-visible { transform: none; }
+
+/* ---------- Hero ---------- */
+@keyframes beam-open { from { clip-path: inset(49.5% 0 49.5% 0); } to { clip-path: inset(0); } }
+/* Lock-on: each state is held for a quarter of the duration (steps(1) holds), so the jumps are 350ms apart. */
+@keyframes lock-on { 0% { transform: translateX(-8px); } 25% { transform: translateX(5px); } 50% { transform: translateX(-3px); } 75%, 100% { transform: none; } }
+
+.hero { overflow-x: clip; padding-bottom: var(--space-5); }
+.hero-name {
+  font-size: clamp(2.5rem, 11vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: var(--space-3);
+  animation: lock-on 1400ms steps(1, end) both;
+}
+.hero-intro {
+  font-size: clamp(1.05rem, 3.6vw, 1.3rem);
+  color: var(--color-muted);
+  margin-bottom: var(--space-5);
+}
+.scope { animation: beam-open 600ms var(--ease-decay) both; }
+
+/* ---------- Scope screen ---------- */
+.scope {
+  position: relative; aspect-ratio: 2 / 1; max-width: 60rem; border: 1px solid var(--color-border);
+  background:
+    linear-gradient(var(--color-grid-major), var(--color-grid-major)) 50% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--color-grid-major), var(--color-grid-major)) 0 50% / 100% 1px no-repeat,
+    linear-gradient(90deg, var(--color-grid-scope) 1px, transparent 1px) 0 0 / 10% 100%,
+    linear-gradient(var(--color-grid-scope) 1px, transparent 1px) 0 0 / 100% 12.5%,
+    var(--color-bg);
+}
+.scope-canvas { display: block; width: 100%; height: 100%; }
+.scope::before, .scope::after { content: ""; position: absolute; left: 0; border: 0.35rem solid transparent; transform: translateY(-50%); }
+.scope::before { top: 31%; border-left: 0.6rem solid var(--ch1); }
+.scope::after { top: 75%; border-left: 0.6rem solid var(--ch2); }
+
+/* ---------- Sections that lock on ---------- */
+.lock { position: relative; padding-top: var(--space-5); margin-top: var(--space-6); }
+.lock::before, .lock::after { content: ""; position: absolute; top: 0; left: 0; right: 0; }
+.lock::before { height: 1px; background: var(--color-border); }
+.lock::after { height: 2px; background: var(--ch1); transform: scaleX(0); transform-origin: left; opacity: 0; }
+@keyframes sweep { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes decay { from { opacity: 1; } to { opacity: 0; } }
+.lock.is-locking::after { animation: sweep 700ms linear both, decay 2600ms var(--ease-decay) 700ms both; }
+.lock.is-locking > .section-title { animation: lock-on 1400ms steps(1, end) both; }
+
+.section-title {
+  font-size: clamp(1.6rem, 5vw, 2rem);
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+}
+
+/* ---------- Projects ---------- */
+.project-list { display: grid; gap: var(--space-3); }
+.project {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+.project h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: var(--space-1); }
+.project p { color: var(--color-text); }
+.project::before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 2px; background: var(--ch2);
+  transform: scaleY(var(--cursor, 0)); transform-origin: top; transition: transform 140ms linear;
+}
+.project:focus-within { --cursor: 1; }
+.project:has(a:hover) { --cursor: 1; }
+
+/* ---------- Skills ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+.chips li {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  padding: var(--space-1) var(--space-3);
+  font-weight: 500;
+}
+
+/* ---------- Contact ---------- */
+.contact-list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-1); }
+.contact-list a { display: inline-block; padding: var(--space-1) 0; font-size: 1.1rem; overflow-wrap: anywhere; }
+
+footer { max-width: 62rem; margin: 0 auto; padding: 0 var(--space-3) var(--space-5); color: var(--color-muted); font-size: 0.95rem; }
+
+/* ---------- Softkeys ---------- */
+.softkeys { position: fixed; inset: auto 0 0 0; z-index: 10; background: var(--color-surface); border-top: 1px solid var(--color-border); }
+.softkeys ul { display: flex; margin: 0; padding: 0; list-style: none; }
+.softkeys li { flex: 1 1 0; min-width: 0; }
+.softkeys a { position: relative; display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 2px;
+  font: 600 clamp(0.72rem, 3.4vw, 0.95rem) var(--font-head); text-align: center; text-decoration: none; overflow-wrap: anywhere; color: var(--color-muted); }
+.softkeys a::after { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--ch1); transform: scaleX(0); transform-origin: left; transition: transform 220ms linear; }
+.softkeys a[aria-current] { color: var(--color-text); background: var(--color-surface-2); }
+.softkeys a[aria-current]::after { transform: scaleX(1); }
+.softkeys a:focus-visible { outline-offset: -3px; }
+
+/* ---------- Wider screens ---------- */
+@media (min-width: 48em) {
+  .scope { aspect-ratio: 5 / 2; }
+  main { padding-left: var(--space-5); padding-right: var(--space-5); }
+  .project-list { grid-template-columns: repeat(3, 1fr); align-items: start; }
+  .project { padding: var(--space-4) var(--space-3); }
+  footer { padding-left: var(--space-5); padding-right: var(--space-5); }
+}
+
+@media (min-width: 60em) {
+  body { padding-bottom: 0; }
+  main { margin-right: calc(var(--keys-w) + 1rem); padding-top: var(--space-6); }
+  footer { margin-right: calc(var(--keys-w) + 1rem); }
+  .softkeys { inset: 50% 0 auto auto; width: var(--keys-w); transform: translateY(-50%); border: 1px solid var(--color-border); border-right: 0; }
+  .softkeys ul { flex-direction: column; }
+  .softkeys a { justify-content: flex-start; padding: 0 var(--space-3); font-size: 1rem; }
+  .softkeys a::after { inset: 0 auto 0 0; width: 3px; height: auto; transform: scaleY(0); transform-origin: top; }
+  .softkeys a[aria-current]::after { transform: scaleY(1); }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

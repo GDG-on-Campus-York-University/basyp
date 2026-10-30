@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Imani Castellanos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <!-- The import map lets script.js say import('three'). Pinned versions only. -->
+  <script type="importmap">
+  { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+  } }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="site-name" href="#home">Imani Castellanos</a>
+    <nav class="site-nav" aria-label="Sections">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Decoration only. The still SVG shows first and whenever 3D is unavailable; script.js adds the canvas. -->
+  <div class="stage" aria-hidden="true">
+    <svg class="room-still" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" focusable="false">
+      <polygon class="still-wall" points="120,70 680,70 680,300 120,300"/>
+      <polygon class="still-side" points="40,30 120,70 120,300 40,420"/>
+      <polygon class="still-floor" points="120,300 680,300 770,430 40,430"/>
+      <ellipse class="still-rug" cx="440" cy="368" rx="150" ry="34"/>
+      <rect class="still-sky" x="500" y="105" width="130" height="95"/>
+      <path class="still-frame" d="M500 105h130v95H500zM565 105v95M500 152h130" fill="none"/>
+      <polygon class="still-wood" points="190,232 450,232 450,246 190,246"/>
+      <rect class="still-leg" x="198" y="246" width="10" height="64"/>
+      <rect class="still-wood" x="400" y="246" width="50" height="64"/>
+      <rect class="still-block1" x="260" y="206" width="38" height="26"/>
+      <rect class="still-block2" x="322" y="194" width="22" height="38"/>
+      <rect class="still-seat" x="500" y="318" width="70" height="14"/>
+      <rect class="still-seat" x="500" y="280" width="70" height="38"/>
+      <polygon class="still-wood" points="58,160 118,176 118,184 58,168"/>
+      <rect class="still-block3" x="72" y="142" width="14" height="22"/>
+      <rect class="still-block4" x="92" y="148" width="14" height="16"/>
+    </svg>
+  </div>
+
+  <main id="main">
+    <section id="home" class="scene-section" aria-labelledby="home-title">
+      <div class="panel panel-hero">
+        <h1 id="home-title">Imani Castellanos</h1>
+        <p>Second-year Digital Media student at York University.</p>
+      </div>
+    </section>
+    <section id="about" class="scene-section" aria-labelledby="about-title">
+      <div class="panel">
+        <h2 id="about-title">About</h2>
+        <p>I like starting with a paper sketch, building the space in 3D, and then making a small physical version I can pick up and move around.</p>
+      </div>
+    </section>
+    <section id="projects" class="scene-section" aria-labelledby="projects-title">
+      <div class="panel">
+        <h2 id="projects-title">Projects</h2>
+        <ul class="project-list">
+          <li class="project">
+            <h3>Corner Studio</h3>
+            <p>A 1:20 foam-board model of a small corner studio, built for a first-year spatial design course.</p>
+          </li>
+          <li class="project">
+            <h3><a class="project-link" href="https://example.com/imani-castellanos/lantern-lamp">Lantern Lamp</a></h3>
+            <p>A table lamp modelled in Blender and 3D printed, redesigned twice after light tests with different shade shapes.</p>
+          </li>
+          <li class="project">
+            <h3>Hallway Walkthrough</h3>
+            <p>A short real-time walkthrough of a hallway, modelled in Blender and viewed in the browser.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section id="skills" class="scene-section" aria-labelledby="skills-title">
+      <div class="panel">
+        <h2 id="skills-title">Skills</h2>
+        <ul class="chips">
+          <li>Blender</li>
+          <li>SketchUp</li>
+          <li>Rhino</li>
+          <li>Figma</li>
+          <li>Model making</li>
+          <li>Hand sketching</li>
+          <li>HTML and CSS</li>
+        </ul>
+      </div>
+    </section>
+    <section id="contact" class="scene-section" aria-labelledby="contact-title">
+      <div class="panel">
+        <h2 id="contact-title">Contact</h2>
+        <ul class="contact-list">
+          <li><a href="mailto:imani.castellanos@example.com">imani.castellanos@example.com</a></li>
+          <li><a href="https://example.com/imani-castellanos">LinkedIn</a></li>
+          <li><a href="https://example.com/imani-makes">Instagram</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

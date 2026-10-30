@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alex Chen | Mechanical Engineering at York University</title>
+  <meta name="description" content="Alex Chen, second-year Mechanical Engineering student at York University.">
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p class="site-name">Alex Chen</p>
+    <nav class="feature-tree" aria-label="Sections">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="view-cube" aria-hidden="true">
+    <div class="cube" data-view="home">
+      <span class="face face-front">Front</span>
+      <span class="face face-back">Back</span>
+      <span class="face face-right">Right</span>
+      <span class="face face-left">Left</span>
+      <span class="face face-top">Top</span>
+      <span class="face face-bottom">Bottom</span>
+    </div>
+  </div>
+
+  <div class="page">
+    <main>
+
+      <section class="section hero" id="home" aria-labelledby="home-title">
+        <h1 id="home-title" class="hero-name part-x">Alex Chen</h1>
+        <p class="hero-intro part-y">Second-year Mechanical Engineering student at York University.</p>
+        <p class="dim-line part-z" aria-hidden="true"><span class="dim-rule"></span><span class="dim-label">Mechanical Engineering</span><span class="dim-rule"></span></p>
+        <p class="hero-goal">I want co-op employers to see how I design, prototype and test parts.</p>
+        <svg class="triad" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+          <path class="triad-plane" d="M60 70 L100 90 L60 110 L20 90 Z"/>
+          <path d="M60 70 L60 20"/>
+          <path d="M60 70 L100 90"/>
+          <path d="M60 70 L20 90"/>
+          <polygon points="60,12 56,20 64,20"/>
+          <polygon points="107.2,93.6 98.2,93.6 101.8,86.4"/>
+          <polygon points="12.8,93.6 21.8,93.6 18.2,86.4"/>
+        </svg>
+      </section>
+
+      <section class="section" id="about" aria-labelledby="about-title">
+        <h2 id="about-title" class="section-title">About</h2>
+        <div class="panel">
+          <p>I like taking an idea from a sketch to a CAD model to something I can hold, then testing it until it breaks.</p>
+        </div>
+      </section>
+
+      <section class="section" id="projects" aria-labelledby="projects-title">
+        <h2 id="projects-title" class="section-title">Projects</h2>
+        <div class="projects-grid">
+          <article class="project-card">
+            <span class="callout" aria-hidden="true"></span>
+            <h3>Robotic Gripper</h3>
+            <p>A 3D-printed, cable-driven gripper with three fingers, designed in CAD and tested on household objects.</p>
+          </article>
+          <article class="project-card">
+            <span class="callout" aria-hidden="true"></span>
+            <h3>Bike Phone Mount</h3>
+            <p>A clamp-on phone mount I redesigned three times after drop tests, now printed in PETG.</p>
+          </article>
+          <article class="project-card">
+            <span class="callout" aria-hidden="true"></span>
+            <h3>Wind Tunnel Stand</h3>
+            <p>A small test stand for measuring drag on student-made model car bodies, built for a first-year design course.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="skills" aria-labelledby="skills-title">
+        <h2 id="skills-title" class="section-title">Skills</h2>
+        <ul class="parts-list">
+          <li class="tag">SolidWorks</li>
+          <li class="tag">Fusion 360</li>
+          <li class="tag">3D printing</li>
+          <li class="tag">Technical drawing</li>
+          <li class="tag">MATLAB</li>
+          <li class="tag">Hand tools</li>
+        </ul>
+      </section>
+
+      <section class="section" id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title" class="section-title">Contact</h2>
+        <dl class="title-block">
+          <div>
+            <dt>Name</dt>
+            <dd>Alex Chen</dd>
+          </div>
+          <div>
+            <dt>Program</dt>
+            <dd>Mechanical Engineering, York University</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href="mailto:alex.chen@example.com">alex.chen@example.com</a></dd>
+          </div>
+          <div>
+            <dt>LinkedIn</dt>
+            <dd><a href="https://example.com/alex-chen">https://example.com/alex-chen</a></dd>
+          </div>
+        </dl>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <p>Alex Chen, Mechanical Engineering, York University</p>
+    </footer>
+  </div>
+
+</body>
+</html>
