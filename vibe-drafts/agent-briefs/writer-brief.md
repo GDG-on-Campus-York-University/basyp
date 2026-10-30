@@ -33,6 +33,7 @@ You are writing ONE vibe skill (a SKILL.md) for a beginner portfolio workshop. S
 | Pitch Deck | cool paper + claret, wine slide | Archivo / Instrument Sans | cubic-bezier(0.6,0.02,0.1,1) 350-550ms | real metrics count up, deck progress bar |
 | Soft Pastel | blush-white + pastels, teal accent | Fredoka / DM Sans | linear() spring with overshoot 450-800ms | morphing blobs, cards squash |
 | Brutalist | white/black + hazard yellow | Archivo Black / Work Sans | steps(1), zero easing, slams whole blocks | pausable marquee, instant invert |
+| Notebook | warm paper + blue-black ink, red pen lines only, butter/mint/sky notes | Kalam / Karla | cubic-bezier(0.45,0.08,0.25,0.98) pen + cubic-bezier(0.5,0,0.85,0.45) gravity, no overshoot, 250-900ms | pen underlines draw once, sticky notes drop and settle |
 | Blueprint (v1, later) | blueprint blue | IBM Plex pair | - | - |
 | PCB, Research Paper, Pixel, Editorial, Glitch | siblings in progress, see your brief | | | |
 
