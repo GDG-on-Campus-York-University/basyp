@@ -11,7 +11,7 @@ const slugs = process.argv.slice(2);
     for (const id of ids) {
       const p = await b.newPage({ viewport: { width: w, height: 800 } });
       await p.goto(`http://localhost:5181/${slug}/public/`); await p.waitForTimeout(400); await p.mouse.move(w - 5, 795);
-      const link = p.locator(`nav a[href="${id}"], header a[href="${id}"]`).first();
+      const link = p.locator(`nav a[href="${id}"], header a[href="${id}"]`).filter({ visible: true }).first();
       await link.click(); await p.waitForTimeout(1600);
       const cur = await p.evaluate(() => [...new Set([...document.querySelectorAll('header [aria-current], nav [aria-current]')].map(a => a.hash || a.getAttribute('href')))]);
       if (!cur.includes(id)) bad.push(`${id}->${cur.join(',') || 'none'}`);

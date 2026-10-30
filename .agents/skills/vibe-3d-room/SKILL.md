@@ -104,7 +104,7 @@ Section ids are the rail's keys, so keep `home, about, projects, skills, contact
 
   <!-- Decoration only. The still SVG shows first and whenever 3D is unavailable; script.js adds the canvas. -->
   <div class="stage" aria-hidden="true">
-    <svg class="room-still" viewBox="0 0 800 450" preserveAspectRatio="xMidYMax slice" focusable="false">
+    <svg class="room-still" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" focusable="false">
       <polygon class="still-wall" points="120,70 680,70 680,300 120,300"/>
       <polygon class="still-side" points="40,30 120,70 120,300 40,420"/>
       <polygon class="still-floor" points="120,300 680,300 770,430 40,430"/>
@@ -177,6 +177,7 @@ ul { padding: 0; list-style: none; }
 .site-header { position: fixed; inset: 0 0 auto 0; z-index: 3; height: var(--header-h); display: flex; align-items: center;
   justify-content: space-between; gap: 0.5rem; padding-inline: 0.5rem; background: var(--color-bg); border-bottom: 1px solid #3A4C5C; }
 .site-name { display: none; color: var(--color-on-dark); font: 800 1.125rem var(--font-display); text-decoration: none; }
+.site-name:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
 .site-nav ul { display: flex; }
 .site-nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-inline: 0.4rem;
   color: var(--color-on-dark); font: 700 0.875rem var(--font-body); text-decoration: none; border-bottom: 3px solid transparent; transition: color 160ms var(--ease-ui); }
@@ -189,7 +190,7 @@ ul { padding: 0; list-style: none; }
 .stage canvas, .room-still { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .has-3d .room-still { display: none; }
 main { padding-top: calc(var(--header-h) + var(--stage-h)); }          /* the fixed header and band never cover content */
-section[id] { scroll-margin-top: calc(var(--header-h) + var(--stage-h) + 0.5rem); }
+section[id] { scroll-margin-top: calc(var(--header-h) + var(--stage-h) + 0.5rem); } /* do not also add scroll-padding-top on html: it stacks with this and breaks the rail measurements */
 .scene-section { min-height: calc(100svh - var(--header-h) - var(--stage-h)); padding: 1rem var(--gutter) 2rem; }
 
 .panel { width: 100%; max-width: 34rem; padding: var(--panel-pad); border-radius: 10px; background: var(--color-panel);
@@ -275,7 +276,7 @@ function blob(w, d, x, y, z) {               // fake contact shadow: one soft da
   if (!room.blobMaterial) {
     const canvas = document.createElement('canvas'); canvas.width = canvas.height = 64;
     const g = canvas.getContext('2d'), grad = g.createRadialGradient(32, 32, 2, 32, 32, 32);
-    grad.addColorStop(0, 'rgba(40,30,20,0.5)'); grad.addColorStop(1, 'rgba(40,30,20,0)');
+    grad.addColorStop(0, 'rgba(40,30,20,0.3)');   // soft, or blob shadows read as dark smudges grad.addColorStop(1, 'rgba(40,30,20,0)');
     g.fillStyle = grad; g.fillRect(0, 0, 64, 64);
     const map = new THREE.CanvasTexture(canvas); map.colorSpace = THREE.SRGBColorSpace;
     room.blobMaterial = new THREE.MeshBasicMaterial({ map, transparent: true, depthWrite: false });
@@ -299,8 +300,8 @@ const SHAPE_ORDER = ['model', 'lamp', 'board', 'stack'];   // project i uses SHA
 function buildRoom() {
   const THREE = room.THREE, scene = room.scene, C = COLORS;
   // Lighting basics: a soft sky/ground fill so shadows are never black, plus ONE warm "sun" that casts the shadows.
-  scene.add(new THREE.HemisphereLight('#FFF4E0', '#B08A62', 1.15));
-  const sun = new THREE.DirectionalLight('#FFE9C4', 2.3);
+  scene.add(new THREE.HemisphereLight('#FFFFFF', '#D9CDBA', 1.5));   // a near-white sky light keeps the mint walls mint, not olive
+  const sun = new THREE.DirectionalLight('#FFF0D6', 2.0);
   sun.position.set(5, 9, 7);
   Object.assign(sun.shadow.camera, { left: -7, right: 7, top: 7, bottom: -7, near: 1, far: 30 });
   sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.02;
@@ -331,7 +332,7 @@ function buildRoom() {
   piece('window', [box(1.9, 0.12, 0.14, 2.3, 3.09, -2.93, C.frame), box(1.9, 0.12, 0.14, 2.3, 1.71, -2.93, C.frame),
     box(0.12, 1.5, 0.14, 1.41, 2.4, -2.93, C.frame), box(0.12, 1.5, 0.14, 3.19, 2.4, -2.93, C.frame),
     box(0.06, 1.5, 0.1, 2.3, 2.4, -2.94, C.frame), box(1.9, 0.06, 0.1, 2.3, 2.4, -2.94, C.frame), box(2.1, 0.08, 0.3, 2.3, 1.62, -2.85, C.frame)], { light: 'window' });
-  const glass = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.3), new THREE.MeshStandardMaterial({ color: C.sky, emissive: C.sky, emissiveIntensity: 0.3 }));
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.3), new THREE.MeshStandardMaterial({ color: C.sky, emissive: C.sky, emissiveIntensity: 0.12 }));   // low, or the highlight turns the glass bright cyan
   glass.material.userData.tint = glass.material.color.clone(); glass.position.set(2.3, 2.4, -2.995); scene.add(glass);
   (room.lit.window ||= { amount: 0, mats: [] }).mats.push(glass.material);
   // One object per real project, standing on the desk.
@@ -378,6 +379,8 @@ async function startRoom() {
   const stage = document.querySelector('.stage');
   if (!stage) return;
   try {
+    const probe = document.createElement('canvas');                // check for WebGL first: no 720 KB download and no console errors on devices without it
+    if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) throw new Error('WebGL is not available');
     room.THREE = await import('three');                 // the import map in index.html resolves this name
     room.mergeGeometries = (await import('three/addons/utils/BufferGeometryUtils.js')).mergeGeometries;
     const THREE = room.THREE;
@@ -561,9 +564,9 @@ Each section has one stop: where the camera stands (`pos`) and what it looks at 
 const STOPS = {
   home:     { pos: [8.2, 5.8, 10.8], look: [0.0, 1.3, -0.4],  lights: [] },
   about:    { pos: [4.8, 2.9, 4.6],  look: [1.2, 0.8, -0.9],  lights: ['chair'] },
-  projects: { pos: [0.5, 3.0, 2.6],  look: [-1.0, 1.1, -2.3], lights: ['desk'] },
-  skills:   { pos: [-0.2, 2.6, 5.0], look: [-3.7, 1.8, 0.2],  lights: ['shelf'] },
-  contact:  { pos: [2.6, 2.7, 3.6],  look: [2.3, 2.3, -3.0],  lights: ['window'] },
+  projects: { pos: [0.5, 3.0, 2.6],  look: [-0.55, 1.1, -2.3], lights: ['desk'] },
+  skills:   { pos: [0.4, 2.6, 4.2],  look: [-3.7, 1.8, 0.2],  lights: ['shelf'] },
+  contact:  { pos: [2.6, 2.6, 2.7],  look: [2.3, 2.15, -3.0], lights: ['window'] },
 };
 function buildRail() {
   const THREE = room.THREE;
