@@ -38,6 +38,9 @@ You are writing ONE vibe skill (a SKILL.md) for a beginner portfolio workshop. S
 | IDE | graphite + tangerine | Red Hat Text / Red Hat Mono | cubic-bezier(0.25,1,0.5,1) 120-180ms, close instant | Ctrl/Cmd+K palette of real sections, tab jumps via View Transitions |
 | Swiss Minimal | white + near-black + signal red #D10019, grey column bands | Schibsted Grotesk only | cubic-bezier(0.3,0,0.1,1) 360-520ms, 80ms stagger, steps() digit ticks | section numbers count in as digit strips; slides of exactly one column |
 | Cinematic | warm near-black + bone, black bars, curtain-red accent | Jost / Newsreader | cubic-bezier(0.35,0,0.1,1), 1000-1800ms dissolves, linear 10s push-in | letterbox bars open at load, title card per section, subtitle bar names the scene |
+| Site Plan | plan-sheet grey + graphite, violet diazo accent | Overpass / Overpass Mono | cubic-bezier(0.83,0,0.17,1), 600-700ms, no overshoot | section-cut line wipes each project in with clip-path; hatched ground lines under headings |
+| Mission Control | indigo-black + periwinkle paths, ember craft/focus | Michroma / Manrope / Martian Mono | cubic-bezier(0.45,0.05,0.55,0.95), 700ms panels, 1.6s traces, 260ms UI | traced orbit diagram with Kepler-speed craft; text scrambles once into real text |
+| System Design | whiteboard off-white dot grid + navy ink, emerald path, orange packets | Space Grotesk / Be Vietnam Pro | cubic-bezier(0.4,0,0.2,1) 160-240ms UI, packets 320-480ms, nothing loops | packets hop along dashed arrows; hover/focus lights the request path |
 | Blueprint (v1, later) | blueprint blue | IBM Plex pair | - | - |
 | PCB, Research Paper, Pixel, Editorial, Glitch | siblings in progress, see your brief | | | |
 
