@@ -37,6 +37,7 @@ You are writing ONE vibe skill (a SKILL.md) for a beginner portfolio workshop. S
 | Topographic | stone-grey paper + taupe contours, lake-blue accent | Spectral / Albert Sans | cubic-bezier(0.37,0.02,0.2,1), 1.2-2.6s draws, 240-420ms UI, lerp drift | generated contour field blooms from the summit, drifts with cursor |
 | IDE | graphite + tangerine | Red Hat Text / Red Hat Mono | cubic-bezier(0.25,1,0.5,1) 120-180ms, close instant | Ctrl/Cmd+K palette of real sections, tab jumps via View Transitions |
 | Swiss Minimal | white + near-black + signal red #D10019, grey column bands | Schibsted Grotesk only | cubic-bezier(0.3,0,0.1,1) 360-520ms, 80ms stagger, steps() digit ticks | section numbers count in as digit strips; slides of exactly one column |
+| Cinematic | warm near-black + bone, black bars, curtain-red accent | Jost / Newsreader | cubic-bezier(0.35,0,0.1,1), 1000-1800ms dissolves, linear 10s push-in | letterbox bars open at load, title card per section, subtitle bar names the scene |
 | Blueprint (v1, later) | blueprint blue | IBM Plex pair | - | - |
 | PCB, Research Paper, Pixel, Editorial, Glitch | siblings in progress, see your brief | | | |
 
