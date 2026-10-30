@@ -23,7 +23,7 @@ The page plays like the first minutes of a film. A dark frame, black letterbox b
 ## Starting defaults (change freely)
 The student can change any of these with a prompt such as "make the accent gold". Their request wins.
 
-Palette, in words: warm near-black for the frame; a slightly lighter warm grey for surfaces; pure black for the bars; projector-bone off-white for text; a warm grey for secondary text; one rose-red accent, like a velvet curtain. Contrast ratios are in the comments. Other accents that keep the feel: warm gold `#E2B866` (10.1:1 on the frame) or pale moonlight `#9CC3E6` (check it if you change it).
+Palette, in words: warm near-black for the frame; a slightly lighter warm grey for surfaces; pure black for the bars; projector-bone off-white for text; a warm grey for secondary text; one rose-red accent, like a velvet curtain. Contrast ratios are in the comments. Other accents that keep the feel: warm gold `#E2B866` (10.1:1 on the frame) or pale moonlight `#9CC3E6` (10.2:1 on the frame, 9.4:1 on surface; black on it 11.4:1). Check any other accent.
 
 ```css
 :root {
@@ -55,7 +55,7 @@ main > section { width: min(100% - 2rem, 60rem); margin-inline: auto; } /* 16px 
 :focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; }
 [tabindex="-1"]:focus { outline: none; }     /* sections get focus after a jump; they are not controls */
 ```
-Fonts: Jost (variable) for the name, title cards and bars; Newsreader for reading text. Alternatives: Josefin Sans or Raleway for display, Libre Caslon Text for body. Do not use Bodoni Moda (Editorial), Archivo (Pitch Deck) or JetBrains Mono (Terminal).
+Fonts: Jost (variable) for the name, title cards and bars; Newsreader for reading text. Alternatives: Josefin Sans or Raleway for display, Libre Caslon Text for body. Avoid Bodoni Moda (Editorial) and JetBrains Mono (Terminal).
 `<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">`
 Corners stay square.
 
@@ -76,7 +76,6 @@ body::after { content: ""; position: fixed; inset: 0; z-index: 4; pointer-events
 - **Contact:** the real email and links, large and centred, one per line, with `overflow-wrap: anywhere`. Link text is the label SPEC.md gives next to a URL (for example "Vimeo"), never new wording.
 - **Bottom bar:** no footer. The subtitle bar (moment 4) is the only bottom element.
 - **Stills (optional):** only if the student has real images in `assets/` with alt text. Crop them wide (`aspect-ratio: 2.39 / 1; object-fit: cover`) and place them inside the project row; they dissolve in with their scene. Never add stock or invented images. A video only if SPEC.md gives a real one.
-- Scene names are the real section names. Do not number scenes or add act labels.
 
 ## Make it theirs
 - The one loud thing is the letterbox opening. Title cards, dissolves and the subtitle bar stay quiet.
@@ -99,9 +98,10 @@ const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 ```
 
 ### 1. Page load: the title comes into focus
-Right after the letterbox starts to open (moment 5), the name dissolves in from a blur, then the intro fades in, then the whole block pushes in very slowly for ten seconds and stops. Pure CSS, so the text is in the HTML and still shows without JavaScript. Any key press or tap finishes the opening at once.
+Right after the letterbox starts to open (moment 5), the name dissolves in from a blur, then the intro fades in, then the whole block pushes in very slowly for ten seconds and stops. Pure CSS, so the text is in the HTML and still shows without JavaScript. Any key press (Tab included, on purpose) or tap finishes the opening at once.
 
 ```html
+<!-- the hero is the only section without the scene class -->
 <section class="hero" id="home" aria-labelledby="home-title">
   <div class="hero-frame">
     <h1 id="home-title" class="hero-name">Your Name</h1>
@@ -127,6 +127,7 @@ window.addEventListener('pointerdown', finishOpening, { once: true });
 ### 2. Scroll: each section opens with a title card
 When a section reaches the lower part of the screen, its title card comes into focus: it dissolves in from a slight blur while pushing in a few percent, and the two rules grow outward from the title. The rest of the section dissolves in a moment later, with no movement up or down. JavaScript adds the hiding class, so without JavaScript everything is visible. Hidden content uses `opacity`, not `visibility`, so screen readers still read it and Tab still reaches its links; a section lights as soon as anything inside it gets focus.
 
+Every section except the hero has `class="scene"`; the hero never does, or it would be hidden until scrolled to.
 ```html
 <section class="scene" id="about" aria-labelledby="about-title">
   <h2 id="about-title" class="title-card">About</h2>
@@ -134,7 +135,7 @@ When a section reaches the lower part of the screen, its title card comes into f
 </section>
 ```
 ```css
-.title-card { display: flex; align-items: center; gap: 1rem; margin-bottom: clamp(2rem, 6vw, 3.5rem);
+.title-card { display: flex; align-items: center; gap: 1rem; margin-bottom: clamp(2rem, 6vw, 3.5rem); text-align: center;
   font-size: clamp(1.25rem, 5vw, 2.25rem); letter-spacing: 0.3em; text-transform: uppercase; }
 .title-card::before, .title-card::after { content: ""; flex: 1 1 0; height: 1px; background: var(--color-rule); }
 .title-card::before { transform-origin: right; }
@@ -150,6 +151,8 @@ When a section reaches the lower part of the screen, its title card comes into f
 .will-dissolve.is-lit > :not(.title-card) { opacity: 1; transition: opacity 1000ms var(--ease-dissolve) 450ms; }
 .will-dissolve.is-lit > :nth-child(3) { transition-delay: 600ms; }
 .will-dissolve.is-lit > :nth-child(n + 4) { transition-delay: 750ms; }
+/* Something inside has keyboard focus: show the content at once, so a focused link is never invisible. */
+.will-dissolve.is-lit:focus-within > :not(.title-card) { transition: none; }
 ```
 ```js
 const scenes = [...document.querySelectorAll('main .scene')];   // every section except the hero
@@ -204,7 +207,7 @@ Links get an accent underline that is a short dash at rest (so a link never reli
   .row-desc { margin: 0; }
 }
 ```
-Contact and skill lists use the same pieces:
+Contact and skill lists use the same pieces. Every contact link (email and URL) is also `class="reel-link"`, for example `<li><a class="reel-link" href="mailto:...">the email from SPEC.md</a></li>` inside `<ul class="contact-list">`; skills sit in `<ul class="credit-list">`.
 ```css
 .credit-list li { padding-block: 0.5rem; text-align: center; font-family: var(--font-display); font-size: clamp(1rem, 3.6vw, 1.25rem); font-weight: 300; letter-spacing: 0.24em; text-transform: uppercase; overflow-wrap: anywhere; }
 .contact-list li { text-align: center; font-size: clamp(1rem, 4.6vw, 1.75rem); overflow-wrap: anywhere; } /* a real email fits on one line at 320px */
@@ -231,13 +234,13 @@ The bottom bar shows the name of the scene on screen, like a subtitle, and fades
 .site-header { background: var(--color-bar); }
 .header-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 1rem; width: min(100% - 2rem, 60rem); margin-inline: auto; }
 .brand, .site-nav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-display); font-size: 0.875rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text); text-decoration: none; }
-.site-nav { display: flex; flex-wrap: wrap; }     /* five links wrap to a second row at 320px; never scroll sideways */
+.site-nav { display: flex; flex-wrap: wrap; margin-inline: -0.625rem; }   /* five links wrap to a second row at 320px; the negative margin lines their text up with the brand */
 .site-nav a { padding-inline: 0.625rem; }
 .site-nav a::after { content: ""; position: absolute; left: 0.625rem; right: 0.625rem; bottom: 0.55rem; height: 2px; background: var(--color-accent);
   transform: scaleX(0); transform-origin: left; transition: transform 600ms var(--ease-dissolve); }
 .site-nav a:focus-visible::after, .site-nav a[aria-current="location"]::after { transform: none; }
 @media (hover: hover) { .site-nav a:hover::after { transform: none; } }
-/* The subtitle bar and the dip are added by JavaScript, so without JavaScript the page has neither. */
+/* The subtitle bar and the dip are added by JavaScript, so without JavaScript the page has neither. The has-bars class is set on <html>. */
 .subtitle-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: center;
   height: calc(var(--bar-h) + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); background: var(--color-bar); }
 .subtitle { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.12em; transition: opacity 500ms var(--ease-dissolve); }
@@ -326,7 +329,7 @@ jumpLinks.forEach((a) => a.addEventListener('click', (e) => {
   e.preventDefault();
   goTo(a.hash.slice(1));
 }));
-window.addEventListener('hashchange', () => jump(location.hash.slice(1)));
+window.addEventListener('hashchange', () => jump(location.hash.slice(1)));   // only fires for the back button or a typed #hash; nav clicks go through goTo
 ['wheel', 'touchmove'].forEach((type) => window.addEventListener(type, release, { passive: true }));
 window.addEventListener('keydown', (e) => { if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) release(); });
 let ticking = false;                                // one frame per scroll burst, no loop
@@ -341,7 +344,7 @@ updateNav();
 ```
 
 ### 5. Signature: the letterbox opens
-At load the frame is cropped by two black bars, each about a fifth of the screen. After a beat they slide off the top and bottom over 1.3 seconds, revealing the header, the hero and the bottom bar in place, while the name comes into focus behind them. Pure CSS and decorative. The masks rest off screen in their base style, so if animation is ever off they are simply not there.
+At load the frame is cropped by two black bars, each about a fifth of the screen. After a beat they slide off the top and bottom over 1.3 seconds, revealing the header, the hero and the bottom bar in place, while the name comes into focus behind them. Pure CSS and decorative. A full-page screenshot (or print) misplaces fixed bars and masks; check with a normal viewport capture. The masks rest off screen in their base style, so if animation is ever off they are simply not there.
 
 ```html
 <!-- first children of <body>, before the header -->
@@ -383,7 +386,6 @@ None. Plain CSS and JavaScript do everything here. Do not add GSAP, a video play
 - Animated or heavy grain, a flickering projector, shake, or any video or audio that plays by itself.
 - Bars that stay thick and crop the content. After the opening, the bars are slim and only the header and subtitle bar remain.
 - Slides, bounces or zoom on paragraphs. Dissolves only; the one push-in is the hero.
-- Capital letters on paragraphs or on long names of projects. Capitals are for the name, title cards, nav and skills.
 - Generic page habits: a "→" after every link, "A · B · C" strings, 01 / 02 / 03 numbering, one word of a headline picked out in the accent, an ALL-CAPS label above every heading, a fade-up on every section, the same rounded card with a soft shadow everywhere.
 
 ## Who wins
