@@ -122,7 +122,7 @@ The page. Repeat the project and skill items for every real one in SPEC.md. The 
     </nav>
   </header>
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <section class="shot shot--home" id="home" aria-labelledby="home-title">
       <div class="shot__grade" aria-hidden="true"></div>
       <div class="hero-inner">
@@ -343,7 +343,22 @@ Smooth scrolling. Lenis is only started on devices with a mouse:
     const tick = (time) => lenis.raf(time * 1000);        // GSAP's clock drives Lenis (one loop, not two)
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
-    return { lenis, stop() { gsap.ticker.remove(tick); gsap.ticker.lagSmoothing(500, 33); lenis.destroy(); } };
+    // With Lenis on it, GSAP's ticker would run every frame forever. Let it sleep after 1.5s with nothing
+    // moving; any input or scroll wakes it (GSAP also wakes it whenever a new tween starts).
+    let idle;
+    const wake = () => {
+      gsap.ticker.wake();
+      clearTimeout(idle);
+      idle = setTimeout(() => (lenis.isScrolling ? wake() : gsap.ticker.sleep()), 1500);
+    };
+    const inputs = ['wheel', 'keydown', 'pointerdown', 'touchstart', 'scroll'];
+    inputs.forEach((name) => window.addEventListener(name, wake, { passive: true }));
+    wake();
+    return { lenis, stop() {
+      inputs.forEach((name) => window.removeEventListener(name, wake));
+      clearTimeout(idle); gsap.ticker.wake();
+      gsap.ticker.remove(tick); gsap.ticker.lagSmoothing(500, 33); lenis.destroy();
+    } };
   }
 ```
 
@@ -456,7 +471,7 @@ Each shot has the same three parts: a transition into it (its grade), text that 
 Only a project name that is a real link reacts, and nav links. The underline is an accent line that grows with `transform: scaleX`. Keyboard focus does exactly what hover does, plus the outline. Nav hover and focus are in the frame CSS above.
 ```css
 /* Only titles that are real links react. The underline draws with transform, so nothing re-lays out. */
-.project__title a { position: relative; display: inline-block; min-height: 44px; color: inherit; text-decoration: none; transition: color 240ms var(--ease-dissolve); }
+.project__title a { position: relative; display: inline-block; min-height: 44px; color: inherit; text-decoration: underline 1px var(--color-accent); text-underline-offset: 0.12em; /* a resting cue, so the link reads as a link without hover */ transition: color 240ms var(--ease-dissolve); }
 .project__title a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--color-accent);
   transform: scaleX(0); transform-origin: left center; transition: transform 300ms var(--ease-dissolve); }
 .project__title a:focus-visible { color: var(--color-accent); }
@@ -564,8 +579,14 @@ At load the name sits in the half-closed letterbox with its letters slightly apa
     })
       // The bars start tall (20% of the screen each) and open to their real size.
       .fromTo('.letterbox', { scaleY: (i, bar) => (window.innerHeight * 0.2) / bar.offsetHeight }, { scaleY: 1, duration: 0.7 }, 0)
-      // Hand-off: the title card dissolves, then About rises from below.
-      .to('.hero-inner', { opacity: 0, scale: 0.94, duration: 0.25 }, 0.75);
+      .set({}, {}, 1);                                    // the card holds, fully formed, to the end of the pin
+
+    // Hand-off: the title card dissolves while About rises over it. Fading it inside the pin instead
+    // leaves a whole screen of empty ink between the two shots.
+    gsap.to('.hero-inner', {
+      opacity: 0, scale: 0.94, ease: 'none',
+      scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'top 35%', scrub: cfg.scrub }
+    });
 
     // The name: autoSplit re-splits when the width changes or the font loads. Returning the animation lets
     // SplitText throw it away and rebuild it on the new letters, so nothing is ever left half-split.
@@ -576,7 +597,7 @@ At load the name sits in the half-closed letterbox with its letters slightly apa
       autoSplit: true,
       onSplit(split) {
         const from = {
-          xPercent: (i, el, all) => (i - (all.length - 1) / 2) * 18,   // spread out from the middle letter
+          xPercent: (i, el, all) => (i - (all.length - 1) / 2) * (window.innerWidth < 640 ? 7 : 18), // spread out from the middle letter; less on phones so the end letters are not clipped
           yPercent: (i) => (i % 2 ? 20 : -20),                          // odd letters start low, even letters high
           opacity: 0.55,                                                // the name stays readable before the first scroll
           stagger: { amount: 0.3, from: 'center' }, duration: 0.4, ease: 'power2.out'

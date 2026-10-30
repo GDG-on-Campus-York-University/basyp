@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ines Duarte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Pinned versions, in this order. defer keeps them in order and runs them before script.js. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.25/dist/lenis.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Decoration only: shown by CSS once the film starts (html.has-film). -->
+  <div class="letterbox letterbox--top" aria-hidden="true"></div>
+  <div class="letterbox letterbox--bottom" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"></div>
+  <p class="caption" aria-hidden="true"></p>
+
+  <header class="frame">
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="shot shot--home" id="home" aria-labelledby="home-title">
+      <div class="shot__grade" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <h1 id="home-title" class="title-card">Ines Duarte</h1>
+        <span class="hero-rule" aria-hidden="true"></span>
+        <p class="hero-intro">Second-year Cinema and Media Arts student at York University.</p>
+      </div>
+    </section>
+
+    <section class="shot shot--about" id="about" aria-labelledby="about-title">
+      <div class="shot__grade" aria-hidden="true"></div>
+      <div class="shot__inner">
+        <h2 id="about-title" class="shot__title" data-depth="0.6">About</h2>
+        <p class="shot__text">I think in shots. I like planning a scene on paper, shooting it with whatever light I can find, and finding the film again in the edit.</p>
+      </div>
+    </section>
+
+    <section class="shot shot--projects" id="projects" aria-labelledby="projects-title">
+      <div class="shot__grade" aria-hidden="true"></div>
+      <div class="shot__inner">
+        <h2 id="projects-title" class="shot__title" data-depth="0.6">Projects</h2>
+        <ul class="project-list">
+          <li class="project">
+            <h3 class="project__title"><a href="https://example.com/ines-duarte/night-shift">Night Shift</a></h3>
+            <p class="project__desc">A four-minute short film about a late-night transit worker, shot over two weekends for a second-year production course.</p>
+          </li>
+          <li class="project">
+            <h3 class="project__title">Paper Weather</h3>
+            <p class="project__desc">A two-minute stop-motion animation made from cut paper, a phone on a tripod and a desk lamp.</p>
+          </li>
+          <li class="project">
+            <h3 class="project__title">Rooftop Loop</h3>
+            <p class="project__desc">A thirty-second looping motion piece, edited and graded for a class on moving image design.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="shot shot--skills" id="skills" aria-labelledby="skills-title">
+      <div class="shot__grade" aria-hidden="true"></div>
+      <div class="shot__inner">
+        <h2 id="skills-title" class="shot__title" data-depth="0.6">Skills</h2>
+        <ul class="skill-list">
+          <li>Premiere Pro</li>
+          <li>DaVinci Resolve</li>
+          <li>After Effects</li>
+          <li>Cinematography</li>
+          <li>Storyboarding</li>
+          <li>Sound editing</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="shot shot--contact" id="contact" aria-labelledby="contact-title">
+      <div class="shot__grade" aria-hidden="true"></div>
+      <div class="shot__inner">
+        <h2 id="contact-title" class="shot__title" data-depth="0.6">Contact</h2>
+        <ul class="contact-list">
+          <li><a href="mailto:ines.duarte@example.com">ines.duarte@example.com</a></li>
+          <li><a href="https://example.com/ines-duarte">LinkedIn</a></li>
+        </ul>
+        <a class="to-top" href="#home">Back to top</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
