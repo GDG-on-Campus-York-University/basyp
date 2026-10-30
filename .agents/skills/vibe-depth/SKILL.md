@@ -95,6 +95,7 @@ Corners on sheets, cards and chips stay square (cut paper). Only the sun, hills 
 .sheet { position: relative; width: min(100% - 2rem, 62rem); margin: clamp(2.5rem, 7vw, 4.5rem) auto; padding: clamp(1.25rem, 4vw, 3rem); background: var(--color-paper); color: var(--color-text);
   /* two hard offsets are the paper edges underneath, then a contact shadow and a long soft shadow; offsets stay inside the 16px page gutter */
   box-shadow: 0.4rem 0.5rem 0 -0.1rem var(--edge-1), 0.8rem 1rem 0 -0.2rem var(--edge-2), 0 2px 4px rgba(0, 0, 0, 0.35), 0 28px 48px -16px rgba(0, 0, 0, 0.6); }
+/* nth-of-type counts every <section>, the hero included: About and Skills land on even. Re-check if sections change. */
 .sheet:nth-of-type(even) { box-shadow: -0.4rem 0.5rem 0 -0.1rem var(--edge-1), -0.8rem 1rem 0 -0.2rem var(--edge-2), 0 2px 4px rgba(0, 0, 0, 0.35), 0 28px 48px -16px rgba(0, 0, 0, 0.6); }
 .sheet-narrow { width: min(100% - 2rem, 46rem); }
 @media (min-width: 62rem) {
@@ -150,7 +151,8 @@ The hero planes slide forward from deeper in the box, one after another (the far
 </section>
 ```
 ```css
-.hero { position: relative; display: grid; align-items: center; min-height: min(88svh, 44rem); padding-block: 3rem 8rem; overflow: clip; } /* 8rem keeps the near hill off the name sheet */
+.hero { position: relative; display: grid; align-items: center; min-height: min(88svh, 44rem); padding-block: 3rem 8rem; overflow: clip; /* 8rem keeps the near hill off the name sheet */
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent); mask-image: linear-gradient(to bottom, #000 78%, transparent); } /* the clip would cut the hills in a hard line; the mask fades them into the page like a diorama floor */
 .stage { position: absolute; inset: 0; perspective: var(--persp); perspective-origin: 50% 35%; pointer-events: none; }
 .stage-front { z-index: 2; }
 .tilt { position: absolute; inset: 0; transform-style: preserve-3d; }
@@ -243,10 +245,11 @@ Only a card whose title is a real link reacts. It rises, moves toward the viewer
 .card-link::after { content: ""; position: absolute; inset: 0; }   /* stretches the link over the whole card */
 .project-card p { color: var(--color-muted); }
 @media (hover: hover) {
-  .project-card:has(.card-link):hover { transform: translateY(-6px) translateZ(40px) scale(0.9556); z-index: 1; }
+  .project-card:has(.card-link):hover { transform: translateY(-6px); z-index: 1; } /* lift with Y and the deeper shadow only: translateZ plus a counter-scale left text soft at 1x */
   .project-card:has(.card-link):hover::after { opacity: 1; }
 }
-.project-card:has(.card-link:focus-visible) { transform: translateY(-6px) translateZ(40px) scale(0.9556); z-index: 1; outline: 3px solid var(--color-text); outline-offset: 3px; }
+.project-card:has(.card-link:focus-visible) { transform: translateY(-6px); z-index: 1; outline: 3px solid var(--color-text); outline-offset: 3px; }
+.card-link:focus-visible { outline: none; } /* the card's ring replaces it, so there are never two rings */
 .project-card:has(.card-link:focus-visible)::after { opacity: 1; }
 ```
 
@@ -265,7 +268,7 @@ The header is the nearest dark layer. The link for the section on screen is a sm
 .site-nav a[aria-current="location"]:focus-visible { outline-color: var(--color-text); }  /* marigold would be 1.8:1 on the paper chip */
 @media (min-width: 48rem) {
   .site-header { position: sticky; top: 0; }
-  section[id] { scroll-margin-top: 4.5rem; }   /* use your header's height so it never covers a heading */
+  section[id] { scroll-margin-top: 3.5rem; }   /* use your header's height so it never covers a heading */
   html { scroll-padding-top: 4.5rem; }         /* keeps Tab focus out from under the sticky header too */
 }
 ```

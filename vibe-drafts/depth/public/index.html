@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mara Lindqvist | Design student portfolio</title>
+  <meta name="description" content="Portfolio of Mara Lindqvist, second-year Design student at York University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..800&family=Outfit:wght@400..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"><span class="layer layer-moon"></span><span class="layer layer-hill"></span></div>
+  <div class="foreground" aria-hidden="true"><span class="layer layer-scrap-a"></span><span class="layer layer-scrap-b"></span></div>
+
+  <header class="site-header">
+    <div class="header-row">
+      <a class="brand" href="#home">Mara Lindqvist</a>
+      <nav aria-label="Sections">
+        <ul class="site-nav">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <div class="stage stage-back" aria-hidden="true"><div class="tilt">
+        <span class="plane plane-sun"></span><span class="plane plane-ridge-far"></span><span class="plane plane-ridge-mid"></span>
+      </div></div>
+      <div class="hero-copy">
+        <h1 id="home-title" class="hero-name">Mara Lindqvist</h1>
+        <p class="hero-intro">Second-year Design student at York University.</p>
+      </div>
+      <div class="stage stage-front" aria-hidden="true"><div class="tilt">
+        <span class="plane plane-ridge-near"></span><span class="plane plane-scrap"></span>
+      </div></div>
+    </section>
+
+    <section class="sheet sheet-narrow sheet-left" id="about" aria-labelledby="about-title">
+      <h2 id="about-title" class="section-title">About</h2>
+      <p>I like making a flat idea feel deep. I start with cut paper and a desk lamp, then carry what I learn about light and space into digital layouts.</p>
+    </section>
+
+    <section class="sheet" id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="section-title">Projects</h2>
+      <ul class="project-list">
+        <li class="project-card">
+          <h3 class="card-title"><a class="card-link" href="https://example.com/mara-lindqvist/ravine-shadow-boxes">Ravine Shadow Boxes</a></h3>
+          <p>Three layered cut-paper scenes of a ravine, each built from five sheets and photographed under one lamp, made for a second-year studio course.</p>
+        </li>
+        <li class="project-card">
+          <h3 class="card-title">Library Wayfinding</h3>
+          <p>A signage concept for one floor of a campus library, tested with a paper prototype and classmates who tried to find their way.</p>
+        </li>
+        <li class="project-card">
+          <h3 class="card-title">Fold Lamp</h3>
+          <p>A lamp shade folded from a single sheet of paper, redesigned twice after I saw how it threw light on the wall.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="sheet sheet-narrow sheet-right" id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title" class="section-title">Skills</h2>
+      <ul class="skill-list">
+        <li>Figma</li>
+        <li>Adobe Illustrator</li>
+        <li>Adobe Photoshop</li>
+        <li>Paper modelling</li>
+        <li>Sketching</li>
+        <li>Photography</li>
+      </ul>
+    </section>
+
+    <section class="sheet sheet-narrow sheet-left" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="section-title">Contact</h2>
+      <ul class="contact-list">
+        <li><a href="mailto:mara.lindqvist@example.com">mara.lindqvist@example.com</a></li>
+        <li><a href="https://example.com/mara-lindqvist">LinkedIn</a></li>
+        <li><a href="https://example.com/mara-makes">Instagram</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="to-top" href="#home">Back to top</a>
+  </footer>
+</body>
+</html>
