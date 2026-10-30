@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kenji Moreau</title>
+  <meta name="description" content="Second-year Space Engineering student at York University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Martian+Mono:wght@400;500&family=Michroma&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="tabs" aria-label="Sections">
+      <ul>
+        <li><a href="#home" aria-current="location">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 id="home-title" class="hero-name scramble">Kenji Moreau</h1>
+          <p class="hero-intro">Second-year Space Engineering student at York University.</p>
+        </div>
+        <div class="orbit-panel">
+          <div class="orbit-bar"><p class="panel-tag" aria-hidden="true">Home</p><button class="orbit-toggle" type="button">Pause orbit</button></div>
+          <svg class="orbit-svg" viewBox="0 0 400 300" aria-hidden="true" focusable="false">
+            <g transform="translate(168 159)">
+              <g class="orbit" transform="rotate(160)"><path class="track" pathLength="1" d="M56 0A140 112 0 1 1 -224 0A140 112 0 1 1 56 0Z"/></g>
+              <g class="orbit orbit-craft" transform="rotate(-35)" data-rx="104" data-ry="78">
+                <path class="track" pathLength="1" d="M35.2 0A104 78 0 1 1 -172.8 0A104 78 0 1 1 35.2 0Z"/>
+                <circle class="trail t4" r="2"/><circle class="trail t3" r="2.6"/><circle class="trail t2" r="3.2"/><circle class="trail t1" r="3.8"/>
+                <circle class="craft" r="5"/>
+              </g>
+              <g class="orbit" transform="rotate(80)"><path class="track" pathLength="1" d="M26.7 0A68 54 0 1 1 -109.3 0A68 54 0 1 1 26.7 0Z"/></g>
+              <circle class="planet" r="10"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="about" aria-labelledby="about-title">
+      <div class="panel-head"><span class="lamp" aria-hidden="true"></span><h2 id="about-title" class="panel-title scramble">About</h2></div>
+      <div class="panel-body"><p>I got into space engineering by building things and then asking why they behaved the way they did. I like turning a physics idea into a simulation, and a simulation into something I can hold. I am learning how a small team puts a satellite together, one subsystem at a time.</p></div>
+    </section>
+
+    <section class="panel" id="projects" aria-labelledby="projects-title">
+      <div class="panel-head"><span class="lamp" aria-hidden="true"></span><h2 id="projects-title" class="panel-title scramble">Projects</h2></div>
+      <div class="panel-body">
+        <ul class="project-list">
+          <li class="project"><h3 id="project-1">CubeSat Club Subsystem</h3><p>A student club project where I help design and test one small subsystem of a CubeSat, writing down what we tried and what we changed.</p></li>
+          <li class="project"><h3 id="project-2">Orbit Simulation</h3><p>A Python program that works out how a satellite moves around a planet and plots the path.</p><a href="https://example.com/kenji-moreau/orbit-simulation" aria-describedby="project-2">Code</a></li>
+          <li class="project"><h3 id="project-3">Model Rocket</h3><p>A small model rocket I built from a kit, flew with my club, and then compared against my own predictions of how high it would go.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel" id="skills" aria-labelledby="skills-title">
+      <div class="panel-head"><span class="lamp" aria-hidden="true"></span><h2 id="skills-title" class="panel-title scramble">Skills</h2></div>
+      <div class="panel-body">
+        <ul class="chips">
+          <li>Python</li><li>MATLAB</li><li>CAD</li><li>Git</li><li>Orbital mechanics basics</li><li>Soldering</li><li>Technical writing</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel" id="contact" aria-labelledby="contact-title">
+      <div class="panel-head"><span class="lamp" aria-hidden="true"></span><h2 id="contact-title" class="panel-title scramble">Contact</h2></div>
+      <div class="panel-body">
+        <ul class="contact-list">
+          <li><a href="mailto:kenji.moreau@example.com">kenji.moreau@example.com</a></li>
+          <li><a href="https://example.com/kenji-moreau">LinkedIn</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
