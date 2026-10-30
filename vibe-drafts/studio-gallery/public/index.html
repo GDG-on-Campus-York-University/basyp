@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rosalind Abara</title>
+  <meta name="description" content="Second-year Visual Arts student at York University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300..600&family=Crimson+Pro:ital,wght@0,400..600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-row">
+      <a class="brand" href="#home">Rosalind Abara</a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul class="nav-list">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <h1 id="home-title" class="hero-name">Rosalind Abara</h1>
+      <p class="hero-intro">Second-year Visual Arts student at York University.</p>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="about-title">
+      <h2 id="about-title" class="section-title">About</h2>
+      <div class="about-text">
+        <p>I work slowly and in series. I start with a drawing or a painting, then see what happens when I print it, bind it or put it in motion.</p>
+      </div>
+    </section>
+
+    <section class="projects" id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="section-title">Projects</h2>
+      <ul class="hang">
+        <li class="piece">
+          <div class="piece-art art-1" aria-hidden="true">
+            <div class="piece-mat"><div class="piece-field field-b"></div></div>
+          </div>
+          <div class="piece-label">
+            <h3 class="piece-title">Salt Marsh Studies</h3>
+            <p class="piece-medium">watercolour on paper</p>
+            <p class="piece-desc">A series of watercolour paintings of one stretch of shoreline, painted at different times of day for a second-year painting course.</p>
+          </div>
+        </li>
+        <li class="piece">
+          <div class="piece-art art-2" aria-hidden="true">
+            <div class="piece-mat"><div class="piece-field field-a"></div></div>
+          </div>
+          <div class="piece-label">
+            <h3 class="piece-title">Quiet Hours</h3>
+            <p class="piece-medium">two-colour risograph print</p>
+            <p class="piece-desc">A small zine of illustrated diary pages, printed in two colours and bound by hand with a needle and thread.</p>
+          </div>
+        </li>
+        <li class="piece">
+          <div class="piece-art art-3" aria-hidden="true">
+            <div class="piece-mat"><div class="piece-field field-c"></div></div>
+          </div>
+          <div class="piece-label">
+            <h3 class="piece-title">Night Street Loop</h3>
+            <p class="piece-medium">digital frame-by-frame animation</p>
+            <p class="piece-desc">A short looping animation of a paper lantern drifting down an empty street, drawn frame by frame.</p>
+            <a class="piece-link" href="https://example.com/rosalind-abara/night-street-loop">Link: Night Street Loop</a>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="skills" id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title" class="section-title">Skills</h2>
+      <ul class="skill-list">
+        <li>Watercolour</li>
+        <li>Drawing</li>
+        <li>Risograph printing</li>
+        <li>Bookbinding</li>
+        <li>Procreate</li>
+        <li>Adobe Illustrator</li>
+        <li>Frame-by-frame animation</li>
+      </ul>
+    </section>
+
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="section-title">Contact</h2>
+      <ul class="contact-list">
+        <li><a href="mailto:rosalind.abara@example.com">rosalind.abara@example.com</a></li>
+        <li><a href="https://example.com/rosalind-abara-draws">Instagram</a></li>
+        <li><a href="https://example.com/rosalind-abara/portfolio">Portfolio PDF</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <dialog class="room" id="viewing-room" aria-labelledby="room-title">
+    <div class="room-bar"><button type="button" class="room-close">Close</button></div>
+    <div class="room-inner">
+      <div class="room-art-slot"></div>
+      <div class="room-label">
+        <h2 id="room-title" class="room-title"></h2>
+        <p class="room-medium"></p>
+        <p class="room-desc"></p>
+        <div class="room-links"></div>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>

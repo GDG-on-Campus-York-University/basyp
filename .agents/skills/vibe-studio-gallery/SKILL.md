@@ -72,7 +72,7 @@ Corners stay square, as on real frames and wall labels. Another good wall: brigh
 
 ```html
 <li class="piece">
-  <div class="piece-art" aria-hidden="true" style="--hue: 24; --ratio: 0.8">
+  <div class="piece-art art-1" aria-hidden="true">
     <div class="piece-mat"><div class="piece-field field-a"></div></div>
   </div>
   <div class="piece-label">
@@ -83,7 +83,7 @@ Corners stay square, as on real frames and wall labels. Another good wall: brigh
   </div>
 </li>
 ```
-Wrap the pieces in `<ul class="hang">`. Leave out the medium line when SPEC.md states none.
+Give each piece its own `art-1`, `art-2`, ... class that sets its hue and shape, so the HTML needs no inline styles (for example `.art-1 { --hue: 190; --ratio: 1.25; }`, hues at least 60 degrees apart). Wrap the pieces in `<ul class="hang">`. Leave out the medium line when SPEC.md states none.
 
 ### The artwork
 SPEC.md rarely has images, so each piece shows a designed composition: a dark frame, a white mat and an abstract colour field built from one hue per project. It is clearly decoration (`aria-hidden`) and must never draw the subject of the work, such as a fake landscape or a fake face. Pick hues at least 60 degrees apart (or use a colour word SPEC.md gives for the project), cycle `field-a`, `field-b`, `field-c`, and vary `--ratio` (width divided by height: `0.8`, `1`, `1.25`).
@@ -103,7 +103,7 @@ SPEC.md rarely has images, so each piece shows a designed composition: a dark fr
 .hang { display: grid; gap: clamp(4rem, 12vw, 9rem); margin-top: clamp(2rem, 6vw, 4rem); }
 .piece { --dir: 1; position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: flex-start; gap: 1.25rem; }
 .piece:nth-child(even) { --dir: -1; }
-.piece-label { flex: 0 1 17rem; max-width: 17rem; padding: 1rem 1.125rem 1.125rem; background: var(--color-card); border: 1px solid var(--color-rule); }
+.piece-label { flex: 0 1 auto; width: 17rem; max-width: 100%; /* a width, not a flex-basis: in the phone column a 17rem basis would become a 17rem-tall box */ padding: 1rem 1.125rem 1.125rem; background: var(--color-card); border: 1px solid var(--color-rule); }
 .piece-label p { margin: 0.5rem 0 0; font-size: 1.0625rem; line-height: 1.5; }
 .piece-title { font-size: 1.125rem; font-weight: 500; }
 .piece-medium { font-style: italic; color: var(--color-muted); }
@@ -111,6 +111,7 @@ SPEC.md rarely has images, so each piece shows a designed composition: a dark fr
 @media (min-width: 48rem) {
   .piece { flex-direction: row; align-items: flex-end; gap: 2rem; width: fit-content; max-width: 100%; }
   .piece:nth-child(even) { flex-direction: row-reverse; margin-left: auto; }
+  .piece-label { flex-basis: 17rem; }
 }
 ```
 
@@ -188,15 +189,16 @@ if (!reduce && 'IntersectionObserver' in window && !CSS.supports('animation-time
 ```
 
 ### 3. Hover and focus: the light warms the piece
-Pointing at (or tabbing to) a piece fades in a soft pool of light on the wall behind it, deepens the frame's shadow and warms the colours a touch. Only pieces that open (JavaScript adds `has-open`, moment 5) react, so nothing reacts that does nothing. Keyboard focus does the same plus a visible ring around the whole piece. The whole piece is the click target.
+Pointing at (or tabbing to) a piece fades in a soft pool of light on the wall behind it, deepens the frame's shadow and warms the colours a touch. Only pieces that open (JavaScript adds `has-open`, moment 5) react, so nothing reacts that does nothing. Keyboard focus does the same plus a visible ring on the artwork and on the label (they drift apart on wide screens, so one ring around both cannot hold). The whole piece is the click target: JavaScript listens for clicks on the piece (moment 5), because a stretched `::after` would be trapped inside the drifting label.
 
 ```css
-.piece::before { content: ""; position: absolute; inset: -12% -8%; z-index: -1; pointer-events: none; opacity: 0;
-  background: radial-gradient(ellipse at 40% 40%, var(--color-light), transparent 68%); transition: opacity 700ms var(--ease-glide); }
+.piece::before { content: ""; position: absolute; inset: -30% -16%; z-index: -1; pointer-events: none; opacity: 0;
+  background: radial-gradient(closest-side, var(--color-light) 35%, transparent); /* closest-side fades out before the box edge: no hard rectangle */ transition: opacity 700ms var(--ease-glide); }
 .piece-open { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; min-height: 44px; }
-.piece-open::after { content: ""; position: absolute; inset: 0; }                 /* stretches the button over the whole piece */
-.piece-open:focus-visible { outline: none; }                                      /* the ring is drawn on the stretched area instead */
-.piece-open:focus-visible::after { outline: 3px solid var(--color-text); outline-offset: 4px; }
+.piece.has-open { cursor: pointer; }
+.piece-open:focus-visible { outline: none; }                                      /* the ring is drawn on the art and the label instead */
+.piece.has-open:has(.piece-open:focus-visible) .piece-art,
+.piece.has-open:has(.piece-open:focus-visible) .piece-label { outline: 3px solid var(--color-text); outline-offset: 4px; }
 .piece.has-open:has(.piece-open:focus-visible)::before { opacity: 1; }
 .piece.has-open:has(.piece-open:focus-visible) .piece-art::after { opacity: 1; }
 .piece.has-open:has(.piece-open:focus-visible) .piece-field { filter: saturate(1.12) brightness(1.04); }
@@ -226,7 +228,7 @@ A thin brass line slides under the link of the section on screen, like a visitor
 .brand, .nav-list a { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-display); font-weight: 500; text-decoration: none; color: var(--color-text); }
 .site-nav { position: relative; }
 .nav-list { display: flex; flex-wrap: wrap; margin-inline: -0.75rem; }          /* five links wrap to a second row at 320px */
-.nav-list a { padding-inline: 0.75rem; font-size: 0.9375rem; color: var(--color-muted); }
+.nav-list a { padding-inline: 0.75rem; font-size: 1rem; color: var(--color-muted); }
 .nav-list a[aria-current="location"] { color: var(--color-text); }
 .brand:focus-visible, .nav-list a:focus-visible { outline: 3px solid var(--color-text); outline-offset: -3px; }   /* drawn inside, so the screen edge never clips it */
 .nav-marker { position: absolute; left: 0; top: 0; width: 1px; height: 2px; background: var(--color-accent); pointer-events: none; transform-origin: 0 0;
@@ -378,7 +380,7 @@ if (room && typeof room.showModal === 'function') {
     button.textContent = title.textContent.trim();
     title.replaceChildren(button);
     piece.classList.add('has-open');
-    button.addEventListener('click', () => openRoom(piece));
+    piece.addEventListener('click', (e) => { if (!e.target.closest('.piece-link')) openRoom(piece); });   // the whole piece opens (the button inside does too), but the real link still works
   });
   room.querySelector('.room-close').addEventListener('click', closeRoom);
   room.addEventListener('cancel', (e) => { e.preventDefault(); closeRoom(); });          // Esc goes through the same glide
