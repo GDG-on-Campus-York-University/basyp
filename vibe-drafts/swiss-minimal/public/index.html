@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sam Rivera</title>
+  <meta name="description" content="Sam Rivera, first-year Computer Science student at York University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="page header-row">
+      <a class="brand" href="#home">Sam Rivera</a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" id="home" aria-labelledby="home-title">
+      <span class="hero-bar" aria-hidden="true"></span>
+      <h1 id="home-title" class="hero-name">Sam Rivera</h1>
+      <p class="hero-intro">First-year Computer Science student at York University.</p>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <p class="sec-num" aria-hidden="true">01</p>
+      <h2 id="about-title" class="sec-title">About</h2>
+      <div class="sec-body">
+        <p>I enjoy making small tools that solve everyday student problems.</p>
+      </div>
+    </section>
+
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <p class="sec-num" aria-hidden="true">02</p>
+      <h2 id="projects-title" class="sec-title">Projects</h2>
+      <div class="sec-body">
+        <ul class="project-list">
+          <li class="project-row">
+            <h3 class="project-title">Bus Buddy</h3>
+            <p class="project-desc">A Python script showing upcoming campus bus departures.</p>
+          </li>
+          <li class="project-row">
+            <h3 class="project-title">Study Timer</h3>
+            <p class="project-desc">A simple Pomodoro timer website built with HTML, CSS and JavaScript.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <p class="sec-num" aria-hidden="true">03</p>
+      <h2 id="skills-title" class="sec-title">Skills</h2>
+      <div class="sec-body">
+        <ul class="skill-list">
+          <li>Python</li>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+          <li>Git</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <p class="sec-num" aria-hidden="true">04</p>
+      <h2 id="contact-title" class="sec-title">Contact</h2>
+      <div class="sec-body">
+        <ul class="contact-list">
+          <li><a href="mailto:sam.rivera@example.com">sam.rivera@example.com</a></li>
+          <li><a href="https://example.com/sam">GitHub</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

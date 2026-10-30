@@ -1,0 +1,144 @@
+/* Swiss Minimal: white paper, black type, one red accent, a visible column grid. */
+:root {
+  --color-bg: #FFFFFF;
+  --color-surface: #EEEEEE;   /* the hero's column bands */
+  --color-text: #111111;      /* 18.9:1 on bg, 16.3:1 on surface */
+  --color-muted: #575757;     /* 7.2:1 on bg (used for project descriptions, which sit on bg only) */
+  --color-accent: #D10019;    /* 5.6:1 on bg, 4.9:1 on surface; white on accent 5.6:1 */
+  --color-rule: #B0B0B0;      /* hairlines only, never text */
+  --font: "Schibsted Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.25rem;
+  --space-5: 1.5rem;
+  --space-6: 2.5rem;
+
+  --cols: 4;                  /* the grid: 4 columns on phones */
+  --body-cols: 4;
+  --gutter: 1rem;
+  --margin: 1rem;             /* space either side of the page */
+  --header-h: 0px;            /* the sticky header's real height on desktop, so jumps land below it */
+  /* One column plus one gutter. 100cqw is the page width, so this is exact at every screen size. */
+  --step: calc((100cqw + var(--gutter)) / var(--cols));
+
+  --ease-grid: cubic-bezier(0.3, 0, 0.1, 1);  /* firm start, long exact stop, no overshoot */
+  --move: 520ms;
+  --beat: 80ms;                                /* the stagger between neighbours */
+  --tick: 110ms;                               /* one step of a counting digit */
+}
+@media (min-width: 48rem) {
+  :root { --cols: 12; --body-cols: 8; --gutter: 1.5rem; --margin: 1.5rem; --header-h: 3.75rem; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: auto; }
+body { margin: 0; overflow-x: clip; background: var(--color-bg); color: var(--color-text); font-family: var(--font); font-size: 1.0625rem; line-height: 1.55; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+.page { width: min(100% - 2 * var(--margin), 75rem); margin-inline: auto; container-type: inline-size; }
+/* Everything on the grid uses one of these two shapes. */
+.hero, .section, .header-row { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gutter); }
+.sec-body, .project-row, .skill-list { display: grid; grid-template-columns: repeat(var(--body-cols), minmax(0, 1fr)); column-gap: var(--gutter); }
+a { color: var(--color-accent); text-decoration: underline 2px; text-underline-offset: 0.2em; }
+a:hover { color: var(--color-text); text-decoration-thickness: 4px; } /* instant: colour never animates */
+:focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; }
+
+.site-header { border-bottom: 1px solid var(--color-text); background: var(--color-bg); }
+.header-row { padding-block: var(--space-2); } /* room for the focus ring at the very top of the page */
+.brand { grid-column: 1 / -1; justify-self: start; display: inline-flex; align-items: center; min-height: 44px; color: var(--color-text); font-weight: 800; text-decoration: none; }
+.site-nav { grid-column: 1 / -1; }
+@media (min-width: 48rem) {
+  .site-header { position: sticky; top: 0; z-index: 10; min-height: var(--header-h); } /* border-box, so the border is inside it */
+  .header-row { align-items: center; padding-block: 0; min-height: calc(var(--header-h) - 1px); }
+  .brand { grid-column: 1 / span 4; }
+  .site-nav { grid-column: 5 / -1; }
+}
+
+/* Column bands: each tile is one column wide plus a transparent gutter, repeated across the hero. */
+.hero { align-content: end; row-gap: var(--space-5); min-height: min(78svh, 40rem); padding-block: var(--space-6);
+  background: linear-gradient(to right, var(--color-surface) calc(100% - var(--gutter)), transparent 0) 0 0 / var(--step) 100% repeat-x; }
+.hero-bar { display: block; grid-column: 1; height: 0.75rem; background: var(--color-accent); transform-origin: left; }
+.hero-name { grid-column: 1 / -1; font-size: clamp(2.75rem, 13vw, 9rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; overflow-wrap: anywhere; }
+.hero-intro { grid-column: 1 / -1; max-width: 28ch; font-size: clamp(1.25rem, 2.6vw, 1.875rem); font-weight: 500; line-height: 1.25; }
+@media (min-width: 48rem) { .hero-name { grid-column: 1 / span 10; } .hero-intro { grid-column: 5 / span 6; } }
+
+.section { align-content: start; padding-block: clamp(2rem, 6vw, 4.5rem); border-top: 2px solid var(--color-text); }
+.hero[id], .section[id] { scroll-margin-top: var(--header-h); }
+.sec-num { --cell: 1.15em; grid-column: 1 / -1; color: var(--color-accent); font-size: clamp(3rem, 9vw, 6.5rem); font-weight: 800; line-height: 1.15; }
+.sec-title { grid-column: 1 / -1; font-size: clamp(1.75rem, 3.2vw, 2.5rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+.sec-body { grid-column: 1 / -1; margin-top: var(--space-5); align-content: start; }
+.sec-body > * { grid-column: 1 / -1; }
+.sec-body > p { max-width: 36rem; }
+@media (min-width: 48rem) {
+  .sec-num, .sec-title { grid-column: 1 / span 4; }
+  .sec-num { grid-row: 1; } .sec-title { grid-row: 2; align-self: start; }
+  .sec-body { grid-column: 5 / -1; grid-row: 1 / span 2; margin-top: 0; }
+}
+
+.project-row { padding-block: var(--space-4); border-top: 1px solid var(--color-rule); row-gap: var(--space-2); }
+.project-title { grid-column: 1 / -1; font-size: 1.5rem; font-weight: 800; line-height: 1.15; transition: transform var(--move) var(--ease-grid); }
+.project-desc, .project-link { grid-column: 1 / -1; }
+.project-desc { color: var(--color-muted); }
+.skill-list li { grid-column: span 2; padding-block: var(--space-2); border-top: 1px solid var(--color-rule); font-weight: 500; }
+.contact-list li { border-top: 1px solid var(--color-rule); }
+.contact-list a { display: block; min-height: 44px; padding-block: var(--space-2); font-size: clamp(1rem, 4.4vw, 1.75rem); font-weight: 500; overflow-wrap: anywhere; }
+@media (min-width: 48rem) {
+  .project-title { grid-column: 2 / span 3; grid-row: 1 / span 2; }
+  .project-desc, .project-link { grid-column: 5 / -1; }
+}
+
+/* Shared by page load, scroll and navigation. Defining only the "from" keeps the element's real values as the end. */
+@keyframes slide-col { from { opacity: 0; transform: translateX(calc(var(--step) * -1)); } }
+@keyframes draw-bar { from { transform: scaleX(0); } }
+
+.hero-bar { animation: draw-bar var(--move) var(--ease-grid) both; }
+.hero-name { animation: slide-col var(--move) var(--ease-grid) var(--beat) both; }
+.hero-intro { animation: slide-col var(--move) var(--ease-grid) calc(var(--beat) * 2) both; }
+
+.will-reveal .sec-title,
+.will-reveal .reveal-item { opacity: 0; transform: translateX(calc(var(--step) * -1)); }
+/* The transition sits on the arrived state, so the hidden state never animates. */
+.will-reveal.is-in .sec-title,
+.will-reveal.is-in .reveal-item {
+  opacity: 1; transform: none;
+  transition: opacity var(--move) var(--ease-grid), transform var(--move) var(--ease-grid);
+  transition-delay: calc(min(var(--i, 0), 5) * var(--beat));
+}
+
+@media (min-width: 48rem) {
+  .project-row:has(a):focus-within .project-title { transform: translateX(calc(var(--step) * -1)); }
+}
+@media (min-width: 48rem) and (hover: hover) {
+  .project-row:has(a):hover .project-title { transform: translateX(calc(var(--step) * -1)); }
+}
+
+.site-nav ul { display: flex; flex-wrap: wrap; margin-inline-start: -0.5rem; } /* padding below keeps the text on the column line */
+.site-nav a { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-inline: 0.5rem; color: var(--color-text); font-size: 0.9375rem; font-weight: 500; text-decoration: none; }
+.site-nav a:hover { color: var(--color-accent); }
+.site-nav a::after { content: ""; position: absolute; left: 0.5rem; right: 0.5rem; bottom: 6px; height: 3px; background: var(--color-accent); transform: scaleX(0); transform-origin: left; transition: transform 360ms var(--ease-grid); }
+.site-nav a[aria-current]::after { transform: scaleX(1); }
+
+/* The landing replays the slide. It uses an animation (not the transition above), so the two never fight. */
+.section:target .sec-title,
+.section:target .reveal-item { animation: slide-col var(--move) var(--ease-grid) backwards; animation-delay: calc(min(var(--i, 0), 5) * var(--beat)); }
+
+.digit { display: inline-block; width: 0.62em; height: var(--cell); overflow: clip; vertical-align: top; text-align: center; }
+.digit, .digit-strip { user-select: none; } /* the numbers are decoration: don't select or find "0 1 2" */
+.digit-strip { display: block; }
+.digit-strip span { display: block; height: var(--cell); } /* every cell is one digit high, so each step lands exactly */
+.will-reveal .digit-strip { transform: none; }
+.will-reveal.is-in .digit-strip {
+  transform: translateY(calc(var(--to) * var(--cell) * -1));
+  transition: transform calc(var(--to) * var(--tick)) steps(var(--to), jump-end);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  /* Undo every hidden starting state, not just the animations. */
+  .will-reveal .sec-title,
+  .will-reveal .reveal-item { opacity: 1; transform: none; }
+  .will-reveal .digit-strip { transform: translateY(calc(var(--to) * var(--cell) * -1)); }
+  .project-title { transform: none !important; }
+}

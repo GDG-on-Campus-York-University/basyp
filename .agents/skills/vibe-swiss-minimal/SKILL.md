@@ -32,7 +32,7 @@ Palette, in words: pure white paper; near-black ink; a mid grey for secondary te
   --color-bg: #FFFFFF;
   --color-surface: #EEEEEE;   /* the hero's column bands */
   --color-text: #111111;      /* 18.9:1 on bg, 16.3:1 on surface */
-  --color-muted: #575757;     /* 7.2:1 on bg, 6.2:1 on surface */
+  --color-muted: #575757;     /* 7.2:1 on bg (used for project descriptions, which sit on bg only) */
   --color-accent: #D10019;    /* 5.6:1 on bg, 4.9:1 on surface; white on accent 5.6:1 */
   --color-rule: #B0B0B0;      /* hairlines only, never text */
   --font: "Schibsted Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -41,7 +41,7 @@ Palette, in words: pure white paper; near-black ink; a mid grey for secondary te
   --body-cols: 4;
   --gutter: 1rem;
   --margin: 1rem;             /* space either side of the page */
-  --header-h: 0px;
+  --header-h: 0px;            /* the sticky header's real height on desktop, so jumps land below it */
   /* One column plus one gutter. 100cqw is the page width, so this is exact at every screen size. */
   --step: calc((100cqw + var(--gutter)) / var(--cols));
 
@@ -51,17 +51,33 @@ Palette, in words: pure white paper; near-black ink; a mid grey for secondary te
   --tick: 110ms;                               /* one step of a counting digit */
 }
 @media (min-width: 48rem) {
-  :root { --cols: 12; --body-cols: 8; --gutter: 1.5rem; --margin: 1.5rem; --header-h: 3.5rem; }
+  :root { --cols: 12; --body-cols: 8; --gutter: 1.5rem; --margin: 1.5rem; --header-h: 3.75rem; }
 }
 ```
-Dark variant that still feels Swiss: bg `#111111`, surface `#232323`, text `#F2F2F2` (16.9:1), muted `#B3B3B3` (9.0:1 on bg, 7.5:1 on surface), accent `#FF4A5C` (5.7:1 on bg, 4.8:1 on surface), rule `#5A5A5A`.
 
-Font: Schibsted Grotesk for everything, in weights 400, 500 and 800. Alternatives: Host Grotesk, Albert Sans or Public Sans. Not Inter.
-`<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;800&display=swap" rel="stylesheet">`
+Font: Schibsted Grotesk for everything, in weights 400, 500 and 800 (the link is in the head below). Alternatives: Host Grotesk, Albert Sans or Public Sans. Not Inter.
 
 Type scale (a guide): body 1.0625rem, line height 1.55, lines under 70 characters; section title `clamp(1.75rem, 3.2vw, 2.5rem)` weight 800; section number `clamp(3rem, 9vw, 6.5rem)` weight 800; hero name `clamp(2.75rem, 13vw, 9rem)` weight 800. Corners are square. No shadows, no gradients.
 
 ## Layout ideas
+- **Head.** Every page starts like this; the title is the student's name and the description is the one-line intro, both from SPEC.md.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The student's name from SPEC.md</title>
+  <meta name="description" content="The one-line intro from SPEC.md.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+```
+- **Assembly.** `styles.css`: the `:root` blocks above, the base rules below, header, hero, sections, project/skill/contact rules, then the shared keyframes, moments 1 to 5 and the reduced-motion block last. `script.js`: the shared helpers, then moment 5 (digits), 2 (reveal), 4 (navigation). Moment 3 is CSS only.
+  Warning: `--step` only works on elements inside a `.page` box (it measures `cqw`), so keep everything that slides inside `main`.
 - **Page shell and base rules.** The snippets assume this. Every wide block sits inside `.page`, which is also the measuring box for the grid (`cqw` units).
 ```css
 *, *::before, *::after { box-sizing: border-box; }
@@ -77,7 +93,7 @@ a { color: var(--color-accent); text-decoration: underline 2px; text-underline-o
 a:hover { color: var(--color-text); text-decoration-thickness: 4px; } /* instant: colour never animates */
 :focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; }
 ```
-- **Header:** the student's name at the left (it links to `#home`), then one link per SPEC.md section after Home, starting on the same column as the page content. Plain on phones, sticky on desktop with a hairline below. Links are 44px tall; if they don't fit one row at 320px they wrap to a second row, never scroll sideways.
+- **Header:** the student's name at the left (it links to `#home`), then one link per SPEC.md section after Home, starting on the same column as the page content. Plain on phones, sticky on desktop with a hairline below that sits inside the header's height. Links are at least 44px tall and wide (side padding does it); if they don't fit one row at 320px they wrap to a second row, never scroll sideways.
 ```html
 <header class="site-header">
   <div class="page header-row">
@@ -90,10 +106,12 @@ a:hover { color: var(--color-text); text-decoration-thickness: 4px; } /* instant
 ```
 ```css
 .site-header { border-bottom: 1px solid var(--color-text); background: var(--color-bg); }
-.brand { grid-column: 1 / -1; display: inline-flex; align-items: center; min-height: 44px; color: var(--color-text); font-weight: 800; text-decoration: none; }
+.header-row { padding-block: 0.5rem; } /* room for the focus ring at the very top of the page */
+.brand { grid-column: 1 / -1; justify-self: start; display: inline-flex; align-items: center; min-height: 44px; color: var(--color-text); font-weight: 800; text-decoration: none; }
 .site-nav { grid-column: 1 / -1; }
 @media (min-width: 48rem) {
-  .site-header { position: sticky; top: 0; z-index: 10; }
+  .site-header { position: sticky; top: 0; z-index: 10; min-height: var(--header-h); } /* border-box, so the border is inside it */
+  .header-row { align-items: center; padding-block: 0; min-height: calc(var(--header-h) - 1px); }
   .brand { grid-column: 1 / span 4; }
   .site-nav { grid-column: 5 / -1; }
 }
@@ -155,11 +173,11 @@ a:hover { color: var(--color-text); text-decoration-thickness: 4px; } /* instant
 <ul class="skill-list"><li>A skill from SPEC.md</li></ul>
 <ul class="contact-list"><li><a href="mailto:EMAIL-FROM-SPEC">The email from SPEC.md</a></li></ul>
 ```
-(The skill and contact lists each go inside their own section's `sec-body`.)
 ```css
 .project-row { padding-block: 1.25rem; border-top: 1px solid var(--color-rule); row-gap: 0.5rem; }
 .project-title { grid-column: 1 / -1; font-size: 1.5rem; font-weight: 800; line-height: 1.15; transition: transform var(--move) var(--ease-grid); }
 .project-desc, .project-link { grid-column: 1 / -1; }
+.project-desc { color: var(--color-muted); }
 .skill-list li { grid-column: span 2; padding-block: 0.5rem; border-top: 1px solid var(--color-rule); font-weight: 500; }
 .contact-list li { border-top: 1px solid var(--color-rule); }
 .contact-list a { display: block; min-height: 44px; padding-block: 0.5rem; font-size: clamp(1rem, 4.4vw, 1.75rem); font-weight: 500; overflow-wrap: anywhere; }
@@ -168,13 +186,13 @@ a:hover { color: var(--color-text); text-decoration-thickness: 4px; } /* instant
   .project-desc, .project-link { grid-column: 5 / -1; }
 }
 ```
-- No footer. The last section is Contact; if the student wants one, a plain "Back to top" link to `#home` and nothing else.
+- No footer (this overrides any footer rule elsewhere). The last section is Contact; if the student wants one, a plain "Back to top" link to `#home` and nothing else.
+- **Which SPEC.md lines appear:** the name and the one-line intro ("Who I am"), About me, Projects, Skills and Contact, in the order of the Sections line. "Audience and goal", "Sections" and "Vibe and feel" are never printed. Capitalising the first letter of a fragment is fine; the link label is the word SPEC.md gives (for example "GitHub").
 
 ## Make it theirs
 - The one loud thing is the numbers counting in. The hero and the slides stay quiet: no extra shapes, no second colour, no icons.
 - The student's own work sets the details. Section names, project names and skills are copied exactly from SPEC.md. If a student has only three sections, the numbers stop at `03`. Never add sections or numbers SPEC.md doesn't back up.
 - Every device carries meaning: the red bar is one grid column (it marks where the grid starts), numbers show the real order of sections, red marks only things you can use or the place you are.
-- Check the longest project name and the real email at 320px: both must stay inside their column.
 
 ## Motion character
 Tempo: measured, 360 to 520ms, with neighbours arriving one beat (80ms) after each other. Easing: `var(--ease-grid)` for everything that slides, `steps()` for the counting digits. Things move sideways by exactly one column (`var(--step)`) and stop on the line; the only other movement is a bar growing from its left end. Nothing bounces, floats, fades up, loops or reacts to the cursor position. Colour changes are instant, never animated. The snippets share one `script.js`: start with the shared helpers and add each moment in order.
@@ -200,14 +218,14 @@ The red bar draws across its one column, then the name and intro slide in one co
 ```
 
 ### 2. Scroll: content slides onto the grid
-When a section comes on screen its title, then each block of its content, slides in one column from the left and stops, a beat apart. The hiding class is added by JavaScript, so without JavaScript everything is visible. Hidden items use `opacity`, not `visibility`, so screen readers and Tab still reach them; a section reveals the moment anything inside it gets focus. `overflow-x: clip` on `body` (above) stops the sideways start position from creating a scrollbar.
+When a section comes on screen its title, then each block of its content (each paragraph, and each row of a list), slides in one column from the left and stops, a beat apart. The hiding class is added by JavaScript, so without JavaScript everything is visible. Hidden items use `opacity`, not `visibility`, so screen readers and Tab still reach them; a section reveals the moment anything inside it gets focus. `overflow-x: clip` on `body` (above) stops the sideways start position from creating a scrollbar.
 
 ```css
 .will-reveal .sec-title,
-.will-reveal .sec-body > * { opacity: 0; transform: translateX(calc(var(--step) * -1)); }
+.will-reveal .reveal-item { opacity: 0; transform: translateX(calc(var(--step) * -1)); }
 /* The transition sits on the arrived state, so the hidden state never animates. */
 .will-reveal.is-in .sec-title,
-.will-reveal.is-in .sec-body > * {
+.will-reveal.is-in .reveal-item {
   opacity: 1; transform: none;
   transition: opacity var(--move) var(--ease-grid), transform var(--move) var(--ease-grid);
   transition-delay: calc(min(var(--i, 0), 5) * var(--beat));
@@ -228,7 +246,11 @@ if ('IntersectionObserver' in window) {
     section.classList.add('will-reveal');
     const title = section.querySelector('.sec-title');
     if (title) title.style.setProperty('--i', 0);
-    section.querySelectorAll('.sec-body > *').forEach((el, i) => el.style.setProperty('--i', i + 1));
+    // Paragraphs and list rows arrive a beat apart. --i is set with style.setProperty, which is fine: it only writes a custom property.
+    section.querySelectorAll('.sec-body > :not(ul), .sec-body > ul > li').forEach((el, i) => {
+      el.classList.add('reveal-item');
+      el.style.setProperty('--i', i + 1);
+    });
     revealer.observe(section);
   });
 }
@@ -240,7 +262,7 @@ document.addEventListener('focusin', (event) => {
 ```
 
 ### 3. Hover and focus: the row steps into the margin
-Only a project row that contains a real link reacts: its title slides left into the empty first column, exactly one column, and the link underline thickens (see `a:hover` above). Keyboard focus does the same. This is for wide screens with a mouse; on phones the title already starts at the left edge, so nothing moves.
+Only a project row that contains a real link reacts: its title slides left into the empty first column, exactly one column, and the link underline thickens (see `a:hover` above). Keyboard focus does the same. This needs a project link in SPEC.md; with none, nothing slides, which is correct. It is for wide screens with a mouse; on phones the title already starts at the left edge, so nothing moves.
 
 ```css
 @media (min-width: 48rem) {
@@ -255,18 +277,18 @@ Only a project row that contains a real link reacts: its title slides left into 
 The link for the section on screen gets a red bar that grows under it (and `aria-current`). When you jump to a section, its title and content slide in again, one column, as if setting onto the grid. After a jump the clicked link stays selected until you scroll on your own, so a short last section is not overtaken by the one before it.
 
 ```css
-.site-nav ul { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
-.site-nav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; color: var(--color-text); font-size: 0.9375rem; font-weight: 500; text-decoration: none; }
+.site-nav ul { display: flex; flex-wrap: wrap; margin-inline-start: -0.5rem; } /* padding below keeps the text on the column line */
+.site-nav a { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-inline: 0.5rem; color: var(--color-text); font-size: 0.9375rem; font-weight: 500; text-decoration: none; }
 .site-nav a:hover { color: var(--color-accent); }
-.site-nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 6px; height: 3px; background: var(--color-accent); transform: scaleX(0); transform-origin: left; transition: transform 360ms var(--ease-grid); }
+.site-nav a::after { content: ""; position: absolute; left: 0.5rem; right: 0.5rem; bottom: 6px; height: 3px; background: var(--color-accent); transform: scaleX(0); transform-origin: left; transition: transform 360ms var(--ease-grid); }
 .site-nav a[aria-current]::after { transform: scaleX(1); }
 
 /* The landing replays the slide. It uses an animation (not the transition above), so the two never fight. */
 .section:target .sec-title,
-.section:target .sec-body > * { animation: slide-col var(--move) var(--ease-grid) backwards; animation-delay: calc(min(var(--i, 0), 5) * var(--beat)); }
+.section:target .reveal-item { animation: slide-col var(--move) var(--ease-grid) backwards; animation-delay: calc(min(var(--i, 0), 5) * var(--beat)); }
 ```
 ```js
-const links = [...document.querySelectorAll('.site-nav a[href^="#"]')];
+const links = [...document.querySelectorAll('.site-header a[href^="#"]')]; // the name link counts: it marks Home
 const spied = [...document.querySelectorAll('main > section[id]')];
 let pinned = null; // the section we just jumped to
 let queued = false;
@@ -309,10 +331,11 @@ update();
 ```
 
 ### 5. Signature: section numbers count in
-Each big red number is a rolling counter. When its section arrives, every digit steps up from `0` to its real value, one hard step at a time, exactly one digit-height per step, then stays. `02` ticks 0, 1, 2 in about a third of a second; `12` rolls its first digit once and its second twice. Without JavaScript the number is plain text. The counter is decoration and `aria-hidden`, so screen readers read only the real heading.
+Each big red number is a rolling counter. When its section arrives, every digit steps up from `0` to its real value, one hard step at a time, exactly one digit-height per step, then stays. `02` ticks 0, 1, 2 in about a third of a second; `12` rolls its first digit once and its second twice. Without JavaScript the number is plain text. A digit `0` has nothing to count; its `steps(0)` is ignored by the browser, which is fine. The counter is decoration and `aria-hidden`, so screen readers read only the real heading.
 
 ```css
 .digit { display: inline-block; width: 0.62em; height: var(--cell); overflow: clip; vertical-align: top; text-align: center; }
+.digit, .digit-strip { user-select: none; } /* the numbers are decoration: don't select or find "0 1 2" */
 .digit-strip { display: block; }
 .digit-strip span { display: block; height: var(--cell); } /* every cell is one digit high, so each step lands exactly */
 .will-reveal .digit-strip { transform: none; }
@@ -350,7 +373,7 @@ document.querySelectorAll('.sec-num').forEach((num) => {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   /* Undo every hidden starting state, not just the animations. */
   .will-reveal .sec-title,
-  .will-reveal .sec-body > * { opacity: 1; transform: none; }
+  .will-reveal .reveal-item { opacity: 1; transform: none; }
   .will-reveal .digit-strip { transform: translateY(calc(var(--to) * var(--cell) * -1)); }
   .project-title { transform: none !important; }
 }
