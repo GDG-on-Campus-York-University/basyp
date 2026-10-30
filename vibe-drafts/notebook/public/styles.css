@@ -1,0 +1,123 @@
+/* Contrast: text #1B2233 on bg 14.4:1, on surface 12.7:1, on every sticky note 12.2 to 13.3:1.
+   Muted #4A5163 on bg 7.2:1, on surface 6.4:1, on notes 6.1 to 6.7:1. Link ink #213F94 on bg 8.7:1, surface 7.7:1, notes 7.4 to 8.0:1.
+   Red pen #BE3A33 is for lines only (5.0:1 on bg, 4.2 to 4.6:1 on notes). Border #8C836C on bg 3.4:1.
+   Ruling #D3DEEA and margin #E3A5A0 are decoration only, never text. */
+:root {
+  --color-bg: #F8F4E9;
+  --color-surface: #EDE6D3;
+  --color-text: #1B2233;
+  --color-muted: #4A5163;
+  --color-accent: #213F94;
+  --color-pen: #BE3A33;
+  --color-margin: #E3A5A0;                          /* the margin line, softer than the pen */
+  --color-rule: #D3DEEA;
+  --color-border: #8C836C;
+  --note-1: #FFEB9C; --note-2: #D4EBD2; --note-3: #D3E4F6;
+  --font-hand: "Kalam", "Segoe Print", "Bradley Hand", cursive;
+  --font-body: "Karla", system-ui, sans-serif;
+  --line: 1.75rem;                                  /* ruling pitch; also the body line height. Every block height below is a multiple of it, so text sits ON the ruling */
+  --rule-y: 1.25rem;                                /* where the ruling line falls inside each line (the text baseline: 1.25rem for Karla at 1.0625rem; check it once with your font) */
+  --sec: 1;                                         /* section top padding, in lines. A short SPEC.md (two projects, a short bio) looks better with 1 and 2 */
+  --margin-x: max(0.875rem, calc(50% - 29rem + 0.875rem)); /* the margin line; sits 0.875rem inside the page box */
+  --ease-ink: cubic-bezier(0.45, 0.08, 0.25, 0.98); /* a pen: slow start, steady, soft stop */
+  --ease-fall: cubic-bezier(0.5, 0, 0.85, 0.45);    /* gravity: speeds up, no bounce */
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--color-text); font: 1.0625rem/var(--line) var(--font-body);
+  background-color: var(--color-bg);
+  background-image: linear-gradient(90deg, transparent calc(var(--margin-x) - 1px), var(--color-margin) calc(var(--margin-x) - 1px), var(--color-margin) calc(var(--margin-x) + 1px), transparent calc(var(--margin-x) + 1px));
+}
+/* The ruling is drawn per section and restarts at each section's top, so a tall sticky-note grid can never knock the next section's text off the lines. */
+main > section { padding-block: calc(var(--line) * var(--sec)) var(--line); background-image: repeating-linear-gradient(180deg, transparent 0, transparent calc(var(--rule-y) - 1px), var(--color-rule) calc(var(--rule-y) - 1px), var(--color-rule) var(--rule-y), transparent var(--rule-y), transparent var(--line)); }
+h1, h2, h3 { margin: 0; font-family: var(--font-hand); font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+p { margin: 0 0 var(--line); }
+main p { max-width: 40rem; }                         /* lines stay under 80 characters */
+.page { max-width: 58rem; margin-inline: auto; padding-inline: 1.75rem 1rem; } /* the left room keeps text clear of the margin line */
+@media (min-width: 48rem) { :root { --sec: 2; } }  /* use 2 here for a short SPEC.md */
+::selection { background: #FFE066; color: var(--color-text); } /* a highlighter pen: 12.2:1 */
+a { color: var(--color-accent); }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; border-radius: 2px; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--line); margin: var(--line) 0 0; padding: 0; list-style: none; }
+.note { --tilt: -1deg; position: relative; isolation: isolate; padding: 1.5rem 1.25rem 1.25rem; background: linear-gradient(rgba(60, 40, 0, 0.07) 0 0.5rem, transparent 0.5rem), var(--note-1); rotate: var(--tilt); }
+.note:nth-child(3n + 2) { --tilt: 1.2deg; background-color: var(--note-2); }
+.note:nth-child(3n + 3) { --tilt: -0.6deg; background-color: var(--note-3); }
+.note h3 { font-size: 1.375rem; margin-bottom: 0.5rem; }
+.note p { margin: 0; line-height: 1.6; } /* body text on a note is --color-text; never muted text on the pen colour */
+.note::after { content: ""; position: absolute; z-index: -1; inset: auto 6% -0.5rem; height: 0.875rem; background: radial-gradient(ellipse at center, rgba(40, 30, 10, 0.3), transparent 70%); opacity: 0.7; } /* the shadow, a pseudo-element so only opacity moves */
+.note h3 a { color: inherit; }
+.tags { display: flex; flex-wrap: wrap; gap: var(--line) 0.625rem; margin: var(--line) 0 0; padding: 0; list-style: none; }
+.tags li { height: var(--line); padding-inline: 0.875rem; border: 1.5px solid var(--color-border); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; font-size: 0.9375rem; line-height: calc(var(--line) - 3px); }
+.contact-list { margin: var(--line) 0 0; padding: 0; list-style: none; font-size: 1.125rem; overflow-wrap: anywhere; }
+.contact-list li { min-height: calc(var(--line) * 2); display: flex; align-items: center; } /* 56px: two lines, so the next row stays on the ruling */
+.contact-list a { min-height: 44px; display: inline-flex; align-items: center; }
+
+.scribble { --lh: calc(var(--line) * 2); position: relative; width: fit-content; max-width: 100%; margin: 0 0 var(--line); line-height: var(--lh); } /* a heading is a whole number of lines tall; one line of room keeps the pen off the text below */
+.scribble::after, main a::after, .site-nav a::after {
+  content: ""; position: absolute; left: -0.1em; right: -0.1em; bottom: -0.3em; height: 0.32em; pointer-events: none;
+  background: var(--color-pen);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M3 7 C30 3 60 9 95 5 S155 8 197 4' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M3 7 C30 3 60 9 95 5 S155 8 197 4' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.scribble::after { bottom: calc((var(--lh) - 1em) / 2 - 0.26em); } /* 0.26em below the letters, whatever the line height */
+@keyframes draw-ink { from { clip-path: inset(-30% 100% -30% 0); } to { clip-path: inset(-30% 0 -30% 0); } }
+@keyframes drop {
+  0%   { translate: 0 -2.5rem; rotate: calc(var(--tilt) + 6deg); opacity: 0; animation-timing-function: var(--ease-fall); }
+  18%  { opacity: 1; }
+  60%  { translate: 0 0; rotate: calc(var(--tilt) + 2.5deg); animation-timing-function: var(--ease-ink); }
+  100% { translate: 0 0; rotate: var(--tilt); }
+}
+@keyframes shadow-in { 0%, 45% { opacity: 0; } 100% { opacity: 0.7; } }
+
+.hero-name { font-size: calc(var(--lh) / 1.1); }     /* 2 lines of ruling tall on phones, 3 from 48rem; about 51px, then 76px */
+.hero-name::after { animation: draw-ink 900ms var(--ease-ink) 350ms both; }
+.hero-intro { margin: 0; font-size: 1.25rem; }
+@media (min-width: 48rem) { .hero-name { --lh: calc(var(--line) * 3); } }
+
+.will-draw.scribble::after { clip-path: inset(-30% 100% -30% 0); }
+.will-draw.is-in.scribble::after { clip-path: inset(-30% 0 -30% 0); animation: draw-ink 700ms var(--ease-ink) backwards; }
+h2.scribble { font-size: clamp(1.75rem, 5vw, 2.5rem); }
+
+main a { display: inline-block; position: relative; text-underline-offset: 0.2em; }
+main a::after { bottom: -0.1em; clip-path: inset(-30% 100% -30% 0); transition: clip-path 320ms var(--ease-ink); }
+main a:focus-visible { text-decoration-color: transparent; }
+main a:focus-visible::after { clip-path: inset(-30% 0 -30% 0); }
+@media (hover: hover) {
+  main a:hover { text-decoration-color: transparent; }
+  main a:hover::after { clip-path: inset(-30% 0 -30% 0); }
+}
+.note { translate: 0 0; transition: translate 240ms var(--ease-ink), rotate 240ms var(--ease-ink); }
+.note::after { transition: opacity 240ms var(--ease-ink); }
+.note:focus-within { translate: 0 -4px; rotate: 0deg; }
+.note:focus-within::after { opacity: 1; }
+@media (hover: hover) {
+  .note:has(a:hover) { translate: 0 -4px; rotate: 0deg; }
+  .note:has(a:hover)::after { opacity: 1; }
+}
+
+.site-header { background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+.site-nav { display: flex; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
+.site-nav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding-inline: 0.5rem; color: var(--color-text); font-size: 0.9375rem; font-weight: 500; text-decoration: none; }
+.site-nav a::after { left: 0.5rem; right: 0.5rem; bottom: 0.5rem; clip-path: inset(-30% 100% -30% 0); } /* same selector as in the shared block, but later, so these values win */
+.site-nav a[aria-current="location"]::after { clip-path: inset(-30% 0 -30% 0); animation: draw-ink 260ms var(--ease-ink) backwards; }
+html { scroll-behavior: auto; scroll-padding-top: 1rem; } /* the only landing offset; do not also set scroll-margin-top, they add up */
+.site-nav a:focus-visible { outline-offset: -3px; }  /* the header touches the screen edge, so the ring stays inside the tab */
+main { overflow-x: clip; }                          /* tilted notes can never cause sideways scrolling */
+@media (min-width: 48rem) {
+  .site-header { position: sticky; top: 0; z-index: 2; }
+  html { scroll-padding-top: 4.5rem; }              /* use your header's height */
+  .site-nav a { padding-inline: 0.875rem; font-size: 1rem; }
+  .site-nav a::after { left: 0.875rem; right: 0.875rem; }
+}
+
+.will-drop { opacity: 0; }
+.will-drop.is-in { opacity: 1; animation: drop 560ms backwards; animation-delay: calc(min(var(--i, 0), 5) * 110ms); }
+.will-drop.is-in::after { animation: shadow-in 560ms var(--ease-ink) backwards; animation-delay: calc(min(var(--i, 0), 5) * 110ms); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .scribble::after { clip-path: none !important; }   /* undo the hidden start of the heading underlines */
+  .will-drop { opacity: 1 !important; }
+  .note { translate: none !important; rotate: var(--tilt) !important; }
+}

@@ -43,7 +43,9 @@ Palette, in words: warm paper; blue-black ink for text; a softer ink-grey for se
   --note-1: #FFEB9C; --note-2: #D4EBD2; --note-3: #D3E4F6;
   --font-hand: "Kalam", "Segoe Print", "Bradley Hand", cursive;
   --font-body: "Karla", system-ui, sans-serif;
-  --line: 1.75rem;                                  /* ruling pitch; also the body line height */
+  --line: 1.75rem;                                  /* ruling pitch; also the body line height. Every block height below is a multiple of it, so text sits ON the ruling */
+  --rule-y: 1.25rem;                                /* where the ruling line falls inside each line (the text baseline: 1.25rem for Karla at 1.0625rem; check it once with your font) */
+  --sec: 2;                                         /* section top padding, in lines. A short SPEC.md (two projects, a short bio) looks better with 1 and 2 */
   --margin-x: max(0.875rem, calc(50% - 29rem + 0.875rem)); /* the margin line; sits 0.875rem inside the page box */
   --ease-ink: cubic-bezier(0.45, 0.08, 0.25, 0.98); /* a pen: slow start, steady, soft stop */
   --ease-fall: cubic-bezier(0.5, 0, 0.85, 0.45);    /* gravity: speeds up, no bounce */
@@ -52,41 +54,47 @@ Palette, in words: warm paper; blue-black ink for text; a softer ink-grey for se
 body {
   margin: 0; color: var(--color-text); font: 1.0625rem/var(--line) var(--font-body);
   background-color: var(--color-bg);
-  background-image:
-    linear-gradient(90deg, transparent calc(var(--margin-x) - 1px), var(--color-margin) calc(var(--margin-x) - 1px), var(--color-margin) calc(var(--margin-x) + 1px), transparent calc(var(--margin-x) + 1px)),
-    repeating-linear-gradient(180deg, transparent 0, transparent calc(var(--line) - 1px), var(--color-rule) calc(var(--line) - 1px), var(--color-rule) var(--line));
+  background-image: linear-gradient(90deg, transparent calc(var(--margin-x) - 1px), var(--color-margin) calc(var(--margin-x) - 1px), var(--color-margin) calc(var(--margin-x) + 1px), transparent calc(var(--margin-x) + 1px));
 }
+/* The ruling is drawn per section and restarts at each section's top, so a tall sticky-note grid can never knock the next section's text off the lines. */
+main > section { padding-block: calc(var(--line) * var(--sec)) var(--line); background-image: repeating-linear-gradient(180deg, transparent 0, transparent calc(var(--rule-y) - 1px), var(--color-rule) calc(var(--rule-y) - 1px), var(--color-rule) var(--rule-y), transparent var(--rule-y), transparent var(--line)); }
 h1, h2, h3 { margin: 0; font-family: var(--font-hand); font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
-p { margin: 0 0 1rem; }
+p { margin: 0 0 var(--line); }
 main p { max-width: 40rem; }                         /* lines stay under 80 characters */
 .page { max-width: 58rem; margin-inline: auto; padding-inline: 1.75rem 1rem; } /* the left room keeps text clear of the margin line */
-main > section { padding-block: clamp(2.5rem, 7vw, 4.5rem); }
+@media (min-width: 48rem) { :root { --sec: 3; } }  /* use 2 here for a short SPEC.md */
 ::selection { background: #FFE066; color: var(--color-text); } /* a highlighter pen: 12.2:1 */
 a { color: var(--color-accent); }
 :focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; border-radius: 2px; }
 ```
 Fonts: Kalam 700 for the name, headings and note titles; Karla for everything else. Alternatives: Gochi Hand or Patrick Hand for the handwriting; Mulish or Albert Sans for body. Not a serif body (that is Research Paper or Editorial). Kalam has no 600, so ask for 400 and 700 only.
-`<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">`
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+```
 Corners are nearly square (2px). Only the skill tags below get their wobbly hand-drawn outline.
 
 ## Layout ideas
-- **Header:** a darker-paper strip (`--color-surface`) with the five real section links as index tabs. Static on phones; sticky only from 48rem wide. Links are at least 44px tall and wrap to a second row at 320px (use `flex-wrap`, never sideways scroll).
-- **Hero:** the real name very large in handwriting (`clamp(2.5rem, 12vw, 5.5rem)`), a pen underline under it, then the one-line intro from SPEC.md; if SPEC.md has no separate tagline, use the "Who I am" line without the name. Check the longest word of the name at 320px.
+- **Structure:** `<header class="site-header">` then `<main>` holding one `<section id="..." aria-labelledby="...">` per real section. Each section holds one `<div class="page">` with its content (the header has one too).
+- **Header:** a darker-paper strip (`--color-surface`) with the section links as index tabs. Static on phones; sticky only from 48rem wide. Links are at least 44px tall and wrap to a second row at 320px (use `flex-wrap`, never sideways scroll).
+- **Hero:** the real name very large in handwriting, a pen underline under it, then the one-line intro from SPEC.md. If SPEC.md has no separate tagline, use its "Who I am" line with the name removed and the first remaining word capitalised (nothing else changes). Check the longest word of the name at 320px.
 - **About:** a handwritten heading with its underline, then the real bio as plain paragraphs. No box, no tilt.
 - **Projects:** one sticky note per real project in a loose grid (`repeat(auto-fit, minmax(min(100%, 15rem), 1fr))`, gap about 1.75rem). Title in handwriting, description in Karla. A link only if SPEC.md has one.
 - **Skills:** the real skills as small hand-outlined tags (`border: 1.5px solid var(--color-border)` with `border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px`), body font, 0.9375rem.
-- **Contact:** the real links, one per line, each at least 44px tall, `overflow-wrap: anywhere` so a real email fits at 320px. Link text is the label SPEC.md gives next to the URL (for example "GitHub"), never new wording.
+- **Contact:** the real links, one per line, each at least 44px tall, `overflow-wrap: anywhere` so a real email fits at 320px. Link text is the label SPEC.md gives next to the URL (for example "GitHub"); with no label (an email), the address itself. Never new wording.
 - **Footer:** omit it, or a single plain "Back to top" link. No year, no slogan, no "made with" line.
+- **Short SPEC.md:** with two projects and a short bio, set `--sec` to 1 (2 from 48rem) so the page does not look empty.
 ```html
 <ul class="notes">
   <li class="note">
-    <h3><a href="https://example.com/project">Project name from SPEC.md</a></h3> <!-- plain text, no <a>, if SPEC.md has no link -->
+    <h3><a href="https://example.com/project">Project name from SPEC.md</a></h3> <!-- plain text, no <a>, if SPEC.md has no link; the note lift in moment 3 is then simply unused, which is expected -->
     <p>The one-sentence description from SPEC.md.</p>
   </li>
 </ul>
 ```
 ```css
-.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1.75rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--line); margin: var(--line) 0 0; padding: 0; list-style: none; }
 .note { --tilt: -1deg; position: relative; isolation: isolate; padding: 1.5rem 1.25rem 1.25rem; background: linear-gradient(rgba(60, 40, 0, 0.07) 0 0.5rem, transparent 0.5rem), var(--note-1); rotate: var(--tilt); }
 .note:nth-child(3n + 2) { --tilt: 1.2deg; background-color: var(--note-2); }
 .note:nth-child(3n + 3) { --tilt: -0.6deg; background-color: var(--note-3); }
@@ -94,10 +102,11 @@ Corners are nearly square (2px). Only the skill tags below get their wobbly hand
 .note p { margin: 0; line-height: 1.6; } /* body text on a note is --color-text; never muted text on the pen colour */
 .note::after { content: ""; position: absolute; z-index: -1; inset: auto 6% -0.5rem; height: 0.875rem; background: radial-gradient(ellipse at center, rgba(40, 30, 10, 0.3), transparent 70%); opacity: 0.7; } /* the shadow, a pseudo-element so only opacity moves */
 .note h3 a { color: inherit; }
-.tags { display: flex; flex-wrap: wrap; gap: 0.625rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
-.tags li { padding: 0.25rem 0.875rem; border: 1.5px solid var(--color-border); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; font-size: 0.9375rem; }
-.contact-list { margin: 1.5rem 0 0; padding: 0; list-style: none; font-size: 1.125rem; overflow-wrap: anywhere; }
-.contact-list li { min-height: 44px; display: flex; align-items: center; }
+.tags { display: flex; flex-wrap: wrap; gap: var(--line) 0.625rem; margin: var(--line) 0 0; padding: 0; list-style: none; }
+.tags li { height: var(--line); padding-inline: 0.875rem; border: 1.5px solid var(--color-border); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; font-size: 0.9375rem; line-height: calc(var(--line) - 3px); }
+.contact-list { margin: var(--line) 0 0; padding: 0; list-style: none; font-size: 1.125rem; overflow-wrap: anywhere; }
+.contact-list li { min-height: calc(var(--line) * 2); display: flex; align-items: center; } /* 56px: two lines, so the next row stays on the ruling */
+.contact-list a { min-height: 44px; display: inline-flex; align-items: center; }
 ```
 
 ## Make it theirs
@@ -108,15 +117,18 @@ Corners are nearly square (2px). Only the skill tags below get their wobbly hand
 ## Motion character
 Tempo: unhurried, 250 to 900ms, the pace of a hand. Easing: `--ease-ink` for pen strokes and settling, `--ease-fall` for gravity. Nothing bounces or overshoots: a note falls, then its tilt eases into place. Everything runs once. Animated properties are `clip-path`, `opacity`, and the individual `translate` and `rotate` properties (part of transform).
 
+Assembly: put the CSS blocks into `styles.css` in the order they appear in this file (the shared block below comes before moments 1 to 5), and the two JavaScript blocks (moment 2, then moment 4) into one `script.js` in that order. Moment 5 has CSS only; its JavaScript is moment 2's.
+
 Shared by moments 1, 2, 4 and 5. The pen underline is an inline SVG used as a mask, so it takes the pen colour from CSS. Add `class="scribble"` to the hero `h1` and every `h2`:
 ```css
-.scribble { position: relative; width: fit-content; max-width: 100%; }
+.scribble { --lh: calc(var(--line) * 2); position: relative; width: fit-content; max-width: 100%; margin: 0 0 var(--line); line-height: var(--lh); } /* a heading is a whole number of lines tall; one line of room keeps the pen off the text below */
 .scribble::after, main a::after, .site-nav a::after {
   content: ""; position: absolute; left: -0.1em; right: -0.1em; bottom: -0.3em; height: 0.32em; pointer-events: none;
   background: var(--color-pen);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M3 7 C30 3 60 9 95 5 S155 8 197 4' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M3 7 C30 3 60 9 95 5 S155 8 197 4' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
 }
+.scribble::after { bottom: calc((var(--lh) - 1em) / 2 - 0.26em); } /* 0.26em below the letters, whatever the line height */
 @keyframes draw-ink { from { clip-path: inset(-30% 100% -30% 0); } to { clip-path: inset(-30% 0 -30% 0); } }
 @keyframes drop {
   0%   { translate: 0 -2.5rem; rotate: calc(var(--tilt) + 6deg); opacity: 0; animation-timing-function: var(--ease-fall); }
@@ -136,9 +148,10 @@ The text is in the HTML and visible from the first frame. After a short pause th
 </section>
 ```
 ```css
-.hero-name { font-size: clamp(2.5rem, 12vw, 5.5rem); line-height: 1.1; }
-.hero-name::after { bottom: -0.12em; animation: draw-ink 900ms var(--ease-ink) 350ms both; }
-.hero-intro { margin: 1.5rem 0 0; font-size: 1.25rem; }
+.hero-name { font-size: calc(var(--lh) / 1.1); }     /* 2 lines of ruling tall on phones, 3 from 48rem; about 51px, then 76px */
+.hero-name::after { animation: draw-ink 900ms var(--ease-ink) 350ms both; }
+.hero-intro { margin: 0; font-size: 1.25rem; }
+@media (min-width: 48rem) { .hero-name { --lh: calc(var(--line) * 3); } }
 ```
 
 ### 2. Scroll: each heading gets underlined as it arrives
@@ -146,18 +159,12 @@ When a section heading comes into view the pen draws under it once (700ms). Java
 ```css
 .will-draw.scribble::after { clip-path: inset(-30% 100% -30% 0); }
 .will-draw.is-in.scribble::after { clip-path: inset(-30% 0 -30% 0); animation: draw-ink 700ms var(--ease-ink) backwards; }
-h2.scribble { font-size: clamp(1.75rem, 5vw, 2.5rem); margin-bottom: 1rem; }
+h2.scribble { font-size: clamp(1.75rem, 5vw, 2.5rem); }
 ```
 ```js
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const pending = new Set();                          // everything still waiting to arrive
-const arrival = new IntersectionObserver((entries) => {
-  let order = 0;
-  entries.forEach((entry) => {
-    // Also arrive when already scrolled past (for example after a reload).
-    if (entry.isIntersecting || entry.boundingClientRect.top < 0) arrive(entry.target, order++);
-  });
-}, { rootMargin: '0px 0px -12% 0px' });
+let arrival = null;                                 // the observer, made below only if it is needed and supported
 
 function arrive(el, order) {
   if (!pending.delete(el)) return;
@@ -168,6 +175,13 @@ function arrive(el, order) {
 function hold(el, kind) { el.classList.add(kind); pending.add(el); arrival.observe(el); }
 
 if (!reduce && 'IntersectionObserver' in window) {
+  arrival = new IntersectionObserver((entries) => {
+    let order = 0;
+    entries.forEach((entry) => {
+      // Also arrive when already scrolled past (for example after a reload).
+      if (entry.isIntersecting || entry.boundingClientRect.top < 0) arrive(entry.target, order++);
+    });
+  }, { rootMargin: '0px 0px -12% 0px' });
   document.querySelectorAll('main h2.scribble').forEach((h) => hold(h, 'will-draw'));
   document.querySelectorAll('.note').forEach((n) => hold(n, 'will-drop'));
   // A short last section may never reach the trigger line: at the very bottom, let everything left arrive.
@@ -199,7 +213,6 @@ main a:focus-visible::after { clip-path: inset(-30% 0 -30% 0); }
   .note:has(a:hover)::after { opacity: 1; }
 }
 ```
-The contact links use the same `main a` rule; give them `min-height: 44px; display: inline-flex; align-items: center;` if the row is not already 44px tall.
 
 ### 4. Navigation: the current tab is underlined, the landing heading is re-drawn
 The tab for the section on screen has a pen underline that draws in 260ms when it becomes current. After a jump (tab click or `#hash`), that tab stays current until the visitor scrolls on their own (wheel, touch, scroll keys) or the section leaves the screen, so a short last section is never taken over by the one before it. The landed heading draws its underline again. Jumping is instant, never smooth scrolling.
@@ -222,13 +235,12 @@ The tab for the section on screen has a pen underline that draws in 260ms when i
 .site-nav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding-inline: 0.5rem; color: var(--color-text); font-size: 0.9375rem; font-weight: 500; text-decoration: none; }
 .site-nav a::after { left: 0.5rem; right: 0.5rem; bottom: 0.5rem; clip-path: inset(-30% 100% -30% 0); } /* same selector as in the shared block, but later, so these values win */
 .site-nav a[aria-current="location"]::after { clip-path: inset(-30% 0 -30% 0); animation: draw-ink 260ms var(--ease-ink) backwards; }
-html { scroll-behavior: auto; scroll-padding-top: 1rem; }
-section[id] { scroll-margin-top: 1rem; }
+html { scroll-behavior: auto; scroll-padding-top: 1rem; } /* the only landing offset; do not also set scroll-margin-top, they add up */
+.site-nav a:focus-visible { outline-offset: -3px; }  /* the header touches the screen edge, so the ring stays inside the tab */
 main { overflow-x: clip; }                          /* tilted notes can never cause sideways scrolling */
 @media (min-width: 48rem) {
   .site-header { position: sticky; top: 0; z-index: 2; }
-  section[id] { scroll-margin-top: 4.5rem; }        /* use your header's height */
-  html { scroll-padding-top: 4.5rem; }
+  html { scroll-padding-top: 4.5rem; }              /* use your header's height */
   .site-nav a { padding-inline: 0.875rem; font-size: 1rem; }
   .site-nav a::after { left: 0.875rem; right: 0.875rem; }
 }
