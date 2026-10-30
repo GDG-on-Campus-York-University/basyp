@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mateo Fischer</title>
+  <meta name="description" content="Third-year Software Engineering student at York University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav aria-label="Sections">
+      <ul class="chain">
+        <li data-i="0"><a href="#home" aria-current="location">Home</a></li>
+        <li data-i="1"><span class="arrow" aria-hidden="true"><i class="packet"></i></span><a href="#about">About</a></li>
+        <li data-i="2"><span class="arrow" aria-hidden="true"><i class="packet"></i></span><a href="#projects">Projects</a></li>
+        <li data-i="3"><span class="arrow" aria-hidden="true"><i class="packet"></i></span><a href="#skills">Skills</a></li>
+        <li data-i="4"><span class="arrow" aria-hidden="true"><i class="packet"></i></span><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="flow">
+    <section class="node node--hero" id="home" data-i="0" aria-labelledby="home-title">
+      <h1 id="home-title">Mateo Fischer</h1>
+      <p class="intro">Third-year Software Engineering student at York University.</p>
+    </section>
+
+    <div class="wire" data-i="1" aria-hidden="true"><i class="packet"></i><span class="edge-label">About</span></div>
+    <section class="node" id="about" data-i="1" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <p>I like to draw the pieces of a program on paper first: what talks to what, and where the data lives.</p>
+      <p>Then I build it one piece at a time and write tests as I go.</p>
+      <p>I am happiest when a project is small enough to finish and clear enough that a teammate can pick it up.</p>
+    </section>
+
+    <div class="wire" data-i="2" aria-hidden="true"><i class="packet"></i><span class="edge-label">Projects</span></div>
+    <section class="node" id="projects" data-i="2" aria-labelledby="projects-title">
+      <h2 id="projects-title">Projects</h2>
+      <ul class="services">
+        <li class="service">
+          <h3>Study Room Booker</h3>
+          <p>A small web service for booking study rooms, with a Python (Flask) back end, a SQLite database and a plain JavaScript page. Built with a team of four for a software design course.</p>
+          <p><a href="https://example.com/mateo-fischer/study-room-booker">Source code</a></p>
+        </li>
+        <li class="service">
+          <h3>Chat Room</h3>
+          <p>A chat server and client in Java that use sockets and threads, so several people can talk at once. Made for an operating systems course.</p>
+        </li>
+        <li class="service">
+          <h3>Recipe Box</h3>
+          <p>A command-line recipe manager in Python that stores recipes in a plain text file, with unit tests. My first project with a test suite.</p>
+        </li>
+      </ul>
+    </section>
+
+    <div class="wire" data-i="3" aria-hidden="true"><i class="packet"></i><span class="edge-label">Skills</span></div>
+    <section class="node" id="skills" data-i="3" aria-labelledby="skills-title">
+      <h2 id="skills-title">Skills</h2>
+      <ul class="skills">
+        <li>Java</li>
+        <li>Python</li>
+        <li>JavaScript</li>
+        <li>SQL</li>
+        <li>Flask</li>
+        <li>JUnit</li>
+        <li>unit testing</li>
+        <li>Git</li>
+        <li>Linux command line</li>
+      </ul>
+    </section>
+
+    <div class="wire" data-i="4" aria-hidden="true"><i class="packet"></i><span class="edge-label">Contact</span></div>
+    <section class="node" id="contact" data-i="4" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact</h2>
+      <ul class="contact">
+        <li><a href="mailto:mateo.fischer@example.com">mateo.fischer@example.com</a></li>
+        <li><a href="https://example.com/mateo-fischer">GitHub</a></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
