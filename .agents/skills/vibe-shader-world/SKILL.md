@@ -156,6 +156,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--color-accent); 
 }
 @media (min-width: 60em) {
   main > section:nth-of-type(even) > .panel { margin-left: auto; }   /* panels alternate sides, leaving a window onto the world */
+  .hero-panel { max-width: 52rem; }                                   /* wide enough that the name stays on one line */
+  main > section:last-of-type { min-height: 80svh; }                  /* room to scroll, so the last two moods each get to rest */
 }
 .site-header { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
   padding-inline: 0.5rem; background: var(--color-bar); border-bottom: 1px solid var(--color-border); }
@@ -257,7 +259,7 @@ const CONFIG = {
 const STATES = [
   { name: 'tide',  dark: '#06232B', mid: '#0F6B73', light: '#9FE3D2', scale: 1.6, warp: 1.6, irid: 0.10, cam: [0.0, 0.0, 1.0] },
   { name: 'dusk',  dark: '#1B1030', mid: '#6B2F6E', light: '#F0A58C', scale: 2.2, warp: 2.4, irid: 0.14, cam: [3.0, 1.0, 1.2] },
-  { name: 'ember', dark: '#1D0F0B', mid: '#8A3B1F', light: '#F6C177', scale: 1.3, warp: 3.0, irid: 0.06, cam: [-2.0, 4.0, 1.5] },
+  { name: 'ember', dark: '#240A0A', mid: '#B03A14', light: '#FFB05C', scale: 1.3, warp: 3.0, irid: 0.06, cam: [-2.0, 4.0, 1.5] },
   { name: 'glass', dark: '#0B1A33', mid: '#2C5FA8', light: '#BFD7FF', scale: 2.8, warp: 1.2, irid: 0.18, cam: [5.0, -3.0, 1.0] },
   { name: 'moss',  dark: '#0E1F14', mid: '#3E7D4F', light: '#D6EBB0', scale: 1.8, warp: 2.0, irid: 0.08, cam: [1.0, 6.0, 0.9] },
 ];
@@ -357,7 +359,7 @@ const FRAG = /* glsl */`
 ```
 
 ### Shared part C: the engine (load, size, loop, stop, fall back)
-Failure handling is part of the design. `import()` fails (offline, blocked, wrong URL), WebGL is missing, the shader does not compile, or the graphics context is lost: every one of these ends in `stopWorld()`, which frees everything made so far and leaves the CSS gradient behind (the `body` background in the CSS above). The page, the nav and the content keep working in all of those cases, and the pause button stays hidden because there is nothing to pause. three.js writes its own console message when WebGL cannot start; that is expected.
+Failure handling is part of the design. `import()` fails (offline, blocked, wrong URL), WebGL is missing, the shader does not compile, or the graphics context is lost: every one of these ends in `stopWorld()`, which frees everything made so far and leaves the CSS gradient behind (the `body` background in the CSS above). The page, the nav and the content keep working in all of those cases, and the pause button stays hidden because there is nothing to pause. three.js writes its own console message when WebGL cannot start; that is expected. When WebGL itself is missing, three.js also logs two or three `console.error` lines ("WebGL context could not be created"); that is expected in that one case and not a bug in your code.
 ```js
 // The three.js part is loaded with import(), so a failed download only loses the shader, never the page.
 const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js';
